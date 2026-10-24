@@ -2,520 +2,293 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f5f7fb">
-  <meta name="description" content="Saldo is jouw persoonlijke geldbespaar-dashboard. Houd uitgaven, abonnementen, budgetten en spaardoelen overzichtelijk bij.">
-  <title>Saldo — Meer grip op je geld</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8f5">
+  <meta name="description" content="BespaarSlim: je persoonlijke budgetdashboard voor uitgaven, abonnementen, spaardoelen en bespaarkansen.">
+  <title>BespaarSlim — Meer overhouden, minder gedoe</title>
   <style>
-    :root { --bg:#f5f7fb; --surface:#fff; --text:#192039; --muted:#8490a4; --line:#e9ecf3; --purple:#6857df; --purple-dark:#5141bb; --purple-soft:#f0edff; --green:#0ba87c; --green-soft:#e8faf3; --orange:#ea9b39; --orange-soft:#fff4e8; --red:#e25f69; --red-soft:#fff0f1; --shadow:0 7px 30px rgba(25,32,57,.035); --radius:21px; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }
-    button,input,select { font:inherit; }
-    button { cursor:pointer; }
-    button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline:3px solid #aaa0fa; outline-offset:2px; }
-    .ico { height:20px; width:20px; display:inline-block; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-    .app { display:flex; min-height:100vh; }
-    .sidebar { width:251px; flex:0 0 251px; background:#fff; border-right:1px solid var(--line); min-height:100vh; display:flex; flex-direction:column; padding:29px 16px 19px; position:sticky; top:0; height:100vh; z-index:30; }
-    .brand { display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--text); padding:0 10px 34px; }
-    .brand-logo { display:grid; place-items:center; background:var(--purple); color:#fff; height:39px; width:39px; border-radius:13px; box-shadow:0 7px 14px #6857df32; }
-    .brand-logo .ico { width:25px; height:25px; }
-    .brand-name { font-size:26px; font-weight:850; letter-spacing:-1.4px; line-height:1; }
-    .brand-name span { color:var(--purple); }
-    .side-label { font-size:10px; letter-spacing:1.6px; text-transform:uppercase; font-weight:850; color:#a1a9ba; margin:10px 12px 12px; }
-    .nav-list { display:grid; gap:5px; }
-    .nav-link { display:flex; align-items:center; width:100%; gap:12px; border:0; background:none; padding:12px 15px; border-radius:12px; font-size:13.5px; font-weight:660; color:#778196; text-align:left; transition:background .2s,color .2s; }
-    .nav-link .ico { height:19px; width:19px; }
-    .nav-link:hover { color:var(--purple); background:#f7f5ff; }
-    .nav-link.active { color:var(--purple); background:var(--purple-soft); font-weight:750; }
-    .nav-link.active:before { content:''; position:absolute; left:0; width:3px; height:23px; border-radius:0 5px 5px 0; background:var(--purple); }
-    .side-spacer { flex:1; }
-    .side-help { background:#f5f2ff; border-radius:18px; padding:19px 15px; margin:22px 3px 18px; }
-    .side-help .bubble { width:35px; height:35px; display:grid; place-items:center; color:var(--purple); background:#e9e2ff; border-radius:10px; margin-bottom:11px; }
-    .side-help b { font-size:13px; }
-    .side-help p { color:#8b88a7; font-size:11.5px; line-height:1.6; margin:6px 0 0; }
-    .side-footer { color:#a3aabb; font-size:10px; padding:0 12px; line-height:1.5; }
-    .main { width:calc(100% - 251px); min-width:0; }
-    .topbar { height:88px; padding:0 42px; background:rgba(255,255,255,.86); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:15px; }
-    .topbar-left { display:flex; align-items:center; gap:13px; }
-    .topbar h1 { font-size:20px; line-height:1.15; letter-spacing:-.6px; margin:0 0 5px; font-weight:800; }
-    .topbar p { margin:0; color:var(--muted); font-size:12px; }
-    .top-actions { display:flex; align-items:center; gap:14px; }
-    .today { color:#8a94a7; font-size:12px; white-space:nowrap; font-weight:600; }
-    .pill { display:inline-flex; align-items:center; gap:6px; color:var(--purple); background:var(--purple-soft); border:1px solid #e8e2ff; padding:6px 10px; border-radius:20px; font-size:10px; font-weight:800; white-space:nowrap; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 17px; border:1px solid transparent; border-radius:11px; font-weight:760; font-size:12px; line-height:1.2; text-decoration:none; transition:transform .2s,background .2s,border-color .2s; white-space:nowrap; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn .ico { width:17px; height:17px; }
-    .btn-primary { background:var(--purple); color:white; box-shadow:0 5px 16px #6857df27; }
-    .btn-primary:hover { background:var(--purple-dark); }
-    .btn-white { color:#3f3477; background:#fff; }
-    .btn-light { background:#f3f3fc; color:var(--purple); }
-    .btn-outline { color:var(--text); background:#fff; border:1px solid var(--line); }
-    .btn-danger { color:#bf3d51; background:#fff0f2; }
-    .menu-btn { display:none; border:0; background:none; color:var(--text); padding:7px; }
-    .container { max-width:1520px; margin:0 auto; padding:30px 42px 55px; }
-    .eyebrow { color:var(--purple); font-size:10px; letter-spacing:1.65px; text-transform:uppercase; font-weight:850; }
-    .hero { background:radial-gradient(ellipse at 82% 10%,#8076ec 0,transparent 48%),linear-gradient(105deg,#292252,#5447cc 80%,#776add); color:white; border-radius:24px; min-height:230px; position:relative; overflow:hidden; padding:31px 36px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 14px 35px #4c40b31a; }
-    .hero:before { content:''; position:absolute; width:270px; height:270px; border:1px solid #ffffff25; border-radius:50%; right:42px; top:-135px; }
-    .hero:after { content:''; position:absolute; width:350px; height:350px; border:1px solid #ffffff24; border-radius:50%; right:-165px; bottom:-215px; }
-    .hero-content { position:relative; z-index:2; max-width:520px; }
-    .hero .overline { color:#ddd9ff; font-size:10px; text-transform:uppercase; font-weight:790; letter-spacing:2px; }
-    .hero h2 { font-size:27px; font-weight:840; letter-spacing:-1px; line-height:1.2; margin:13px 0 9px; }
-    .hero p { color:#dfddfa; font-size:12.5px; line-height:1.7; margin:0 0 18px; }
-    .hero-art { position:relative; height:180px; width:230px; flex:0 0 230px; margin-right:30px; }
-    .art-ring { position:absolute; height:175px; width:175px; border:22px solid #ffffff1a; right:0; top:0; border-radius:50%; }
-    .art-card { position:absolute; background:white; border-radius:16px; padding:17px; box-shadow:0 12px 30px #090c2538; transform:rotate(-9deg); right:35px; top:32px; width:177px; }
-    .art-card .art-dot { height:34px; width:34px; background:#e5faf1; color:#1baf82; border-radius:11px; display:grid; place-items:center; }
-    .art-card small { font-size:9px; display:block; color:#8d93a6; margin:16px 0 4px; }
-    .art-card strong { font-size:23px; color:#262448; letter-spacing:-.9px; }
-    .art-chip { position:absolute; right:-9px; bottom:6px; z-index:2; padding:10px 13px; background:#d5ffea; color:#0d916b; border-radius:12px; font-size:11px; font-weight:800; transform:rotate(7deg); box-shadow:0 8px 20px #130e4830; }
-    .stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:17px; margin:22px 0; }
-    .stat { background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:var(--radius); padding:19px 20px 17px; min-width:0; }
-    .stat-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-    .stat-top span { color:#77849b; font-weight:650; font-size:11px; }
-    .stat-icon { width:35px; height:35px; border-radius:10px; display:grid; place-items:center; }
-    .stat-icon .ico { width:18px; height:18px; }
-    .purple-icon { background:var(--purple-soft); color:var(--purple); }
-    .green-icon { background:var(--green-soft); color:var(--green); }
-    .orange-icon { background:var(--orange-soft); color:var(--orange); }
-    .red-icon { background:var(--red-soft); color:var(--red); }
-    .stat-value { font-size:clamp(20px,2.1vw,28px); font-weight:840; letter-spacing:-.9px; margin-top:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .stat-foot { color:#9ba5b6; font-size:10.5px; margin-top:7px; }
-    .stat-foot span { color:var(--green); font-weight:700; }
-    .two-col { display:grid; grid-template-columns:minmax(0,1.32fr) minmax(310px,1fr); gap:20px; margin-bottom:20px; }
-    .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); min-width:0; }
-    .card-body { padding:23px 24px; }
-    .card-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:21px; }
-    .card-title { margin:0; font-size:15px; font-weight:820; letter-spacing:-.3px; }
-    .card-sub { margin:5px 0 0; font-size:11px; color:#9ba5b7; line-height:1.5; }
-    .link-button { border:0; background:none; color:var(--purple); font-size:11px; font-weight:780; padding:3px 0; display:inline-flex; align-items:center; gap:5px; }
-    .link-button .ico { width:14px; height:14px; }
-    .pie-section { display:flex; align-items:center; gap:27px; flex-wrap:wrap; justify-content:space-around; padding:7px 0 8px; }
-    .donut { width:188px; height:188px; border-radius:50%; position:relative; flex:0 0 188px; display:grid; place-items:center; }
-    .donut:before { content:''; width:137px; height:137px; background:white; border-radius:50%; position:absolute; }
-    .donut-inner { z-index:1; text-align:center; }
-    .donut-inner span { display:block; font-size:10px; color:#97a1b4; margin-bottom:6px; }
-    .donut-inner strong { display:block; font-size:21px; letter-spacing:-.8px; }
-    .legend { flex:1; min-width:165px; max-width:280px; }
-    .legend-row { display:flex; gap:10px; justify-content:space-between; align-items:center; padding:7px 0; font-size:11px; }
-    .legend-label { display:flex; align-items:center; gap:9px; color:#7b8698; }
-    .color-dot { width:9px; height:9px; border-radius:4px; display:inline-block; flex-shrink:0; }
-    .legend-row strong { font-size:11px; font-weight:800; }
-    .budget-list { display:grid; gap:16px; }
-    .budget-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
-    .budget-name { display:flex; align-items:center; gap:9px; font-weight:720; font-size:11.5px; }
-    .budget-amount { color:#9ca5b4; font-size:10.5px; white-space:nowrap; }
-    .budget-amount b { color:#323b51; }
-    .progress { height:7px; width:100%; background:#eff1f7; border-radius:100px; overflow:hidden; }
-    .progress > span { display:block; height:100%; min-width:0; border-radius:100px; transition:width .35s; }
-    .budget-footer { display:flex; justify-content:space-between; margin-top:6px; color:#a2aaba; font-size:9.5px; }
-    .transactions { display:grid; gap:0; }
-    .tx-row { display:flex; align-items:center; padding:12px 0; border-bottom:1px solid #f1f2f7; gap:12px; }
-    .tx-row:first-child { padding-top:0; }
-    .tx-row:last-child { border-bottom:0; padding-bottom:0; }
-    .tx-icon { display:grid; place-items:center; width:40px; height:40px; border-radius:12px; flex:0 0 40px; font-size:18px; }
-    .tx-main { flex:1; min-width:0; }
-    .tx-title { font-size:11.8px; font-weight:760; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
-    .tx-meta { font-size:10px; color:#9ca5b7; margin-top:5px; }
-    .tx-end { text-align:right; margin-left:auto; }
-    .tx-amount { white-space:nowrap; font-size:12px; font-weight:800; }
-    .tx-amount.income { color:var(--green); }
-    .tx-date { color:#a1aabd; font-size:10px; margin-top:5px; }
-    .icon-button { border:0; color:#8f99ab; background:none; border-radius:9px; height:31px; width:31px; display:inline-grid; place-items:center; }
-    .icon-button:hover { background:var(--purple-soft); color:var(--purple); }
-    .icon-button .ico { width:16px; height:16px; }
-    .action-pair { display:flex; flex-shrink:0; }
-    .insight { border-radius:15px; background:#f3f0ff; display:flex; align-items:flex-start; gap:12px; padding:16px; margin-bottom:11px; }
-    .insight:last-child { margin-bottom:0; }
-    .insight .insight-ico { width:35px; height:35px; flex:0 0 35px; background:white; color:var(--purple); border-radius:11px; display:grid; place-items:center; }
-    .insight h3 { font-size:12px; margin:0 0 5px; }
-    .insight p { color:#827e9b; line-height:1.6; font-size:11px; margin:0; }
-    .insight.green { background:#e9faf3; }
-    .insight.green .insight-ico { color:var(--green); }
-    .insight.green p { color:#668f81; }
-    .bar-chart { display:flex; gap:13px; align-items:end; height:190px; padding-top:10px; }
-    .bar-col { display:flex; flex:1; flex-direction:column; height:100%; min-width:0; align-items:center; justify-content:flex-end; gap:8px; }
-    .bar-stack { width:100%; max-width:35px; height:153px; display:flex; flex-direction:column; justify-content:flex-end; }
-    .bar { width:100%; min-height:3px; border-radius:7px 7px 3px 3px; background:#e8e4ff; }
-    .bar.current { background:linear-gradient(180deg,#7c6aee,#6250d4); }
-    .bar-col label { font-size:10px; color:#9ca6b7; text-align:center; }
-    .bar-col.current label { color:var(--purple); font-weight:800; }
-    .section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:2px 0 19px; }
-    .section-heading h2 { font-size:21px; font-weight:850; margin:0; letter-spacing:-.7px; }
-    .section-heading p { color:var(--muted); font-size:12px; margin:6px 0 0; }
-    .toolbar { display:flex; gap:11px; align-items:center; flex-wrap:wrap; margin-bottom:19px; }
-    .search-box { display:flex; align-items:center; gap:9px; background:white; border:1px solid var(--line); padding:0 13px; border-radius:11px; height:43px; flex:1; min-width:190px; max-width:380px; color:#a6afbe; }
-    .search-box input { border:0; background:none; outline:none; width:100%; height:100%; color:var(--text); font-size:12px; }
-    .search-box .ico { width:18px; height:18px; }
-    select,input[type="date"],input[type="number"],input[type="text"] { color:var(--text); }
-    .select { border:1px solid var(--line); border-radius:11px; height:43px; padding:0 15px; background:white; font-size:12px; color:#67758b; max-width:100%; }
-    .list-card { padding:0 22px; }
-    .list-card .tx-row { padding:16px 0; }
-    .list-card .tx-row:first-child { padding-top:16px; }
-    .list-card .tx-row:last-child { padding-bottom:16px; }
-    .sub-grid,.goal-grid,.budget-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:17px; }
-    .sub-card { padding:19px; }
-    .sub-top { display:flex; gap:12px; align-items:center; }
-    .service-logo { flex:0 0 48px; height:48px; width:48px; border-radius:15px; background:#eeeaff; color:var(--purple); display:grid; place-items:center; font-weight:850; font-size:20px; }
-    .sub-name { font-size:13px; font-weight:800; overflow-wrap:anywhere; }
-    .sub-type { font-size:11px; color:#9ca6b9; margin-top:4px; }
-    .sub-price { font-size:26px; font-weight:850; letter-spacing:-1px; margin:23px 0 3px; }
-    .sub-price small { font-size:12px; color:#a0aabd; font-weight:550; letter-spacing:0; }
-    .sub-bottom { border-top:1px solid var(--line); margin-top:15px; padding-top:13px; display:flex; align-items:center; justify-content:space-between; gap:7px; }
-    .sub-date { color:#99a5b7; font-size:10px; }
-    .status { display:inline-flex; gap:5px; align-items:center; font-size:10px; font-weight:800; background:var(--green-soft); color:var(--green); border-radius:30px; padding:5px 8px; }
-    .status.inactive { color:#a0a3b2; background:#f0f1f5; }
-    .muted-card { opacity:.67; }
-    .goal-card { padding:22px; }
-    .goal-top { display:flex; justify-content:space-between; align-items:center; }
-    .goal-emoji { display:grid; place-items:center; font-size:24px; width:51px; height:51px; border-radius:14px; background:var(--purple-soft); }
-    .goal-name { font-size:14px; font-weight:800; margin:19px 0 7px; }
-    .goal-saved { font-size:21px; font-weight:860; letter-spacing:-.7px; }
-    .goal-saved small { color:#9ca6b7; font-size:11px; font-weight:500; letter-spacing:0; }
-    .goal-percent { display:flex; justify-content:space-between; font-size:10px; margin:13px 0 8px; color:#a0aabc; }
-    .goal-percent strong { color:var(--purple); }
-    .goal-actions { display:flex; gap:8px; margin-top:20px; }
-    .goal-actions .btn { flex:1; padding:10px 7px; }
-    .budget-card { padding:21px; }
-    .budget-card-title { display:flex; gap:10px; align-items:center; justify-content:space-between; }
-    .budget-card-icon { width:39px; height:39px; border-radius:12px; display:grid; place-items:center; font-size:20px; background:#f3f1ff; }
-    .budget-card h3 { font-size:13px; margin:16px 0 16px; }
-    .budget-card .amount-big { font-size:22px; font-weight:850; }
-    .budget-card .amount-big span { font-size:11px; color:#a1adbb; font-weight:500; }
-    .budget-card p { font-size:10px; color:#a2abb9; margin:8px 0 18px; }
-    .empty { text-align:center; padding:44px 18px; color:#98a3b5; }
-    .empty-icon { width:54px; height:54px; border-radius:17px; background:var(--purple-soft); color:var(--purple); display:grid; place-items:center; margin:0 auto 13px; }
-    .empty h3 { font-size:15px; color:var(--text); margin:0 0 8px; }
-    .empty p { font-size:12px; line-height:1.6; max-width:340px; margin:0 auto 16px; }
-    .banner { border-radius:17px; display:flex; align-items:center; justify-content:space-between; gap:15px; padding:17px 22px; background:linear-gradient(105deg,#eeeaff,#e6faf2); border:1px solid #e9e5fe; margin:0 0 20px; }
-    .banner h3 { font-size:13px; margin:0 0 5px; }
-    .banner p { margin:0; color:#8385a6; font-size:11px; line-height:1.6; }
-    .mini-topics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px; }
-    .mini-topic { padding:20px; }
-    .mini-topic .eyebrow { display:block; margin:0 0 12px; }
-    .mini-topic strong { font-size:23px; letter-spacing:-.8px; }
-    .mini-topic p { font-size:11px; color:#98a4b6; line-height:1.6; }
-    .settings-row { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:17px 0; border-bottom:1px solid var(--line); }
-    .settings-row:last-child { border:0; }
-    .settings-row strong { font-size:12px; }
-    .settings-row p { color:#9da7b9; font-size:11px; margin:5px 0 0; line-height:1.5; }
-    .notice { font-size:11px; color:#8d96a8; line-height:1.7; margin-top:15px; }
-    .modal-wrap { position:fixed; inset:0; background:rgba(23,27,47,.53); backdrop-filter:blur(4px); z-index:100; display:none; align-items:center; justify-content:center; padding:18px; overflow-y:auto; }
-    .modal-wrap.open { display:flex; }
-    .modal { background:white; border-radius:22px; box-shadow:0 22px 90px #0003; width:100%; max-width:480px; max-height:calc(100vh - 35px); overflow-y:auto; padding:24px; }
-    .modal-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:19px; }
-    .modal-heading h2 { font-size:18px; margin:0; letter-spacing:-.5px; }
-    .field { display:block; margin-bottom:15px; }
-    .field-label { display:block; margin-bottom:7px; font-size:11px; font-weight:750; color:#5b6580; }
-    .field-control { border:1px solid #e2e6f0; height:44px; border-radius:10px; padding:0 13px; background:#fff; display:block; width:100%; font-size:13px; outline:none; }
-    .field-control:focus { border-color:var(--purple); box-shadow:0 0 0 3px #6857df17; }
-    .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .form-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:10px; }
-    .form-hint { color:#9ca6b7; font-size:10px; margin:-8px 0 16px; line-height:1.5; }
-    .toast { position:fixed; right:23px; bottom:24px; z-index:200; background:#252645; color:white; border-radius:12px; box-shadow:0 12px 34px #1f21484a; padding:14px 18px; font-size:12px; font-weight:650; transform:translateY(90px); opacity:0; pointer-events:none; transition:transform .25s,opacity .25s; max-width:min(360px,calc(100vw - 40px)); }
-    .toast.show { transform:translateY(0); opacity:1; }
-    .shade { display:none; }
-    .mobile-nav { display:none; }
-    .fineprint { text-align:center; color:#aab2c1; font-size:10px; margin-top:35px; line-height:1.6; }
-    @media(max-width:1250px) { .container { padding-left:27px; padding-right:27px; } .topbar { padding:0 27px; } .sub-grid,.goal-grid,.budget-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .stats-grid { gap:12px; } .stat { padding:17px 15px; } .two-col { grid-template-columns:minmax(0,1.05fr) minmax(290px,1fr); } .pie-section { gap:12px; } .donut { width:155px; height:155px; flex-basis:155px; } .donut:before { height:113px; width:113px; } .donut-inner strong { font-size:17px; } }
-    @media(max-width:1050px) { .two-col { grid-template-columns:1fr; } .stat-value { font-size:22px; } .sidebar { width:220px; flex-basis:220px; } .main { width:calc(100% - 220px); } .hero-art { margin-right:0; } .pie-section { justify-content:space-around; } }
-    @media(max-width:840px) { .sidebar { position:fixed; left:0; top:0; transform:translateX(-105%); transition:transform .25s; width:255px; z-index:102; box-shadow:15px 0 30px #1c20301a; } .sidebar.open { transform:translateX(0); } .shade.open { position:fixed; display:block; inset:0; background:#15192c88; z-index:101; } .main { width:100%; } .menu-btn { display:inline-grid; place-items:center; } .mobile-nav { position:fixed; z-index:50; bottom:0; left:0; right:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); background:#fff; border-top:1px solid var(--line); padding:8px max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)); box-shadow:0 -8px 25px #1f23410b; } .mobile-nav button { border:0; background:none; color:#9aa3b4; display:flex; flex-direction:column; gap:4px; align-items:center; font-size:9px; font-weight:680; padding:4px 2px; } .mobile-nav button.active { color:var(--purple); } .mobile-nav .ico { width:20px; height:20px; } .container { padding-bottom:105px; } .toast { bottom:91px; } }
-    @media(max-width:620px) { .topbar { height:74px; padding:0 17px; } .topbar h1 { font-size:17px; } .topbar p { display:none; } .top-actions .today,.top-actions .pill { display:none!important; } .top-actions .btn { padding:10px; font-size:0; } .top-actions .btn .ico { height:19px; width:19px; } .container { padding:20px 15px 105px; } .hero { border-radius:19px; min-height:220px; padding:25px 23px; } .hero h2 { font-size:24px; } .hero p { font-size:11px; max-width:300px; } .hero-art { display:none; } .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin:14px 0; } .stat { padding:14px; border-radius:16px; } .stat-value { font-size:21px; } .stat-top span { font-size:10px; } .stat-icon { height:29px; width:29px; } .stat-foot { font-size:9px; } .two-col { gap:14px; margin-bottom:14px; } .card { border-radius:17px; } .card-body { padding:19px 17px; } .pie-section { gap:16px; } .donut { width:156px; height:156px; flex-basis:156px; } .legend { min-width:150px; } .sub-grid,.goal-grid,.budget-grid { grid-template-columns:1fr; gap:12px; } .section-heading h2 { font-size:19px; } .banner { flex-direction:column; align-items:flex-start; } .mini-topics { grid-template-columns:1fr; } .search-box { width:100%; max-width:none; } .toolbar .select { flex:1; min-width:120px; } .tx-row { gap:9px; } .tx-icon { width:36px; height:36px; flex-basis:36px; font-size:17px; } .list-card { padding:0 13px; } .list-card .action-pair { gap:0; } .icon-button { width:27px; height:30px; } .tx-main { max-width:none; } .tx-title { font-size:11px; } .tx-amount { font-size:11px; } .tx-meta { font-size:9px; } .settings-row { flex-wrap:wrap; } }
-    @media(max-width:390px) { .stat-value { font-size:18px; } .stat-top span { max-width:95px; line-height:1.4; } .stats-grid { gap:9px; } .stat { padding:12px; } .hero h2 { font-size:21px; } .card-body { padding:16px 13px; } .form-grid { grid-template-columns:1fr; gap:0; } }
-    @media(prefers-reduced-motion:reduce) { *,*:before,*:after { scroll-behavior:auto!important; transition:none!important; } }
+    :root{--bg:#f6f7f4;--white:#fff;--ink:#18231e;--muted:#849087;--muted2:#68776e;--green:#c8f28a;--forest:#214d36;--line:#e8ece7;--red:#c54b54;--orange:#edaa64;--purple:#a99bec;--blue:#89b7e9;--radius:22px;--shadow:0 12px 36px rgba(30,50,34,.035)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8bcf75;outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.5}svg{display:block}a{color:inherit}.icon{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.icon-sm{width:16px;height:16px}.icon-lg{width:22px;height:22px}
+    .shell{min-height:100vh;display:flex}.sidebar{width:250px;flex:0 0 250px;background:#fff;border-right:1px solid var(--line);min-height:100vh;padding:28px 17px 22px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}.brand{display:flex;gap:10px;align-items:center;padding:6px 13px 41px}.brand-mark{height:37px;width:37px;display:grid;place-items:center;background:var(--ink);color:var(--green);border-radius:12px;transform:rotate(-6deg)}.brand-mark svg{transform:rotate(6deg)}.brand-name{font-weight:850;font-size:21px;letter-spacing:-1px}.brand-name span{color:#7bb957}.nav-caption{font-size:10px;font-weight:850;color:#a6afa8;letter-spacing:1.65px;padding:0 17px;margin-bottom:13px}.side-nav{display:grid;gap:6px}.nav-btn{border:0;background:transparent;border-radius:13px;display:flex;align-items:center;gap:12px;padding:14px 16px;width:100%;color:#76847c;text-align:left;font-weight:650;transition:.15s}.nav-btn:hover{background:#f4f7f0;color:var(--forest)}.nav-btn.active{background:#ecf7dc;color:var(--forest);font-weight:800}.nav-btn.active .icon{stroke-width:2.3}.side-bottom{margin-top:auto}.tip-panel{background:#eaf4df;border-radius:18px;padding:19px 16px;position:relative;overflow:hidden}.tip-panel .tip-icon{height:35px;width:35px;background:#d2eca8;border-radius:11px;display:grid;place-items:center;margin-bottom:12px}.tip-panel h4{margin:0 0 7px;font-size:14px;line-height:1.35}.tip-panel p{color:#57715f;font-size:12px;line-height:1.55;margin:0}.tip-panel:after{content:"";position:absolute;width:112px;height:112px;border:17px solid #dbedc3;border-radius:50%;right:-64px;top:-49px;pointer-events:none}.privacy{display:flex;align-items:center;gap:8px;color:#94a097;font-size:11px;padding:23px 9px 1px;line-height:1.4}
+    .workspace{flex:1;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;padding:25px clamp(24px,4.3vw,72px);border-bottom:1px solid #eff1ed;background:rgba(255,255,255,.52);height:88px}.crumb{font-size:13px;color:#a3aaa5}.crumb strong{color:var(--ink);font-weight:760}.top-actions{display:flex;align-items:center;gap:16px}.date-pill{display:flex;align-items:center;gap:7px;color:#7a857c;font-weight:600;font-size:12px}.avatar{width:40px;height:40px;display:grid;place-items:center;border:3px solid white;border-radius:50%;background:#e4d7ed;color:#584a66;font-weight:850;box-shadow:0 2px 7px #0000000a}.demo-pill{color:#4c6e52;background:#e5f3df;border-radius:25px;font-size:11px;font-weight:800;padding:7px 11px}.page{max-width:1390px;padding:34px clamp(24px,4.3vw,72px) 74px;margin:0 auto}.view{display:none}.view.active{display:block;animation:fadeIn .22s ease}@keyframes fadeIn{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.eyebrow{font-size:10px;letter-spacing:2px;font-weight:850;color:#88a18a;text-transform:uppercase;margin:0 0 11px}.page-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:25px}.page-head h1{font-size:clamp(26px,3vw,36px);letter-spacing:-1.45px;line-height:1.15;margin:0;font-weight:850}.page-sub{margin:10px 0 0;color:#819087;line-height:1.5}.btn{border:0;border-radius:12px;padding:12px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;transition:transform .15s,background .15s;white-space:nowrap}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:#2d493a}.btn-lime{background:var(--green);color:#203d26}.btn-lime:hover{background:#b8e879}.btn-light{background:#f0f4ed;color:#3f5945}.btn-outline{border:1px solid #e1e7e0;background:white;color:#506257}.btn-small{font-size:12px;padding:9px 12px;border-radius:10px}.btn-ghost{background:transparent;color:#74857a;padding:9px}.btn-danger{background:#fcecef;color:#bb4552}.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px}.metric{padding:22px 21px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid #edf0eb;min-height:148px;display:flex;flex-direction:column;justify-content:space-between}.metric-head{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#7a867f;font-size:12px;font-weight:720}.metric-icon{height:34px;width:34px;display:grid;place-items:center;border-radius:10px}.metric-icon.green{background:#eaf6df;color:#50884c}.metric-icon.purple{background:#f1edfe;color:#8271cf}.metric-icon.orange{background:#fcf0e3;color:#c38643}.metric-icon.blue{background:#eaf2fd;color:#628dc7}.metric-number{font-size:clamp(22px,2.3vw,30px);line-height:1.15;letter-spacing:-1.2px;font-weight:850;margin:15px 0 6px;font-variant-numeric:tabular-nums}.metric-foot{font-size:11px;color:#91a095}.metric-foot.good{color:#438857}.hero{background:#203c2e;color:white;border-radius:26px;padding:33px 36px;min-height:236px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;margin-bottom:20px}.hero-left{position:relative;z-index:1;max-width:500px}.hero .eyebrow{color:#b9e99c}.hero h2{font-size:clamp(30px,3.8vw,48px);margin:0 0 12px;line-height:1.1;letter-spacing:-2px;font-weight:850}.hero h2 em{color:var(--green);font-style:normal}.hero p{color:#b7d2c0;line-height:1.65;font-size:13px;max-width:415px;margin:0 0 20px}.hero .btn{font-size:12px}.hero-visual{width:300px;height:195px;position:relative;z-index:0;flex:none;margin-right:15px}.ring1,.ring2{position:absolute;border-radius:50%;border:34px solid #416d4c;inset:-65px -46px -70px 8px;opacity:.65}.ring2{inset:9px 5px 2px 105px;border-width:25px;border-color:#7caf70;opacity:.4}.float-card{position:absolute;width:180px;height:113px;background:linear-gradient(130deg,#d7f7a2,#aedb78);border-radius:17px;top:28px;left:80px;transform:rotate(-11deg);box-shadow:0 18px 37px #12231a66;padding:17px;color:#2f5a35;display:flex;flex-direction:column;justify-content:space-between}.float-card span{font-size:9px;font-weight:800;letter-spacing:1.3px}.float-card strong{font-size:23px;letter-spacing:-1px}.float-card svg{position:absolute;right:16px;top:14px}.star{position:absolute;right:5px;top:-4px;color:#cff99b;font-size:37px}.section-grid{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(280px,1fr);gap:19px;margin-top:20px}.panel{background:white;border:1px solid #edf0eb;border-radius:var(--radius);padding:24px;min-width:0;box-shadow:var(--shadow)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:23px}.panel-title{font-size:16px;font-weight:850;letter-spacing:-.4px;margin:0}.panel-subtitle{font-size:12px;color:#97a49a;margin-top:5px}.text-link{border:0;background:transparent;color:#4a8454;font-size:12px;font-weight:850;padding:5px;display:inline-flex;align-items:center;gap:5px}.text-link:hover{text-decoration:underline}.subrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #f0f2ee;min-width:0}.subrow:first-of-type{border-top:0}.service-logo,.category-icon{height:43px;width:43px;display:grid;place-items:center;border-radius:13px;font-size:17px;font-weight:900;flex:none}.subrow-main{flex:1;min-width:0}.subrow-main strong{display:block;font-size:13px;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.subrow-main span{display:block;color:#a1aaa3;font-size:11px}.subrow-price{text-align:right;white-space:nowrap}.subrow-price strong{display:block;font-size:13px}.subrow-price span{font-size:11px;color:#99a49c}.spend-composition{display:flex;align-items:center;justify-content:center;gap:25px;min-height:205px}.donut{height:165px;width:165px;border-radius:50%;position:relative;display:grid;place-items:center;flex-shrink:0;background:conic-gradient(#ebeee9 0 100%)}.donut:before{content:"";width:117px;height:117px;border-radius:50%;background:#fff;position:absolute}.donut-inner{text-align:center;position:relative;z-index:1}.donut-inner span{font-size:11px;color:#9da99f}.donut-inner strong{display:block;font-size:19px;letter-spacing:-.8px;margin-top:4px}.legend{min-width:0;flex:1}.legend-item{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:11px 0;font-size:11px}.legend-name{display:flex;align-items:center;gap:7px;color:#7d8c82;white-space:nowrap}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}.legend-val{font-weight:780;white-space:nowrap}.bottom-grid{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(280px,1fr);gap:19px;margin-top:19px}.opportunity{padding:13px 0;display:flex;align-items:flex-start;gap:13px;border-top:1px solid #f0f2ee}.opportunity:first-of-type{border-top:0}.opportunity-symbol{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;flex:none;background:#eff6df;color:#578551}.opportunity strong{display:block;font-size:13px;line-height:1.5}.opportunity p{font-size:12px;color:#89968e;line-height:1.5;margin:4px 0 0}.opportunity .amount{font-size:12px;font-weight:850;color:#33814c;white-space:nowrap;margin-left:auto}.activity{padding:12px 0;display:flex;gap:11px;align-items:center;border-top:1px solid #f0f2ee}.activity:first-of-type{border-top:0}.activity-main{flex:1;min-width:0}.activity-main strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.activity-main span{font-size:11px;color:#a1aaa3;display:block;margin-top:5px}.activity-price{font-size:12px;font-weight:850;white-space:nowrap}.activity-price.pos{color:#3b9854}.notice{padding:13px 16px;background:#f0f6eb;border-radius:12px;border:1px solid #e4efd8;display:flex;align-items:flex-start;gap:10px;color:#66816e;font-size:12px;line-height:1.55;margin-top:20px}.notice svg{flex:none;margin-top:1px}.panel-blank{padding:24px;text-align:center;color:#9ca8a0;font-size:13px;line-height:1.6}.panel-blank .icon{margin:0 auto 9px;color:#89b66a}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}.search{display:flex;align-items:center;gap:9px;border:1px solid #e3e9e2;background:#fff;border-radius:12px;padding:0 13px;min-width:220px;flex:1;max-width:380px;color:#8b9a8f}.search input{border:0;background:transparent;outline:0;height:44px;flex:1;min-width:50px;color:var(--ink)}.search input::placeholder{color:#abb7ae}.select{border:1px solid #e3e9e2;background:white;color:#61766a;border-radius:12px;height:44px;padding:0 13px;min-width:155px;outline:0}.table-scroll{overflow-x:auto}.transaction-table{width:100%;border-collapse:collapse;min-width:560px}.transaction-table th{color:#a0a9a2;text-transform:uppercase;font-size:10px;letter-spacing:1px;text-align:left;padding:12px 15px;border-bottom:1px solid var(--line)}.transaction-table td{padding:14px 15px;border-bottom:1px solid #f0f2ef;color:#66766b;font-size:12px}.transaction-table tr:last-child td{border-bottom:0}.transaction-table td strong{font-size:13px;color:#26352b}.transaction-table td.amount-neg{font-weight:850;color:#26352b}.transaction-table td.amount-pos{font-weight:850;color:#36864a}.pill{padding:6px 10px;border-radius:20px;background:#f1f5ef;font-size:10px;display:inline-block;color:#5b7161;font-weight:750}.delete-btn{border:0;background:#f9f2f2;color:#b46e75;border-radius:9px;padding:8px}.delete-btn:hover{background:#f5e3e5}.subscriptions-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(275px,.8fr);gap:19px}.subscription-card{display:flex;align-items:center;gap:15px;padding:18px 0;border-bottom:1px solid var(--line)}.subscription-card:first-child{padding-top:4px}.subscription-card:last-child{border-bottom:0}.subscription-card .service-logo{width:52px;height:52px;border-radius:16px}.subscription-detail{flex:1;min-width:0}.subscription-detail strong{font-size:14px;display:block;margin-bottom:5px}.subscription-detail span{font-size:11px;color:#97a49a}.subscription-amount{text-align:right}.subscription-amount strong{display:block;font-size:15px}.subscription-amount span{font-size:11px;color:#9da89e}.cancel-button{display:inline-flex;align-items:center;margin:7px 0 0;border:0;padding:0;background:transparent;font-size:11px;font-weight:750;color:#749b75}.cancel-button:hover{text-decoration:underline}.cancelled{opacity:.55}.sub-large{background:#253f30;border-radius:20px;padding:25px;color:white;margin-bottom:15px;position:relative;overflow:hidden}.sub-large:after{content:"";height:120px;width:120px;border:22px solid #365b3d;border-radius:50%;position:absolute;right:-39px;top:-50px}.sub-large small{color:#b3cdb4;font-weight:700}.sub-large strong{display:block;font-size:36px;letter-spacing:-1px;margin:14px 0 7px}.sub-large p{color:#a5c3ac;font-size:12px;margin:0}.savings-goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px}.goal-card{background:white;border-radius:22px;padding:25px;border:1px solid #e9eee7;box-shadow:var(--shadow)}.goal-icon{display:grid;place-items:center;background:#edf6dd;border-radius:15px;width:49px;height:49px;font-size:24px}.goal-head{display:flex;justify-content:space-between;align-items:flex-start}.goal-card h3{font-size:17px;margin:19px 0 7px;letter-spacing:-.3px}.goal-card p{font-size:12px;color:#9ca79f;margin:0 0 21px}.progress-labels{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.progress-labels strong{font-size:18px;letter-spacing:-.6px}.progress-labels span{font-size:12px;color:#a0aaa1}.progress-track{height:10px;background:#ecf0e9;border-radius:10px;overflow:hidden}.progress-fill{background:#9bd268;height:100%;border-radius:10px;transition:width .2s}.goal-actions{display:flex;gap:9px;margin-top:19px}.budget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.budget-row{border:1px solid #edf0ea;background:white;border-radius:18px;padding:20px}.budget-row h4{font-size:13px;margin:0 0 7px}.budget-row p{color:#96a099;margin:0 0 17px;font-size:11px}.budget-row .progress-track{height:8px}.budget-row .progress-labels strong{font-size:13px}.budget-row .progress-labels span{font-weight:800;color:#7a8980}.over{background:#e59e78}.budget-edit{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:14px}.budget-edit label{color:#99a79e;font-size:11px}.mini-input{width:100px;border:1px solid #e5eae5;border-radius:9px;padding:7px 10px;background:#fbfcfb;text-align:right;color:#283f2f}.insight-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:20px}.insight-hero{background:#e5f1d8;border-radius:20px;padding:27px;margin-bottom:20px}.insight-hero strong{display:block;font-size:29px;letter-spacing:-1px;margin:13px 0}.insight-hero p{color:#608064;line-height:1.65;font-size:12px;margin:0}.trend{height:175px;display:flex;align-items:end;gap:13px;border-bottom:1px solid #e7ebe4;padding:7px 0 0}.trend-col{flex:1;display:flex;align-items:center;justify-content:end;flex-direction:column;min-width:0;gap:7px}.trend-bar-wrap{height:145px;width:100%;display:flex;align-items:end;justify-content:center}.trend-bar{width:clamp(18px,45%,40px);background:#d8e6ce;border-radius:8px 8px 0 0;min-height:2px;position:relative}.trend-bar.current{background:#8ac76f}.trend-col small{font-size:10px;color:#9aa89d;white-space:nowrap}.trend-tooltip{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-size:9px;color:#476c4d;font-weight:800;white-space:nowrap}.footer-text{text-align:center;color:#acb5ad;font-size:11px;margin-top:36px;line-height:1.6}.mobile-bottom{display:none}
+    .modal-wrap{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(16,30,22,.55);z-index:50;backdrop-filter:blur(3px)}.modal-wrap.open{display:flex}.modal{background:white;border-radius:23px;width:min(100%,490px);max-height:calc(100vh - 36px);overflow-y:auto;padding:27px;box-shadow:0 26px 90px #06130a38}.modal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:19px}.modal h2{font-size:23px;margin:0;letter-spacing:-.7px}.modal-close{border:0;background:#f1f4f0;border-radius:10px;height:32px;width:32px;display:grid;place-items:center;color:#607769}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:12px;color:#5e7164;font-weight:780}.field input,.field select{border:1px solid #e0e7e0;outline:0;border-radius:12px;padding:12px 13px;min-width:0;width:100%;background:#fbfcfa;color:#203427}.field input:focus,.field select:focus{border-color:#94c479}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:10px}.modal-description{color:#859389;line-height:1.65;font-size:12px;margin:-5px 0 22px}.seg{display:flex;gap:6px;background:#f2f5ef;padding:5px;border-radius:12px;margin-bottom:19px}.seg button{flex:1;border:0;background:transparent;padding:10px;border-radius:9px;color:#8a968b;font-weight:800}.seg button.active{background:white;color:#284232;box-shadow:0 2px 8px #0000000b}.toast{position:fixed;z-index:100;bottom:26px;right:26px;background:#233d2e;color:#fff;padding:13px 18px;border-radius:14px;box-shadow:0 14px 40px #172c2055;display:none;align-items:center;gap:9px;max-width:calc(100vw - 48px);font-size:12px;font-weight:730}.toast.show{display:flex;animation:fadeIn .2s}.empty-state{color:#95a398;text-align:center;padding:38px 12px;line-height:1.7}.empty-state strong{display:block;color:#667d6b;margin-bottom:4px}.empty-state .icon{margin:0 auto 10px;width:26px;height:26px}
+    @media(max-width:1230px){.sidebar{width:222px;flex-basis:222px}.page{padding-left:28px;padding-right:28px}.topbar{padding-left:28px;padding-right:28px}.metric{padding:18px}.spend-composition{gap:12px}.donut{width:135px;height:135px}.donut:before{height:95px;width:95px}.legend-item{font-size:10px}}
+    @media(max-width:1030px){.sidebar{width:76px;flex-basis:76px;padding:24px 10px}.brand{padding:6px 7px 39px}.brand-name,.nav-caption,.nav-label,.side-bottom,.privacy{display:none}.side-nav{gap:10px}.nav-btn{justify-content:center;padding:14px}.nav-btn .icon{width:22px;height:22px}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-visual{margin-right:0}.section-grid,.bottom-grid,.subscriptions-layout,.insight-grid{grid-template-columns:minmax(0,1fr) minmax(270px,.85fr)}}
+    @media(max-width:760px){.sidebar{display:none}.topbar{height:67px;padding:0 17px}.topbar .crumb{font-size:12px}.date-pill{display:none}.page{padding:23px 16px 105px}.page-head{align-items:flex-start}.page-head h1{font-size:28px}.page-head .btn{padding:11px;font-size:11px}.hero{padding:27px;min-height:217px}.hero-visual{width:135px;opacity:.62;position:absolute;right:10px;top:30px}.hero h2{font-size:36px}.hero-left{max-width:390px}.hero p{max-width:285px}.grid4{gap:11px}.metric{border-radius:17px;padding:16px;min-height:127px}.metric-number{font-size:24px;margin:10px 0 5px}.metric-head{font-size:11px}.section-grid,.bottom-grid,.subscriptions-layout,.insight-grid,.savings-goals{grid-template-columns:1fr}.panel{padding:19px}.mobile-bottom{position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -8px 23px #2538290b}.mobile-tab{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px;color:#94a499;font-size:9px;font-weight:720;width:20%}.mobile-tab.active{color:#37774e}.mobile-tab .icon{width:21px;height:21px}.toast{bottom:93px;right:12px}.footer-text{margin-bottom:9px}}
+    @media(max-width:480px){.page-head{gap:10px}.page-head .btn span{display:none}.hero h2{font-size:31px}.hero-visual{right:-55px;top:45px}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.metric-number{font-size:22px}.metric-head{font-size:10px}.metric-icon{height:29px;width:29px}.spend-composition{gap:15px}.donut{height:130px;width:130px}.donut:before{width:92px;height:92px}.legend-item{font-size:10px}.legend-name{gap:5px}.budget-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.modal{padding:22px}.page-head h1{font-size:26px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+  
+    .bank-hero{display:flex;align-items:center;justify-content:space-between;background:#234936;border-radius:23px;color:#fff;padding:28px 33px;margin-bottom:20px;gap:20px;overflow:hidden}.bank-hero h2{font-size:clamp(23px,3vw,36px);letter-spacing:-1.1px;margin:13px 0 10px}.bank-hero p{line-height:1.65;color:#c4dfcc;max-width:630px;margin:0}.bank-secure{display:inline-flex;background:#c8f28a;color:#235137;padding:7px 10px;border-radius:22px;font-size:11px;font-weight:850}.bank-hero-badge{display:grid;place-items:center;border-radius:28px;background:#ffffff1a;border:1px solid #ffffff3d;height:108px;min-width:108px;font-size:59px}.bank-columns{display:grid;grid-template-columns:1fr 1fr;gap:19px;align-items:stretch}.bank-form{display:grid;gap:11px}.bank-form label{color:#44564b;font-size:12px;font-weight:800}.bank-form input,.bank-form select{min-width:0;width:100%;height:46px;border-radius:11px;padding:0 13px;border:1px solid #dee7df;background:#fff;color:#233a2a}.bank-form .btn{justify-self:start}.bank-help{color:#7a8f80;font-size:12px;line-height:1.6;margin:0 0 7px}.bank-state{background:#f5f8f2;color:#56745f;border-radius:11px;border:1px solid #e9eee6;padding:14px;margin-top:17px;font-size:12px;line-height:1.6;overflow-wrap:anywhere}.bank-state.error{background:#fff1f2;color:#ac4352;border-color:#f4dade}.bank-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.bank-info{margin-top:19px}.bank-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:21px}.bank-steps>div{display:grid;align-content:start;gap:9px}.bank-steps span{background:#ecf6dd;color:#437848;display:grid;place-items:center;width:37px;height:37px;font-size:12px;font-weight:850;border-radius:12px}.bank-steps strong{font-size:13px}.bank-steps p{margin:0;font-size:12px;line-height:1.65;color:#839489}@media(max-width:800px){.bank-columns,.bank-steps{grid-template-columns:1fr}.bank-hero{padding:25px}.bank-hero-badge{min-width:68px;height:68px;font-size:38px}}@media(max-width:480px){.bank-hero-badge{display:none}.bank-hero h2{font-size:26px}.bank-columns{gap:12px}.bank-hero{border-radius:18px}}
   </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 9h18M16 14h2M6 5V3h12"/></symbol>
-  <symbol id="i-dashboard" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/></symbol>
-  <symbol id="i-transfer" viewBox="0 0 24 24"><path d="M4 7h16m-5-4 5 4-5 4M20 17H4m5-4-5 4 5 4"/></symbol>
-  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4m14-1v2a3 3 0 0 1-3 3H3"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M12 3v9h9A9 9 0 1 1 12 3Z"/><path d="M15 3a9 9 0 0 1 6 6h-6Z"/></symbol>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-8h6v8"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
   <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
-  <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M9 18h6m-5 4h4m-6-6c-1-2-3-3-3-7a7 7 0 1 1 14 0c0 4-2 5-3 7-1 1-1 2-1 2h-6s0-1-1-2Z"/></symbol>
-  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1-2 2-.1-.1a1.6 1.6 0 0 0-1.8-.3l-.4.2-.4 2.3h-3l-.4-2.3-.4-.2a1.6 1.6 0 0 0-1.8.3l-.1.1-2-2 .1-.1a1.6 1.6 0 0 0 .3-1.8l-.2-.4L5 14.2v-3l2.3-.4.2-.4a1.6 1.6 0 0 0-.3-1.8L7.1 8l2-2 .1.1a1.6 1.6 0 0 0 1.8.3l.4-.2L11.8 4h3l.4 2.2.4.2a1.6 1.6 0 0 0 1.8-.3l.1-.1 2 2-.1.1a1.6 1.6 0 0 0-.3 1.8l.2.4 2.3.4v3l-2.3.4Z" transform="translate(-1 -1)"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M7 16l5-5 4 3 5-7"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></symbol>
-  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
-  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6M12 9v12"/></symbol>
-  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6M12 3v12"/></symbol>
-  <symbol id="i-trending" viewBox="0 0 24 24"><path d="m3 17 7-7 4 4 7-7m-6 0h6v6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 9h18M16 14h2M6 5V3h12"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8M15 7h6v6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 2.3 7.7L22 12l-7.7 2.3L12 22l-2.3-7.7L2 12l7.7-2.3z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m3 0-1 15H6L5 6M10 10v7m4-7v7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 17v3h16v-3"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.01"/></symbol>
   <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></symbol>
-  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16m-10 4v7m4-7v7M6 7l1 14h10l1-14M9 7V4h6v3"/></symbol>
-  <symbol id="i-edit" viewBox="0 0 24 24"><path d="m5 16-1 4 4-1L19 8l-3-3L5 16Zm9-9 3 3"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
-  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol>
-  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 17v4h16v-4"/></symbol>
-  <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
-  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 6 4 9 8 10 4-1 8-4 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></symbol>
-  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 2 2.3 6.7L21 11l-6.7 2.3L12 20l-2.3-6.7L3 11l6.7-2.3L12 2Zm7 16 1 2 2 1-2 1m-16-1 1-3 3-1-3-1"/></symbol>
-  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
-  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/></symbol>
 </svg>
-<div class="app">
-  <div class="shade" id="shade"></div>
-  <aside class="sidebar" id="sidebar" aria-label="Hoofdnavigatie">
-    <a class="brand" href="#overzicht" data-page="overzicht" aria-label="Saldo - overzicht">
-      <span class="brand-logo"><svg class="ico"><use href="#i-wallet"></use></svg></span>
-      <span class="brand-name">saldo<span>.</span></span>
-    </a>
-    <div class="side-label">MENU</div>
-    <nav class="nav-list" id="side-nav">
-      <button class="nav-link" data-page="overzicht"><svg class="ico"><use href="#i-dashboard"></use></svg> Overzicht</button>
-      <button class="nav-link" data-page="transacties"><svg class="ico"><use href="#i-transfer"></use></svg> Transacties</button>
-      <button class="nav-link" data-page="abonnementen"><svg class="ico"><use href="#i-repeat"></use></svg> Abonnementen</button>
-      <button class="nav-link" data-page="budgetten"><svg class="ico"><use href="#i-chart"></use></svg> Budgetten</button>
-      <button class="nav-link" data-page="spaardoelen"><svg class="ico"><use href="#i-target"></use></svg> Spaardoelen</button>
-      <button class="nav-link" data-page="inzichten"><svg class="ico"><use href="#i-lightbulb"></use></svg> Bespaarinzichten</button>
+<div class="shell">
+  <aside class="sidebar" aria-label="Hoofdnavigatie">
+    <div class="brand"><div class="brand-mark"><svg class="icon icon-lg"><use href="#i-spark"/></svg></div><span class="brand-name">bespaar<span>slim.</span></span></div>
+    <div class="nav-caption">MENU</div>
+    <nav class="side-nav">
+      <button class="nav-btn active" data-view="dashboard"><svg class="icon"><use href="#i-home"/></svg><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" data-view="banking"><svg class="icon"><use href="#i-lock"/></svg><span class="nav-label">Bank koppelen</span></button>
+      <button class="nav-btn" data-view="transactions"><svg class="icon"><use href="#i-list"/></svg><span class="nav-label">Transacties</span></button>
+      <button class="nav-btn" data-view="subscriptions"><svg class="icon"><use href="#i-repeat"/></svg><span class="nav-label">Abonnementen</span></button>
+      <button class="nav-btn" data-view="goals"><svg class="icon"><use href="#i-target"/></svg><span class="nav-label">Spaardoelen</span></button>
+      <button class="nav-btn" data-view="insights"><svg class="icon"><use href="#i-chart"/></svg><span class="nav-label">Bespaartips</span></button>
     </nav>
-    <div class="side-spacer"></div>
-    <div class="side-label">OVERIG</div>
-    <nav class="nav-list"><button class="nav-link" data-page="instellingen"><svg class="ico"><use href="#i-settings"></use></svg> Instellingen</button></nav>
-    <div class="side-help"><span class="bubble"><svg class="ico"><use href="#i-sparkles"></use></svg></span><b>Elke euro telt ✨</b><p>Houd inzicht in je geld en ontdek waar jij kunt besparen.</p></div>
-    <div class="side-footer">© <span id="copyright-year"></span> Saldo · Zelfstandig demo-project</div>
+    <div class="side-bottom"><div class="tip-panel"><div class="tip-icon"><svg class="icon"><use href="#i-spark"/></svg></div><h4>Kleine stappen.<br>Groot verschil.</h4><p>Ontdek wat jij kunt besparen en werk aan je doelen.</p></div><div class="privacy"><svg class="icon icon-sm"><use href="#i-lock"/></svg>Je gegevens blijven in je browser</div></div>
   </aside>
-  <div class="main">
-    <header class="topbar">
-      <div class="topbar-left"><button class="menu-btn" id="menu-btn" aria-label="Open menu"><svg class="ico"><use href="#i-menu"></use></svg></button><div><h1 id="page-title">Goed dat je er bent 👋</h1><p id="page-desc">Hier zie je hoe jouw geld ervoor staat.</p></div></div>
-      <div class="top-actions"><span class="today" id="today-label"></span><span class="pill" id="demo-pill">Voorbeeldgegevens</span><button class="btn btn-primary" data-action="add-transaction"><svg class="ico"><use href="#i-plus"></use></svg> Transactie toevoegen</button></div>
-    </header>
-    <main class="container" id="view"></main>
+  <div class="workspace">
+    <header class="topbar"><div class="crumb">Mijn geld &nbsp;/&nbsp; <strong id="breadcrumb">Dashboard</strong></div><div class="top-actions"><span class="demo-pill">Lokaal dashboard · bank via PSD2</span><span class="date-pill"><svg class="icon icon-sm"><use href="#i-calendar"/></svg><span id="todayLabel"></span></span><div class="avatar" title="Mijn dashboard">BS</div></div></header>
+    <main class="page">
+      <section class="view active" id="view-dashboard" aria-label="Dashboard">
+        <div class="page-head"><div><p class="eyebrow">JOUW FINANCIËLE OVERZICHT</p><h1>Goed bezig met je geld. <span aria-hidden="true">✳</span></h1><p class="page-sub">Alle cijfers op een rij, zodat jij slimmer kunt sparen.</p></div><button class="btn btn-primary" data-modal="transaction"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Uitgave toevoegen</span></button></div>
+        <div class="hero"><div class="hero-left"><p class="eyebrow">DIT HEB JE DEZE MAAND OVER</p><h2 id="heroBalance">€ 0,00</h2><p id="heroText">Bekijk waar je geld naartoe gaat en ontdek hoeveel je kunt overhouden.</p><button class="btn btn-lime" data-view="insights">Bekijk mijn bespaarkansen <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div class="hero-visual" aria-hidden="true"><div class="ring1"></div><div class="ring2"></div><div class="float-card"><span>BESPAARSLIM</span><svg class="icon icon-lg"><use href="#i-spark"/></svg><strong>€ € €</strong></div><span class="star">✦</span></div></div>
+        <div class="grid4">
+          <div class="metric"><div class="metric-head">Inkomsten <span class="metric-icon green"><svg class="icon"><use href="#i-trend"/></svg></span></div><div><div class="metric-number" id="metricIncome">€ 0</div><div class="metric-foot">Deze maand ontvangen</div></div></div>
+          <div class="metric"><div class="metric-head">Uitgaven <span class="metric-icon orange"><svg class="icon"><use href="#i-wallet"/></svg></span></div><div><div class="metric-number" id="metricExpenses">€ 0</div><div class="metric-foot">Inclusief abonnementen</div></div></div>
+          <div class="metric"><div class="metric-head">Abonnementen <span class="metric-icon purple"><svg class="icon"><use href="#i-repeat"/></svg></span></div><div><div class="metric-number" id="metricSubs">€ 0</div><div class="metric-foot" id="metricSubsFoot">0 actief per maand</div></div></div>
+          <div class="metric"><div class="metric-head">Spaardoelen <span class="metric-icon blue"><svg class="icon"><use href="#i-target"/></svg></span></div><div><div class="metric-number" id="metricSaved">€ 0</div><div class="metric-foot good" id="metricSavedFoot">Jouw gespaarde bedrag</div></div></div>
+        </div>
+        <div class="section-grid">
+          <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Jouw abonnementen</h2><div class="panel-subtitle">Waar gaat elke maand geld naartoe?</div></div><button class="text-link" data-view="subscriptions">Bekijk alles <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div id="dashSubs"></div></div>
+          <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Uitgaven per categorie</h2><div class="panel-subtitle">Verdeling van deze maand</div></div></div><div class="spend-composition"><div class="donut" id="donut"><div class="donut-inner"><span>Totaal</span><strong id="donutTotal">€ 0</strong></div></div><div class="legend" id="legend"></div></div></div>
+        </div>
+        <div class="bottom-grid">
+          <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Jouw bespaarkansen <span aria-hidden="true">✨</span></h2><div class="panel-subtitle">Handige inzichten op basis van je gegevens</div></div><button class="text-link" data-view="insights">Meer tips <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div id="dashOpportunities"></div></div>
+          <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Recente transacties</h2><div class="panel-subtitle">Je laatst geregistreerde bedragen</div></div><button class="text-link" data-view="transactions">Bekijk alles <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div id="dashActivity"></div></div>
+        </div>
+        <div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Je overzicht werkt lokaal in je browser. <button class="text-link" data-view="banking">Bank veilig koppelen</button> kan na het instellen van een externe beveiligde backend. Zonder koppeling worden voorbeeldgegevens getoond.</span></div>
+      </section>
+      <section class="view" id="view-transactions" aria-label="Transacties"><div class="page-head"><div><p class="eyebrow">HOU JE UITGAVEN BIJ</p><h1>Transacties</h1><p class="page-sub">Voeg bedragen toe en zie waar je geld naartoe gaat.</p></div><button class="btn btn-primary" data-modal="transaction"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Transactie toevoegen</span></button></div><div class="toolbar"><div class="search"><svg class="icon icon-sm"><use href="#i-search"/></svg><input id="transactionSearch" type="search" placeholder="Zoek een transactie…" aria-label="Zoek een transactie"></div><select id="transactionFilter" class="select" aria-label="Filter transacties"><option value="all">Alle transacties</option><option value="expense">Alleen uitgaven</option><option value="income">Alleen inkomsten</option></select><button class="btn btn-outline btn-small" id="csvExport"><svg class="icon icon-sm"><use href="#i-download"/></svg>CSV exporteren</button></div><div class="panel" style="padding:9px 8px"><div class="table-scroll"><table class="transaction-table"><thead><tr><th>Omschrijving</th><th>Categorie</th><th>Datum</th><th>Bedrag</th><th></th></tr></thead><tbody id="transactionRows"></tbody></table></div><div id="transactionsEmpty" class="empty-state" hidden>Geen transacties gevonden. Voeg er een toe met de knop hierboven.</div></div></section>
+      <section class="view" id="view-subscriptions" aria-label="Abonnementen"><div class="page-head"><div><p class="eyebrow">VASTE LASTEN ONDER CONTROLE</p><h1>Abonnementen</h1><p class="page-sub">Houd bij wat je maandelijks betaalt en ontdek bespaarkansen.</p></div><button class="btn btn-primary" data-modal="subscription"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Abonnement toevoegen</span></button></div><div class="subscriptions-layout"><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Mijn abonnementen</h2><div class="panel-subtitle">Markeer een abonnement als opgezegd als je dit zelf bij de aanbieder hebt geregeld.</div></div></div><div id="subscriptionRows"></div></div><div><div class="sub-large"><small>MAANDELIJKSE KOSTEN</small><strong id="subsMonthlyTotal">€ 0</strong><p id="subsMonthlyDetail">Totaal voor actieve abonnementen</p></div><div class="panel"><h2 class="panel-title">Op jaarbasis</h2><div class="metric-number" id="subsYearlyTotal">€ 0</div><p class="page-sub">Dit betaal je in 12 maanden als niets verandert.</p><div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Een abonnement markeren als opgezegd beëindigt het <strong>niet</strong> bij de aanbieder.</span></div></div></div></div></section>
+      <section class="view" id="view-goals" aria-label="Spaardoelen"><div class="page-head"><div><p class="eyebrow">BOUW AAN MORGEN</p><h1>Mijn spaardoelen</h1><p class="page-sub">Maak je dromen concreet en houd je voortgang bij.</p></div><button class="btn btn-primary" data-modal="goal"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Spaardoel toevoegen</span></button></div><div class="savings-goals" id="goalCards"></div></section>
+      <section class="view" id="view-banking" aria-label="Bank koppelen">
+        <div class="page-head"><div><p class="eyebrow">VEILIG BANKGEGEVENS INZIEN</p><h1>Verbind jouw bank.</h1><p class="page-sub">Lees met jouw toestemming je transacties uit. Geen bankwachtwoorden op deze website.</p></div></div>
+        <div class="bank-hero"><div><span class="bank-secure">🔒 PSD2 · Alleen lezen</span><h2>Jouw geld. Jouw overzicht.</h2><p>Via Enable Banking ga je naar je eigen bank om toestemming te geven. BespaarSlim kan daarna je betaaltransacties ophalen, maar geen betalingen uitvoeren.</p></div><div class="bank-hero-badge" aria-hidden="true">🏦</div></div>
+        <div class="bank-columns"><div class="panel"><div class="panel-head"><div><h2 class="panel-title">1. Beveiligde verbinding instellen</h2><div class="panel-subtitle">Eenmalig, nadat je de backend hebt gepubliceerd</div></div></div>
+          <form id="bankSettings" class="bank-form">
+            <label for="bankBackend">URL van jouw Cloudflare Worker</label><input id="bankBackend" type="url" required inputmode="url" placeholder="https://bespaarslim-bank.jij.workers.dev" autocomplete="url" aria-describedby="bankHelp">
+            <label for="bankAccess">Privé-toegangstoken</label><input id="bankAccess" type="password" minlength="32" required placeholder="Lang geheim toegangstoken (min. 32 tekens)" autocomplete="off">
+            <p class="bank-help" id="bankHelp">Je backend-URL wordt alleen lokaal bewaard. Je toegangstoken blijft uitsluitend in deze browsersessie en wordt niet in GitHub opgeslagen. Deel dit token met niemand.</p>
+            <button class="btn btn-primary" type="submit">Verbinding controleren</button>
+          </form><div class="bank-state" id="bankConnectionState" role="status" aria-live="polite">Nog geen backend ingesteld. Zie de meegeleverde handleiding.</div>
+        </div><div class="panel"><div class="panel-head"><div><h2 class="panel-title">2. Kies je bank</h2><div class="panel-subtitle">Beschikbare banken verschijnen na verbinding</div></div></div><div class="bank-form"><label for="bankSelect">Mijn bank</label><select id="bankSelect" class="select" disabled><option value="">Stel eerst je backend in</option></select><button id="bankConnect" class="btn btn-lime" type="button" disabled>🔒 Veilig koppelen via mijn bank</button><div class="bank-state" id="bankAccounts">Nog geen gekoppelde betaalrekening.</div><div class="bank-actions"><button type="button" class="btn btn-outline btn-small" id="bankSync" disabled>Transacties ophalen</button><button type="button" class="btn btn-danger btn-small" id="bankDisconnect" disabled>Koppeling intrekken</button></div></div></div></div>
+        <div class="panel bank-info"><h2 class="panel-title">Hoe werkt dit?</h2><div class="bank-steps"><div><span>01</span><strong>Maak een persoonlijke backend</strong><p>Publiceer de meegeleverde Worker en registreer een Enable Banking-app. Dit kan niet veilig met alleen GitHub Pages.</p></div><div><span>02</span><strong>Bevestig bij je bank</strong><p>Je wordt doorgestuurd naar de veilige toestemming- en inlogomgeving van je bank.</p></div><div><span>03</span><strong>Bekijk je uitgaven</strong><p>Klik op ‘Transacties ophalen’. Je opgehaalde transacties worden in deze browser opgeslagen. Er wordt niets van je rekening afgeschreven.</p></div></div></div>
+        <div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Dit is een technisch startpakket en nog geen live bankdienst. Zonder een goedgekeurde API-app en ingerichte backend werkt de echte koppeling niet. Deel geen bankwachtwoorden, pincodes of geheime sleutels via GitHub. Gebruik dit voor eigen gebruik; openbare dienstverlening vereist aanvullende beveiliging, privacymaatregelen en mogelijke vergunning-/contractcontroles.</span></div>
+      </section>
+      <section class="view" id="view-insights" aria-label="Bespaartips"><div class="page-head"><div><p class="eyebrow">MEER OVERHOUDEN</p><h1>Jouw bespaarplan</h1><p class="page-sub">Krijg grip op uitgaven met inzichten en persoonlijke budgetten.</p></div></div><div class="insight-grid"><div><div class="insight-hero"><div class="eyebrow">RUIMTE OM TE BESPAREN</div><strong id="insightSavings">€ 0 per jaar</strong><p id="insightSavingsText">Controleer je abonnementen en kijk welke je echt gebruikt. De besparing is een rekenvoorbeeld, geen garantie.</p></div><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Uitgaven afgelopen 6 maanden</h2><div class="panel-subtitle">Inclusief de huidige actieve abonnementen als schatting</div></div></div><div class="trend" id="trendChart"></div></div></div><div><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Kansen voor jou</h2><div class="panel-subtitle">Gebaseerd op je ingevoerde gegevens</div></div></div><div id="allOpportunities"></div></div><div class="panel" style="margin-top:20px"><div class="panel-head"><div><h2 class="panel-title">Mijn maandbudgetten</h2><div class="panel-subtitle">Pas bedragen aan en bekijk hoeveel ruimte er nog is.</div></div><span class="pill">Automatisch opgeslagen</span></div><div class="budget-grid" id="budgetCards"></div></div></div><div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Tip: werk je administratie regelmatig bij. De tips en prognoses zijn uitsluitend gebaseerd op de bedragen die jij in deze browser invoert.</span></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:23px"><button id="backupExport" class="btn btn-outline btn-small"><svg class="icon icon-sm"><use href="#i-download"/></svg>Back-up downloaden (JSON)</button><button id="clearData" class="btn btn-danger btn-small"><svg class="icon icon-sm"><use href="#i-trash"/></svg>Demogegevens / alle gegevens wissen</button></div></section>
+      <div class="footer-text">© <span id="year"></span> BespaarSlim · Zelfstandig gebouwd, geïnspireerd op financiële budgetapps · Geen officiële band met Dyme</div>
+    </main>
   </div>
 </div>
-<nav class="mobile-nav" aria-label="Mobiele navigatie" id="mobile-nav">
-  <button data-page="overzicht"><svg class="ico"><use href="#i-dashboard"></use></svg>Overzicht</button>
-  <button data-page="transacties"><svg class="ico"><use href="#i-transfer"></use></svg>Transacties</button>
-  <button data-page="budgetten"><svg class="ico"><use href="#i-chart"></use></svg>Budgetten</button>
-  <button data-page="spaardoelen"><svg class="ico"><use href="#i-target"></use></svg>Spaardoelen</button>
-  <button data-action="open-menu"><svg class="ico"><use href="#i-menu"></use></svg>Meer</button>
+<nav class="mobile-bottom" aria-label="Mobiele navigatie">
+  <button class="mobile-tab active" data-view="dashboard"><svg class="icon"><use href="#i-home"/></svg>Overzicht</button><button class="mobile-tab" data-view="transactions"><svg class="icon"><use href="#i-list"/></svg>Transacties</button><button class="mobile-tab" data-view="subscriptions"><svg class="icon"><use href="#i-repeat"/></svg>Abonnementen</button><button class="mobile-tab" data-view="goals"><svg class="icon"><use href="#i-target"/></svg>Sparen</button><button class="mobile-tab" data-view="banking"><svg class="icon"><use href="#i-lock"/></svg>Bank</button>
 </nav>
-<div id="modal-wrap" class="modal-wrap" role="dialog" aria-modal="true" aria-hidden="true"></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<input id="import-file" type="file" accept=".json,application/json" hidden>
+<div class="modal-wrap" id="modalWrap" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><h2 id="modalTitle">Toevoegen</h2><button class="modal-close" id="modalClose" aria-label="Venster sluiten"><svg class="icon"><use href="#i-close"/></svg></button></div><p class="modal-description" id="modalDescription"></p><div id="modalBody"></div></div></div>
+<div class="toast" role="status" aria-live="polite" id="toast"><svg class="icon icon-sm"><use href="#i-check"/></svg><span id="toastMessage"></span></div>
 <script>
-(function(){
-'use strict';
-const KEY='saldo-dashboard-v1';
-const categories=['Wonen','Boodschappen','Vervoer','Uit eten','Shoppen','Gezondheid','Overig'];
-const catInfo={
- 'Wonen':{icon:'🏡',color:'#8574ec',soft:'#f0edff'},
- 'Boodschappen':{icon:'🛒',color:'#15ae90',soft:'#e5faf3'},
- 'Vervoer':{icon:'🚗',color:'#e4a14b',soft:'#fff5e8'},
- 'Uit eten':{icon:'🍽️',color:'#ee7c86',soft:'#fff0f2'},
- 'Shoppen':{icon:'🛍️',color:'#79a1e6',soft:'#edf4ff'},
- 'Gezondheid':{icon:'💊',color:'#a486ce',soft:'#f6eeff'},
- 'Overig':{icon:'✨',color:'#9da9bc',soft:'#f0f3f7'},
- 'Inkomsten':{icon:'💸',color:'#10aa83',soft:'#e3faf1'}
-};
-const chartColors=['#7867e6','#13b592','#edaa55','#ec7d91','#78a6e3','#a78bd6','#a8afc1'];
-const icon=n=>`<svg class="ico" aria-hidden="true"><use href="#i-${n}"></use></svg>`;
-const el=document.getElementById('view');
-const monthNames=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
-const now=new Date();
-const money=n=>new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(n)||0);
-const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const inputDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const makeDate=(m,day)=>{const d=new Date(now.getFullYear(),now.getMonth()+m,1);d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));return inputDate(d);};
-const displayDate=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(String(s)))return '-';const [y,m,d]=s.split('-').map(Number);return `${d} ${monthNames[m-1]?.slice(0,3)||''} ${y}`;};
-const startMonth=s=>typeof s==='string'&&s.slice(0,7)===`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-const makeId=()=>window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-const sample=()=>{
-  const tx=[]; const add=(m,day,title,category,amount,type='uitgave')=>tx.push({id:makeId(),date:makeDate(m,day),title,category,amount,type});
-  for(let m=-5;m<=0;m++){
-    add(m,1,'Salaris','Inkomsten',2850,'inkomsten');
-    add(m,2,'Huur appartement','Wonen',920);
-    add(m,5,'Albert Heijn','Boodschappen',m===0?76.23:85+(m+5)*3);
-    add(m,9,'Jumbo','Boodschappen',m===0?54.81:64+(m+5)*2);
-    add(m,12,'Tankstation','Vervoer',m===0?68.4:52+(m+5)*5);
-    add(m,16,'Lunch buiten de deur','Uit eten',m===0?36.50:44+(m+5)*4);
-    add(m,19,'Boodschappen week 3','Boodschappen',m===0?68.42:75+(m+5)*2);
-    add(m,21,'Kleding en accessoires','Shoppen',m===0?84.95:95+(m+5)*9);
-    add(m,23,'Drogisterij','Gezondheid',m===0?26.75:29+(m+5)*2);
-    add(m,25,'Online bestelling','Overig',m===0?42.60:51+(m+5)*3);
+(function(){'use strict';
+  const STORE='bespaarslim_data_v1';
+  const euro=(n,d=0)=>new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR',minimumFractionDigits:d,maximumFractionDigits:d}).format(Number(n)||0);
+  const esc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const uid=()=>`${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
+  const icon=(name,cls='')=>`<svg class="icon ${cls}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+  const cats=['Boodschappen','Wonen','Vervoer','Winkelen','Eten & drinken','Overig','Abonnementen'];
+  const catColors={'Boodschappen':'#99cb81','Wonen':'#8aafe4','Vervoer':'#f4bc83','Winkelen':'#a99bec','Eten & drinken':'#f097a5','Overig':'#aec2ac','Abonnementen':'#5f9475'};
+  const catEmoji={'Boodschappen':'🛒','Wonen':'🏠','Vervoer':'🚲','Winkelen':'🛍️','Eten & drinken':'☕','Overig':'💳','Abonnementen':'🔁','Inkomsten':'💸'};
+  const defaultBudgets={'Boodschappen':350,'Wonen':1000,'Vervoer':160,'Winkelen':180,'Eten & drinken':130,'Overig':200,'Abonnementen':100};
+  const $=s=>document.querySelector(s);
+  const now=new Date();const localDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const currentMonth=localDate(now).slice(0,7);
+  const priorMonth=(offset=0)=>{const d=new Date(now.getFullYear(),now.getMonth()-offset,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`};
+  function makeDemo(){
+    let transactions=[];
+    for(let k=5;k>=0;k--){
+      const month=priorMonth(k),vary=[1.03,.96,1.14,1.01,1.08,1][5-k];
+      const entries=[['Salaris',2750,'Inkomsten','income',3],['Bijverdiensten',165+(5-k)*7,'Inkomsten','income',8],['Huur appartement',890,'Wonen','expense',2],['Albert Heijn',83.54*vary,'Boodschappen','expense',5],['Jumbo',65.27*vary,'Boodschappen','expense',12],['Lidl',52.99*vary,'Boodschappen','expense',19],['Treinreis NS',48.3,'Vervoer','expense',9],['H&M',49.99,'Winkelen','expense',14],['Lunch buiten de deur',27.5,'Eten & drinken','expense',17],['Koffie & snacks',22.8,'Eten & drinken','expense',21],['Tankbeurt',56.2,'Vervoer','expense',18],['Etos',15.8,'Overig','expense',22]];
+      for(const [name,amount,category,type,day] of entries){if(k===0&&day>now.getDate())continue;transactions.push({id:uid(),name,amount:+amount.toFixed(2),category,type,date:`${month}-${String(day).padStart(2,'0')}`})}
+    }
+    return {demo:true,transactions,subscriptions:[{id:uid(),name:'Netflix',amount:15.99,period:'month',category:'Streaming',active:true},{id:uid(),name:'Spotify',amount:10.99,period:'month',category:'Muziek',active:true},{id:uid(),name:'Adobe Creative Cloud',amount:24.19,period:'month',category:'Software',active:true},{id:uid(),name:'iCloud+',amount:2.99,period:'month',category:'Cloudopslag',active:true},{id:uid(),name:'Basic-Fit',amount:24.99,period:'month',category:'Sport',active:true},{id:uid(),name:'Videoland',amount:9.99,period:'month',category:'Streaming',active:true}],goals:[{id:uid(),name:'Vakantie naar Italië',target:2500,saved:1050,emoji:'✈️'},{id:uid(),name:'Noodbuffer',target:5000,saved:1850,emoji:'🛟'}],budgets:{...defaultBudgets}};
   }
-  add(0,10,'Freelance opdracht','Inkomsten',350,'inkomsten');
-  add(0,18,'Restaurant','Uit eten',49.5);
-  add(0,20,'Jumbo','Boodschappen',51.79);
-  add(0,22,'OV-chipkaart','Vervoer',31.2);
-  return {demo:true,transactions:tx,subscriptions:[
-    {id:makeId(),name:'Netflix',category:'Entertainment',amount:15.99,nextDate:makeDate(0,27),status:'actief'},
-    {id:makeId(),name:'Spotify',category:'Muziek',amount:10.99,nextDate:makeDate(0,29),status:'actief'},
-    {id:makeId(),name:'Sportschool',category:'Sport',amount:29.95,nextDate:makeDate(1,4),status:'actief'},
-    {id:makeId(),name:'Cloudopslag',category:'Software',amount:2.99,nextDate:makeDate(0,28),status:'actief'}
-  ],budgets:{'Wonen':1050,'Boodschappen':350,'Vervoer':180,'Uit eten':160,'Shoppen':200,'Gezondheid':100,'Overig':140},goals:[
-    {id:makeId(),name:'Noodpotje',target:5000,saved:2150,emoji:'🛟'},
-    {id:makeId(),name:'Zomervakantie',target:1800,saved:720,emoji:'🏖️'},
-    {id:makeId(),name:'Nieuwe laptop',target:1400,saved:350,emoji:'💻'}
-  ]};
-};
-const emptyData=()=>({demo:false,transactions:[],subscriptions:[],budgets:Object.fromEntries(categories.map(c=>[c,0])),goals:[]});
-function clean(raw){
-  if(!raw||typeof raw!=='object'||!Array.isArray(raw.transactions)||!Array.isArray(raw.subscriptions)||!Array.isArray(raw.goals)||!raw.budgets||typeof raw.budgets!=='object')throw new Error('Ongeldig gegevensbestand');
-  const name=s=>String(s??'').trim().slice(0,100);
-  const amt=n=>Number.isFinite(Number(n))?Math.max(0,Math.min(Number(n),100000000)):0;
-  const date=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)?s:inputDate(now);
-  const limited=a=>a.slice(0,5000);
-  return {demo:raw.demo===true,
-    transactions:limited(raw.transactions).filter(x=>x&&typeof x==='object').map(x=>({id:name(x.id)||makeId(),title:name(x.title)||'Transactie',date:date(x.date),amount:amt(x.amount),type:x.type==='inkomsten'?'inkomsten':'uitgave',category:x.type==='inkomsten'?'Inkomsten':categories.includes(x.category)?x.category:'Overig'})),
-    subscriptions:limited(raw.subscriptions).filter(x=>x&&typeof x==='object').map(x=>({id:name(x.id)||makeId(),name:name(x.name)||'Abonnement',category:name(x.category)||'Overig',amount:amt(x.amount),nextDate:date(x.nextDate),status:x.status==='opgezegd'?'opgezegd':'actief'})),
-    budgets:Object.fromEntries(categories.map(c=>[c,amt(raw.budgets[c])])),
-    goals:limited(raw.goals).filter(x=>x&&typeof x==='object').map(x=>({id:name(x.id)||makeId(),name:name(x.name)||'Spaardoel',target:amt(x.target),saved:amt(x.saved),emoji:['🛟','🏖️','💻','🏠','🚗','🎯','💰','🎓','💍','🌍'].includes(x.emoji)?x.emoji:'🎯'}))
+  function readData(){try{const raw=localStorage.getItem(STORE);if(raw){const d=JSON.parse(raw);if(d&&Array.isArray(d.transactions)&&Array.isArray(d.subscriptions)&&Array.isArray(d.goals)){return {...d,budgets:{...defaultBudgets,...d.budgets}}}}}catch(e){console.warn('Kan lokale gegevens niet lezen.',e)}return makeDemo()}
+  let data=readData();let view='dashboard',currentModal='',kind='expense',toastTimeout;
+  function persist(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){toast('Opslaan is geblokkeerd door je browser. Exporteren kan wel.')}}
+  if(!localStorage.getItem(STORE))persist();
+  const totals=()=>{
+    const ts=data.transactions.filter(t=>t.date.startsWith(currentMonth));
+    const income=ts.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount),0);
+    const expenses=ts.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount),0);
+    const active=data.subscriptions.filter(s=>s.active);
+    const subs=active.reduce((sum,s)=>sum+monthlyPrice(s),0);
+    const saved=data.goals.reduce((sum,g)=>sum+Number(g.saved),0);
+    return {income,expenses,subs,outgoings:expenses+(data.bankSyncActive?0:subs),balance:income-expenses-(data.bankSyncActive?0:subs),active,saved};
   };
-}
-let data;
-try {const stored=localStorage.getItem(KEY); data=stored?clean(JSON.parse(stored)):sample();}catch(e){data=sample();}
-let page=['overzicht','transacties','abonnementen','budgetten','spaardoelen','inzichten','instellingen'].includes(location.hash.slice(1))?location.hash.slice(1):'overzicht';
-let filters={query:'',type:'alles',category:'alles'};
-let formHandler=null,toastTimer=null;
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){notify('Opslaan is niet gelukt. Mogelijk is de opslag vol.');}};
-const monthly=()=>data.transactions.filter(t=>startMonth(t.date));
-const spent=category=>monthly().filter(t=>t.type==='uitgave'&&(!category||t.category===category)).reduce((a,t)=>a+t.amount,0);
-const income=()=>monthly().filter(t=>t.type==='inkomsten').reduce((a,t)=>a+t.amount,0);
-const activeSubs=()=>data.subscriptions.filter(s=>s.status==='actief');
-const subTotal=()=>activeSubs().reduce((a,s)=>a+s.amount,0);
-const pct=(a,b)=>b>0?Math.round(a/b*100):0;
-function notify(message){const t=document.getElementById('toast');t.textContent=message;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3200);}
-function markChanged(){data.demo=false;save();render();}
-function noItems(title,msg,action,actionLabel){return `<div class="empty"><div class="empty-icon">${icon('wallet')}</div><h3>${safe(title)}</h3><p>${safe(msg)}</p>${action?`<button class="btn btn-primary" data-action="${action}">${icon('plus')} ${safe(actionLabel)}</button>`:''}</div>`;}
-function section(title,subtitle,button,action){return `<div class="section-heading"><div><h2>${title}</h2><p>${subtitle}</p></div>${button?`<button class="btn btn-primary" data-action="${action}">${icon('plus')} ${button}</button>`:''}</div>`;}
-const titles={overzicht:['Goed dat je er bent 👋','Hier zie je hoe jouw geld ervoor staat.'],transacties:['Jouw transacties','Al je inkomsten en uitgaven overzichtelijk op één plek.'],abonnementen:['Je abonnementen','Krijg grip op terugkerende kosten.'],budgetten:['Jouw budgetten','Geef je geld een plan, elke maand opnieuw.'],spaardoelen:['Jouw spaardoelen','Stap voor stap dichter bij wat je belangrijk vindt.'],inzichten:['Slimme bespaarinzichten','Ontdek patronen in je uitgaven.'],instellingen:['Instellingen','Beheer je gegevens en privacy.']};
-function navigate(to){if(!titles[to])return;page=to;location.hash=to;filters={query:'',type:'alles',category:'alles'};closeMenu();render();window.scrollTo({top:0,behavior:'instant'});}
-function closeMenu(){document.getElementById('sidebar').classList.remove('open');document.getElementById('shade').classList.remove('open');}
-function render(){
-  document.getElementById('page-title').textContent=titles[page][0];
-  document.getElementById('page-desc').textContent=titles[page][1];
-  document.getElementById('demo-pill').style.display=data.demo?'inline-flex':'none';
-  document.querySelectorAll('[data-page]').forEach(b=>{b.classList.toggle('active',b.dataset.page===page); if(b.tagName==='BUTTON'){if(b.dataset.page===page)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}});
-  document.getElementById('today-label').textContent=`${monthNames[now.getMonth()]} ${now.getFullYear()}`;
-  document.getElementById('copyright-year').textContent=now.getFullYear();
-  el.innerHTML=({overzicht:renderOverview,transacties:renderTransactions,abonnementen:renderSubscriptions,budgetten:renderBudgets,spaardoelen:renderGoals,inzichten:renderInsights,instellingen:renderSettings})[page]();
-  if(page==='transacties')fillTransactions();
-}
-function stat(label,value,foot,ic,cls){return `<article class="stat"><div class="stat-top"><span>${label}</span><div class="stat-icon ${cls}">${icon(ic)}</div></div><div class="stat-value">${value}</div><div class="stat-foot">${foot}</div></article>`;}
-function pie(){
- const entries=categories.map((c,i)=>({name:c,value:spent(c),color:chartColors[i]})).filter(x=>x.value>0).sort((a,b)=>b.value-a.value);
- const sum=entries.reduce((s,e)=>s+e.value,0);
- let start=0;const grad=entries.map(x=>{const end=start+x.value/sum*100;const part=`${x.color} ${start}% ${end}%`;start=end;return part;}).join(',');
- return `<div class="pie-section"><div class="donut" style="background:${sum>0?`conic-gradient(${grad})`:'#f0f1f7'}"><div class="donut-inner"><span>Totaal uitgegeven</span><strong>${money(sum)}</strong></div></div><div class="legend">${entries.length?entries.slice(0,7).map(x=>`<div class="legend-row"><span class="legend-label"><i class="color-dot" style="background:${x.color}"></i>${x.name}</span><strong>${Math.round(x.value/sum*100)}%</strong></div>`).join(''):'<p class="notice">Nog geen uitgaven deze maand.</p>'}</div></div>`;
-}
-function budgetRows(limit){
- const rows=categories.filter(c=>Number(data.budgets[c])>0);
- return !rows.length?noItems('Nog geen budgetten','Stel je eerste maandbudget in.','add-budget','Budget instellen'):`<div class="budget-list">${(limit?rows.slice(0,limit):rows).map(c=>{
- const b=data.budgets[c],s=spent(c),p=pct(s,b),color=p>=100?'#e25f69':p>=80?'#e9a34f':catInfo[c].color;
- return `<div><div class="budget-top"><div class="budget-name"><span>${catInfo[c].icon}</span>${c}</div><div class="budget-amount"><b>${money(s)}</b> / ${money(b)}</div></div><div class="progress"><span style="width:${Math.min(100,p)}%;background:${color}"></span></div>${p>=80?`<div class="budget-footer"><span>${p>=100?'Budget overschreden':'Bijna aan je limiet'}</span><span>${p}%</span></div>`:''}</div>`;
- }).join('')}</div>`;
-}
-function rowTx(t,editable=false){
- const ci=catInfo[t.category]||catInfo.Overig;
- return `<div class="tx-row"><div class="tx-icon" style="background:${ci.soft}">${ci.icon}</div><div class="tx-main"><div class="tx-title">${safe(t.title)}</div><div class="tx-meta">${safe(t.category)} · ${displayDate(t.date)}</div></div><div class="tx-end"><div class="tx-amount ${t.type==='inkomsten'?'income':''}">${t.type==='inkomsten'?'+':'−'} ${money(t.amount)}</div></div>${editable?`<div class="action-pair"><button class="icon-button" data-action="edit-transaction" data-id="${safe(t.id)}" title="Bewerken" aria-label="Transactie bewerken">${icon('edit')}</button><button class="icon-button" data-action="delete-transaction" data-id="${safe(t.id)}" title="Verwijderen" aria-label="Transactie verwijderen">${icon('trash')}</button></div>`:''}</div>`;
-}
-function recentTransactions(limit=5){const items=monthly().slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,limit);return items.length?`<div class="transactions">${items.map(t=>rowTx(t)).join('')}</div>`:noItems('Nog geen transacties','Voeg je inkomsten en uitgaven toe om inzicht te krijgen.','add-transaction','Transactie toevoegen');}
-function tips(){
- const tips=[];
- if(activeSubs().length){tips.push({title:`${money(subTotal())} per maand aan abonnementen`,desc:`Je hebt ${activeSubs().length} actieve abonnement${activeSubs().length!==1?'en':''}. Bekijk of je alles nog gebruikt. Op jaarbasis is dat ${money(subTotal()*12)}.`,green:false});}
- const exceeded=categories.filter(c=>data.budgets[c]>0&&spent(c)>data.budgets[c]).sort((a,b)=>(spent(b)-data.budgets[b])-(spent(a)-data.budgets[a]));
- if(exceeded.length){const c=exceeded[0];tips.push({title:`Let op je budget voor ${c.toLowerCase()}`,desc:`Je zit ${money(spent(c)-data.budgets[c])} boven je ingestelde maandbudget.`,green:false});}
- else {const high=categories.filter(c=>data.budgets[c]>0&&spent(c)>data.budgets[c]*.8).sort((a,b)=>spent(b)/data.budgets[b]-spent(a)/data.budgets[a]);if(high.length)tips.push({title:`${high[0]} nadert je budget`,desc:`Je hebt ${pct(spent(high[0]),data.budgets[high[0]])}% van je budget besteed.`,green:false});}
- if(income()>0&&income()>spent()){tips.push({title:'Je houdt geld over deze maand',desc:`Je inkomsten zijn ${money(income()-spent())} hoger dan je geregistreerde uitgaven. Misschien kun je iets opzijzetten voor je doelen.`,green:true});}
- if(!tips.length)tips.push({title:'Je bent goed begonnen!',desc:'Vul transacties, abonnementen en budgetten in. Daarna verschijnen hier bespaarkansen op basis van jouw cijfers.',green:true});
- return tips.slice(0,3).map(t=>`<div class="insight ${t.green?'green':''}"><div class="insight-ico">${icon(t.green?'check':'lightbulb')}</div><div><h3>${safe(t.title)}</h3><p>${safe(t.desc)}</p></div></div>`).join('');
-}
-function monthlySeries(){return Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-5+i,1);const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;const v=data.transactions.filter(t=>t.type==='uitgave'&&t.date.slice(0,7)===key).reduce((a,t)=>a+t.amount,0);return {label:monthNames[d.getMonth()].slice(0,3),value:v,current:i===5};});}
-function chart(){const ms=monthlySeries();const max=Math.max(1,...ms.map(m=>m.value));return `<div class="bar-chart" role="img" aria-label="Uitgaven per maand: ${ms.map(m=>`${m.label} ${money(m.value)}`).join(', ')}">${ms.map(m=>`<div class="bar-col ${m.current?'current':''}"><div class="bar-stack"><div class="bar ${m.current?'current':''}" style="height:${Math.max(2,m.value/max*100)}%" title="${m.label}: ${money(m.value)}"></div></div><label>${m.label}</label></div>`).join('')}</div>`;}
-function renderOverview(){const inc=income(),exp=spent(),remain=inc-exp,ratio=inc>0?Math.round(remain/inc*100):0;return `
-  <section class="hero"><div class="hero-content"><span class="overline">✦ JOUW FINANCIËLE OVERZICHT</span><h2>${inc===0&&exp===0?'Geef je geld een slimme start.':remain>=0?'Goed bezig met je geld!':'Tijd om je uitgaven te bekijken.'}</h2><p>${inc===0&&exp===0?'Voeg je eerste transactie toe en ontdek hoe je meer overzicht en rust krijgt.':`Deze ${monthNames[now.getMonth()]} houd je op basis van je ingevoerde transacties ${money(Math.abs(remain))} ${remain>=0?'over':'tekort'}.`}</p><button class="btn btn-white" data-page="inzichten">Ontdek bespaarkansen ${icon('arrow-right')}</button></div><div class="hero-art" aria-hidden="true"><div class="art-ring"></div><div class="art-card"><div class="art-dot">${icon('trending')}</div><small>Saldo deze maand</small><strong>${money(remain)}</strong></div><span class="art-chip">✦ Meer inzicht</span></div></section>
-  <div class="stats-grid">${stat('Inkomsten',money(inc),'Geregistreerd deze maand','arrow-down','green-icon')}${stat('Uitgaven',money(exp),'Exclusief losse abonnementenlijst','arrow-up','red-icon')}${stat('Verschil',money(remain),inc?`<span>${Math.max(0,ratio)}% van je inkomsten over</span>`:'Inkomsten min uitgaven','wallet','purple-icon')}${stat('Abonnementen',money(subTotal()),`${activeSubs().length} actief · per maand`,'repeat','orange-icon')}</div>
-  <div class="two-col"><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Waar gaat je geld naartoe?</h2><p class="card-sub">Uitgaven per categorie · ${monthNames[now.getMonth()]}</p></div><button class="link-button" data-page="inzichten">Inzichten ${icon('arrow-right')}</button></div>${pie()}</section><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Mijn budgetten</h2><p class="card-sub">Zo sta je ervoor deze maand</p></div><button class="link-button" data-page="budgetten">Alles bekijken ${icon('arrow-right')}</button></div>${budgetRows(5)}</section></div>
-  <div class="two-col"><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Laatste transacties</h2><p class="card-sub">Je meest recente inkomsten en uitgaven</p></div><button class="link-button" data-page="transacties">Bekijk alles ${icon('arrow-right')}</button></div>${recentTransactions()}</section><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Slim besparen <span aria-hidden="true">✨</span></h2><p class="card-sub">Mogelijkheden op basis van je ingevulde cijfers</p></div><button class="link-button" data-page="inzichten">Meer tips ${icon('arrow-right')}</button></div>${tips()}</section></div>
-  <div class="two-col"><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Uitgaven afgelopen 6 maanden</h2><p class="card-sub">Alle geregistreerde uitgaven per maand</p></div></div>${chart()}</section><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Jouw spaardoelen</h2><p class="card-sub">Elke stap telt</p></div><button class="link-button" data-page="spaardoelen">Bekijk doelen ${icon('arrow-right')}</button></div>${data.goals.length?data.goals.slice(0,3).map(g=>`<div style="margin-bottom:18px"><div class="budget-top"><span class="budget-name">${safe(g.emoji)} ${safe(g.name)}</span><span class="budget-amount"><b>${money(g.saved)}</b> / ${money(g.target)}</span></div><div class="progress"><span style="width:${Math.min(100,pct(g.saved,g.target))}%;background:var(--purple)"></span></div></div>`).join(''):noItems('Nog geen doelen','Maak een spaardoel aan om vooruitgang te zien.','add-goal','Doel toevoegen')}</section></div>
-  ${footer()}`;}
-function renderTransactions(){return `${section('Alle transacties','Voeg transacties toe, zoek en filter op categorie.','Nieuwe transactie','add-transaction')}
-  <div class="toolbar"><label class="search-box">${icon('search')}<input id="tx-search" type="search" placeholder="Zoek een transactie..." value="${safe(filters.query)}" aria-label="Zoeken"></label><select id="tx-type" class="select" aria-label="Filter op type"><option value="alles" ${filters.type==='alles'?'selected':''}>Alle types</option><option value="uitgave" ${filters.type==='uitgave'?'selected':''}>Uitgaven</option><option value="inkomsten" ${filters.type==='inkomsten'?'selected':''}>Inkomsten</option></select><select id="tx-category" class="select" aria-label="Filter op categorie"><option value="alles">Alle categorieën</option>${[...categories,'Inkomsten'].map(c=>`<option value="${c}" ${filters.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
-  <div class="card list-card" id="tx-list"></div><p class="notice">Je voert transacties zelf in. Er is geen automatische bankkoppeling of verwerking van echte bankgegevens.</p>${footer()}`;}
-function fillTransactions(){const list=document.getElementById('tx-list');if(!list)return;const q=filters.query.toLowerCase();const rows=data.transactions.filter(t=>(filters.type==='alles'||t.type===filters.type)&&(filters.category==='alles'||t.category===filters.category)&&(t.title.toLowerCase().includes(q)||t.category.toLowerCase().includes(q))).slice().sort((a,b)=>b.date.localeCompare(a.date));list.innerHTML=rows.length?`<div class="transactions">${rows.map(t=>rowTx(t,true)).join('')}</div>`:noItems('Geen transacties gevonden','Voeg een nieuwe transactie toe of wijzig je zoekfilters.','add-transaction','Transactie toevoegen');}
-function subscriptionCard(s){const active=s.status==='actief';return `<article class="card sub-card ${active?'':'muted-card'}"><div class="sub-top"><div class="service-logo">${safe(s.name).slice(0,1).toUpperCase()}</div><div style="min-width:0"><div class="sub-name">${safe(s.name)}</div><div class="sub-type">${safe(s.category)}</div></div></div><div class="sub-price">${money(s.amount)} <small>/ maand</small></div><div class="sub-bottom"><span class="status ${active?'':'inactive'}">${active?'● Actief':'● Opgezegd'}</span><span class="sub-date">${active?`Volgende: ${displayDate(nextDue(s.nextDate))}`:'Niet meer actief'}</span></div><div style="display:flex;justify-content:flex-end;gap:4px;margin-top:12px"><button class="icon-button" data-action="toggle-subscription" data-id="${safe(s.id)}" title="${active?'Markeer als opgezegd':'Markeer als actief'}" aria-label="Status wijzigen">${icon(active?'check':'repeat')}</button><button class="icon-button" data-action="edit-subscription" data-id="${safe(s.id)}" title="Bewerken" aria-label="Abonnement bewerken">${icon('edit')}</button><button class="icon-button" data-action="delete-subscription" data-id="${safe(s.id)}" title="Verwijderen" aria-label="Abonnement verwijderen">${icon('trash')}</button></div></article>`;}
-function nextDue(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(String(d)))return inputDate(now);let [y,m,day]=d.split('-').map(Number);if(y<2000||y>2200||m<1||m>12||day<1||day>31)return inputDate(now);let next=new Date(y,m-1,Math.min(day,new Date(y,m,0).getDate()));let i=0;while(next<new Date(now.getFullYear(),now.getMonth(),now.getDate())&&i<240){m++;if(m>12){m=1;y++;}next=new Date(y,m-1,Math.min(day,new Date(y,m,0).getDate()));i++;}return inputDate(next);}
-function renderSubscriptions(){return `${section('Abonnementen in beeld','Alle maandbedragen zijn apart van je transacties geregistreerd.','Abonnement toevoegen','add-subscription')}
-  <div class="stats-grid">${stat('Actieve abonnementen',String(activeSubs().length),'Je lopende contracten','repeat','purple-icon')}${stat('Maandelijkse kosten',money(subTotal()),'Totaal actieve abonnementen','wallet','orange-icon')}${stat('Jaarlijkse kosten',money(subTotal()*12),'12 × maandbedrag','calendar','red-icon')}${stat('Bespaarkans',money(subTotal()),'Maximaal per maand bij stopzetten','lightbulb','green-icon')}</div>
-  <div class="banner"><div><h3>💡 Heb je al deze abonnementen nog nodig?</h3><p>Controleer wat je gebruikt. De knop om op te zeggen past alleen je overzicht aan; hij zegt geen echt contract op.</p></div><button class="btn btn-outline" data-page="inzichten">Bekijk bespaartips ${icon('arrow-right')}</button></div>
-  ${data.subscriptions.length?`<div class="sub-grid">${data.subscriptions.slice().sort((a,b)=>(a.status===b.status?0:a.status==='actief'?-1:1)).map(subscriptionCard).join('')}</div>`:`<div class="card">${noItems('Geen abonnementen','Voeg je streamingdiensten, sportschool en andere vaste lasten toe.','add-subscription','Abonnement toevoegen')}</div>`}${footer()}`;}
-function renderBudgets(){const assigned=categories.reduce((a,c)=>a+Number(data.budgets[c]||0),0);const over=categories.filter(c=>data.budgets[c]>0&&spent(c)>data.budgets[c]).length;return `${section('Maandbudgetten','Je budgetten gelden per kalendermaand.','Budget instellen','add-budget')}
-  <div class="stats-grid">${stat('Totaal budget',money(assigned),'Alle ingestelde budgetten','wallet','purple-icon')}${stat('Uitgegeven',money(spent()),'Geregistreerd deze maand','arrow-up','orange-icon')}${stat('Budgetruimte',money(assigned-spent()),'Totaal budget min uitgaven','target','green-icon')}${stat('Overschreden',String(over),`${over===1?'categorie':'categorieën'} over budget`,'chart','red-icon')}</div>
-  <div class="budget-grid">${categories.map(c=>{const b=Number(data.budgets[c]||0),s=spent(c),p=pct(s,b);const color=b>0&&p>=100?'#e25f69':b>0&&p>=80?'#e8a246':catInfo[c].color;return `<div class="card budget-card"><div class="budget-card-title"><div class="budget-card-icon">${catInfo[c].icon}</div><button class="icon-button" data-action="edit-budget" data-category="${c}" aria-label="Budget ${c} aanpassen" title="Budget aanpassen">${icon('edit')}</button></div><h3>${c}</h3><div class="amount-big">${money(s)} <span>/ ${b>0?money(b):'geen budget'}</span></div><p>${b>0?`${p}% besteed · ${money(b-s)} over`:'Stel een limiet in om je uitgaven te volgen'}</p><div class="progress"><span style="width:${b>0?Math.min(p,100):0}%;background:${color}"></span></div></div>`;}).join('')}</div>${footer()}`;}
-function renderGoals(){const total=data.goals.reduce((a,g)=>a+g.saved,0),target=data.goals.reduce((a,g)=>a+g.target,0);return `${section('Dromen worden doelen','Maak je spaardoelen concreet en volg je voortgang.','Nieuw spaardoel','add-goal')}
-  <div class="banner"><div><h3>🎯 Je hebt ${money(total)} gereserveerd voor je doelen</h3><p>${target>0?`Samen ben je ${pct(total,target)}% op weg naar je spaardoelen.`:'Begin met een doel en spaar in je eigen tempo.'} Bedragen hier worden niet automatisch als transacties geboekt.</p></div></div>
-  ${data.goals.length?`<div class="goal-grid">${data.goals.map(g=>{const p=pct(g.saved,g.target);return `<article class="card goal-card"><div class="goal-top"><div class="goal-emoji">${safe(g.emoji)}</div><button class="icon-button" data-action="edit-goal" data-id="${safe(g.id)}" aria-label="Doel bewerken">${icon('edit')}</button></div><h3 class="goal-name">${safe(g.name)}</h3><div class="goal-saved">${money(g.saved)} <small>/ ${money(g.target)}</small></div><div class="goal-percent"><span>Jouw voortgang</span><strong>${p}%</strong></div><div class="progress"><span style="width:${Math.min(100,p)}%;background:${p>=100?'var(--green)':'var(--purple)'}"></span></div><div class="goal-actions"><button class="btn btn-light" data-action="contribute-goal" data-id="${safe(g.id)}">${icon('plus')} Bedrag toevoegen</button><button class="icon-button" data-action="delete-goal" data-id="${safe(g.id)}" aria-label="Doel verwijderen" title="Verwijderen">${icon('trash')}</button></div></article>`;}).join('')}</div>`:`<div class="card">${noItems('Nog geen spaardoelen','Waar wil jij voor sparen? Voeg je eerste doel toe.','add-goal','Spaardoel toevoegen')}</div>`}${footer()}`;}
-function renderInsights(){const inc=income(),exp=spent(),r=inc>0?Math.round((inc-exp)/inc*100):0;const top=categories.map(c=>({c,v:spent(c)})).sort((a,b)=>b.v-a.v)[0];return `${section('Maak slimme keuzes','Gebaseerd op de gegevens die jij invoert.')}
-  <div class="stats-grid">${stat('Spaarpercentage',inc>0?`${r}%`:'—','(Inkomsten − uitgaven) / inkomsten','trending','green-icon')}${stat('Grootste uitgavencategorie',top?.v?top.c:'—',top?.v?money(top.v):'Nog geen uitgaven','chart','purple-icon')}${stat('Vaste lasten',money(subTotal()),'Abonnementen per maand','repeat','orange-icon')}${stat('Potentieel per jaar',money(subTotal()*12),'Als alle abonnementen stoppen','lightbulb','red-icon')}</div>
-  <div class="two-col"><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Jouw persoonlijke bespaarkansen</h2><p class="card-sub">Tips op basis van geregistreerde bedragen</p></div></div>${tips()}</section><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Uitgaven per categorie</h2><p class="card-sub">Deze maand</p></div></div>${pie()}</section></div>
-  <div class="two-col"><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Maandelijkse uitgaven</h2><p class="card-sub">Bekijk je trend over de laatste zes maanden</p></div></div>${chart()}</section><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Praktische bespaartips</h2><p class="card-sub">Kleine gewoontes maken verschil</p></div></div>
-    ${[{title:'Loop je abonnementen na',desc:'Zet een herinnering om streaming- en appabonnementen te evalueren.'},{title:'Plan je boodschappen',desc:'Maak een lijstje en vermijd extra aankopen.'},{title:'Stel een weekbudget in',desc:'Deel een maandbudget op in vier overzichtelijke delen.'},{title:'Zet automatisch geld opzij',desc:'Een vaste overboeking kan je helpen om je spaardoel te halen.'}].map(t=>`<div class="insight green"><div class="insight-ico">${icon('check')}</div><div><h3>${t.title}</h3><p>${t.desc}</p></div></div>`).join('')}</section></div>${footer()}`;}
-function renderSettings(){return `${section('Jouw gegevens','Jij bepaalt welke financiële informatie hier staat.')}
- <div class="two-col"><section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Gegevens beheren</h2><p class="card-sub">Maak een back-up of begin opnieuw</p></div></div>
- <div class="settings-row"><div><strong>Gegevens exporteren</strong><p>Download je transacties, abonnementen, budgetten en doelen als JSON.</p></div><button class="btn btn-outline" data-action="export">${icon('download')} Exporteren</button></div>
- <div class="settings-row"><div><strong>Gegevens importeren</strong><p>Laad eerder geëxporteerde data. Hiermee vervang je alle huidige gegevens.</p></div><button class="btn btn-outline" data-action="import">${icon('upload')} Importeren</button></div>
- <div class="settings-row"><div><strong>Begin met lege gegevens</strong><p>Wis alle voorbeeld- en ingevoerde data op dit apparaat.</p></div><button class="btn btn-danger" data-action="reset-empty">Leegmaken</button></div>
- <div class="settings-row"><div><strong>Voorbeeldgegevens herstellen</strong><p>Vervang alles met een demonstratie van de website.</p></div><button class="btn btn-outline" data-action="reset-demo">Herstellen</button></div></section>
- <section class="card card-body"><div class="card-heading"><div><h2 class="card-title">Privacy en informatie</h2><p class="card-sub">Belangrijk om te weten</p></div>${icon('shield')}</div>
- <div class="insight green"><div class="insight-ico">${icon('shield')}</div><div><h3>Gegevens blijven in je browser</h3><p>Deze statische website slaat alles lokaal op met localStorage. Er wordt niets naar een server verstuurd.</p></div></div>
- <div class="insight"><div class="insight-ico">${icon('info')}</div><div><h3>Geen echte bankkoppeling</h3><p>Deze website is een zelfstandig voorbeeldproject, geen dienst van Dyme. Er is geen inlog, bankkoppeling, contractopzegging of synchronisatie tussen apparaten.</p></div></div>
- <div class="mini-topics"><div class="mini-topic card" style="border:0;background:#f7f8fc"><span class="eyebrow">TRANSACTIES</span><strong>${data.transactions.length}</strong><p>Opgeslagen transacties</p></div><div class="mini-topic card" style="border:0;background:#f7f8fc"><span class="eyebrow">SPAARDOELEN</span><strong>${data.goals.length}</strong><p>Aangemaakte doelen</p></div></div></section></div>${footer()}`;}
-function footer(){return `<div class="fineprint">Gemaakt voor slimmer geldbeheer · Alle bedragen en inzichten zijn gebaseerd op jouw handmatig ingevoerde gegevens. Geen financieel advies.</div>`;}
-function openModal(title,body,handler){formHandler=handler;const wrap=document.getElementById('modal-wrap');wrap.innerHTML=`<div class="modal"><div class="modal-heading"><h2 id="modal-title">${safe(title)}</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="Sluiten">${icon('x')}</button></div><form id="edit-form">${body}<div class="form-actions"><button type="button" class="btn btn-outline" data-action="close-modal">Annuleren</button><button type="submit" class="btn btn-primary">${icon('check')} Opslaan</button></div></form></div>`;wrap.classList.add('open');wrap.setAttribute('aria-hidden','false');wrap.setAttribute('aria-labelledby','modal-title');document.body.style.overflow='hidden';setTimeout(()=>wrap.querySelector('input,select')?.focus(),0);}
-function closeModal(){const wrap=document.getElementById('modal-wrap');wrap.classList.remove('open');wrap.setAttribute('aria-hidden','true');wrap.innerHTML='';document.body.style.overflow='';formHandler=null;}
-function field(label,name,type,value='',extras=''){return `<label class="field"><span class="field-label">${label}</span><input class="field-control" type="${type}" name="${name}" value="${safe(value)}" ${extras} required></label>`;}
-const numberField=(label,name,value)=>field(label,name,'number',value,'min="0.01" step="0.01" max="100000000"');
-function selectField(label,name,options,value){return `<label class="field"><span class="field-label">${label}</span><select class="field-control" name="${name}" required>${options.map(x=>`<option ${x===value?'selected':''} value="${safe(x)}">${safe(x)}</option>`).join('')}</select></label>`;}
-function transactionModal(id){const old=data.transactions.find(t=>t.id===id);openModal(old?'Transactie bewerken':'Nieuwe transactie',
- `${selectField('Type transactie','type',['uitgave','inkomsten'],old?.type||'uitgave')}${field('Omschrijving','title','text',old?.title||'','maxlength="100" placeholder="Bijv. Boodschappen"')}${numberField('Bedrag in euro','amount',old?.amount||'')}
- <div class="form-grid">${selectField('Categorie','category',old?.type==='inkomsten'?['Inkomsten',...categories]:[...categories,'Inkomsten'],old?.category||'Boodschappen')}${field('Datum','date','date',old?.date||inputDate(now))}</div>`,f=>{
-   const type=f.get('type')==='inkomsten'?'inkomsten':'uitgave';const title=String(f.get('title')||'').trim();const amount=Number(f.get('amount'));const date=String(f.get('date')||'');const category=type==='inkomsten'?'Inkomsten':categories.includes(f.get('category'))?f.get('category'):'Overig';
-   if(!title||!Number.isFinite(amount)||amount<=0||!validDate(date)){notify('Vul een geldige omschrijving, bedrag en datum in.');return false;}
-   if(old)Object.assign(old,{type,title:title.slice(0,100),amount,date,category});else data.transactions.push({id:makeId(),type,title:title.slice(0,100),amount,date,category});markChanged();notify('Transactie opgeslagen');return true;
- });
- const form=document.getElementById('edit-form');form.querySelector('[name=type]').addEventListener('change',e=>{const cat=form.querySelector('[name=category]');if(e.target.value==='inkomsten')cat.value='Inkomsten';else if(cat.value==='Inkomsten')cat.value='Boodschappen';});}
-function validDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const [y,m,d]=s.split('-').map(Number);return y>=2000&&y<=2200&&m>=1&&m<=12&&d>=1&&d<=new Date(y,m,0).getDate();}
-function subscriptionModal(id){const old=data.subscriptions.find(s=>s.id===id);openModal(old?'Abonnement bewerken':'Abonnement toevoegen',
- `${field('Naam abonnement','name','text',old?.name||'','maxlength="100" placeholder="Bijv. Spotify"')}${selectField('Soort','category',['Entertainment','Muziek','Sport','Software','Telefonie','Verzekering','Overig'],old?.category||'Entertainment')}${numberField('Maandbedrag in euro','amount',old?.amount||'')}${field('Volgende betaaldatum','nextDate','date',old?.nextDate||makeDate(0,Math.min(now.getDate()+3,28)))}<p class="form-hint">Ook als je per jaar betaalt, vul je hier het gemiddelde bedrag per maand in. Een statuswijziging zegt geen echt abonnement op.</p>`,f=>{
- const name=String(f.get('name')||'').trim(),amount=Number(f.get('amount')),nextDate=String(f.get('nextDate'));if(!name||!Number.isFinite(amount)||amount<=0||!validDate(nextDate)){notify('Vul alle velden correct in.');return false;}
- const obj={name:name.slice(0,100),amount,category:String(f.get('category')).slice(0,100),nextDate};if(old)Object.assign(old,obj);else data.subscriptions.push({id:makeId(),status:'actief',...obj});markChanged();notify('Abonnement opgeslagen');return true;
- });}
-function budgetModal(category){const c=category||categories.find(x=>Number(data.budgets[x])===0)||'Boodschappen';openModal('Maandbudget instellen',
- `${selectField('Categorie','category',categories,c)}${field('Maximumbedrag per maand (€)','amount','number',data.budgets[c]||'','min="0" step="0.01" max="100000000"')}<p class="form-hint">Vul 0 in om een budget te verwijderen. Budgetten gelden voor iedere maand.</p>`,f=>{const a=Number(f.get('amount'));if(!Number.isFinite(a)||a<0||a>1e8){notify('Vul een geldig bedrag in.');return false;}data.budgets[f.get('category')]=a;markChanged();notify('Budget bijgewerkt');return true;});
- const form=document.getElementById('edit-form');form.querySelector('[name=category]').addEventListener('change',e=>{form.querySelector('[name=amount]').value=data.budgets[e.target.value]||'';});}
-function goalModal(id){const old=data.goals.find(g=>g.id===id);openModal(old?'Spaardoel bewerken':'Nieuw spaardoel',
- `${field('Naam van je doel','name','text',old?.name||'','maxlength="100" placeholder="Bijv. Wereldreis"')}<div class="form-grid">${numberField('Doelbedrag (€)','target',old?.target||'')}${field('Al gespaard (€)','saved','number',old?.saved??0,'min="0" step="0.01" max="100000000"')}</div>${selectField('Symbool','emoji',['🎯','🛟','🏖️','💻','🏠','🚗','💰','🎓','💍','🌍'],old?.emoji||'🎯')}<p class="form-hint">Spaardoelen zijn apart bijgehouden, zonder automatische koppeling aan je transacties.</p>`,f=>{
- const name=String(f.get('name')||'').trim(),target=Number(f.get('target')),saved=Number(f.get('saved'));if(!name||!Number.isFinite(target)||target<=0||!Number.isFinite(saved)||saved<0){notify('Controleer de ingevulde bedragen.');return false;}const obj={name:name.slice(0,100),target,saved,emoji:String(f.get('emoji'))};if(old)Object.assign(old,obj);else data.goals.push({id:makeId(),...obj});markChanged();notify('Spaardoel opgeslagen');return true;
- });}
-function contributionModal(id){const g=data.goals.find(g=>g.id===id);if(!g)return;openModal(`Sparen voor ${g.name}`,`${numberField('Bedrag toevoegen (€)','amount','')}<p class="form-hint">Dit bedrag verhoogt je spaardoel. Het wordt niet van je banksaldo afgeschreven.</p>`,f=>{const a=Number(f.get('amount'));if(!Number.isFinite(a)||a<=0){notify('Vul een geldig bedrag in.');return false;}g.saved+=a;markChanged();notify(`${money(a)} toegevoegd aan je spaardoel`);return true;});}
-function remove(kind,id,label){if(!window.confirm(`Weet je zeker dat je deze ${label} wilt verwijderen?`))return;data[kind]=data[kind].filter(x=>x.id!==id);markChanged();notify('Item verwijderd');}
-function exportData(){const blob=new Blob([JSON.stringify({...data,exportDate:new Date().toISOString()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`saldo-backup-${inputDate(now)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Back-up gedownload');}
-function importData(file){if(!file)return;if(file.size>2*1024*1024){notify('Dit bestand is te groot (maximaal 2 MB).');return;}const reader=new FileReader();reader.onload=()=>{try{const imported=clean(JSON.parse(reader.result));if(!window.confirm('Alle huidige gegevens vervangen door dit back-upbestand?'))return;data=imported;save();render();notify('Gegevens succesvol geïmporteerd');}catch(e){notify('Dit is geen geldig Saldo-back-upbestand.');}};reader.onerror=()=>notify('Het bestand kon niet worden gelezen.');reader.readAsText(file);}
-function handleAction(action,button){const id=button?.dataset.id;switch(action){
- case 'add-transaction':transactionModal();break; case 'edit-transaction':transactionModal(id);break; case 'delete-transaction':remove('transactions',id,'transactie');break;
- case 'add-subscription':subscriptionModal();break; case 'edit-subscription':subscriptionModal(id);break; case 'delete-subscription':remove('subscriptions',id,'abonnement');break;
- case 'toggle-subscription':{const s=data.subscriptions.find(x=>x.id===id);if(!s)return;s.status=s.status==='actief'?'opgezegd':'actief';markChanged();notify('Status aangepast in dit overzicht (geen echte opzegging)');break;}
- case 'add-budget':budgetModal();break;case 'edit-budget':budgetModal(button.dataset.category);break;
- case 'add-goal':goalModal();break;case 'edit-goal':goalModal(id);break;case 'delete-goal':remove('goals',id,'spaardoel');break;case 'contribute-goal':contributionModal(id);break;
- case 'export':exportData();break;case 'import':document.getElementById('import-file').click();break;
- case 'reset-empty':if(confirm('Alle gegevens wissen? Dit kun je niet ongedaan maken zonder back-up.')){data=emptyData();markChanged();notify('Je begint nu met een leeg overzicht');}break;
- case 'reset-demo':if(confirm('Alle huidige gegevens vervangen door voorbeeldgegevens?')){data=sample();save();render();notify('Voorbeeldgegevens hersteld');}break;
- case 'open-menu':document.getElementById('sidebar').classList.add('open');document.getElementById('shade').classList.add('open');break;
- case 'close-modal':closeModal();break;
- }}
-document.addEventListener('click',e=>{const nav=e.target.closest('[data-page]');if(nav){e.preventDefault();navigate(nav.dataset.page);return;}const action=e.target.closest('[data-action]');if(action){e.preventDefault();handleAction(action.dataset.action,action);}});
-document.getElementById('menu-btn').addEventListener('click',()=>handleAction('open-menu'));
-document.getElementById('shade').addEventListener('click',closeMenu);
-document.getElementById('modal-wrap').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeMenu();}});
-document.addEventListener('submit',e=>{if(e.target.id!=='edit-form')return;e.preventDefault();if(!formHandler)return;const ok=formHandler(new FormData(e.target));if(ok)closeModal();});
-document.addEventListener('input',e=>{if(e.target.id==='tx-search'){filters.query=e.target.value;fillTransactions();}});
-document.addEventListener('change',e=>{if(e.target.id==='tx-type'){filters.type=e.target.value;fillTransactions();}else if(e.target.id==='tx-category'){filters.category=e.target.value;fillTransactions();}});
-document.getElementById('import-file').addEventListener('change',e=>{importData(e.target.files?.[0]);e.target.value='';});
-window.addEventListener('hashchange',()=>{const dest=location.hash.slice(1);if(titles[dest]&&dest!==page)navigate(dest);});
-render();fillTransactions();
+  const monthlyPrice=s=>Number(s.amount)/(s.period==='year'?12:1);
+  const dateView=s=>{const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'})};
+  const toColor=s=>{let n=0;for(const c of s)n=(n*31+c.charCodeAt(0))|0;return ['#eff2fb','#faedeb','#e8f5e0','#f2eafa','#fdf3dd'][Math.abs(n)%5]};
+  const logo=(name,large=false)=>`<div class="service-logo" style="background:${toColor(name)};color:#385949;${large?'':'width:43px;height:43px'}">${esc(name.trim().charAt(0).toUpperCase()||'?')}</div>`;
+  function toast(message){$('#toastMessage').textContent=message;$('#toast').classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>$('#toast').classList.remove('show'),3500)}
+  function go(name){if(!document.getElementById('view-'+name))return;view=name;document.querySelectorAll('.view').forEach(e=>e.classList.toggle('active',e.id==='view-'+name));document.querySelectorAll('[data-view]').forEach(e=>e.classList.toggle('active',e.dataset.view===name));const labels={dashboard:'Dashboard',transactions:'Transacties',subscriptions:'Abonnementen',goals:'Spaardoelen',insights:'Bespaartips',banking:'Bank koppelen'};$('#breadcrumb').textContent=labels[name];window.scrollTo({top:0,behavior:'auto'});render()}
+  const p100=(n)=>Math.max(0,Math.min(100,n));
+  function categorySpend(){const out={};for(const t of data.transactions){if(t.type==='expense'&&t.date.startsWith(currentMonth))out[t.category]=(out[t.category]||0)+Number(t.amount)}if(!data.bankSyncActive)out['Abonnementen']=(out['Abonnementen']||0)+totals().subs;return Object.entries(out).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1])}
+  function insightItems(){const t=totals(),items=[];
+    if(t.active.length){const sorted=[...t.active].sort((a,b)=>monthlyPrice(b)-monthlyPrice(a));const top=sorted[0];items.push({icon:'repeat',title:'Controleer je abonnement op '+top.name,desc:'Gebruik je dit nog? Als je het zelf opzegt, kan dat tot '+euro(monthlyPrice(top)*12,2)+' per jaar schelen.',amount:euro(monthlyPrice(top)*12)+'/jr'});items.push({icon:'wallet',title:'Je vaste abonnementskosten zijn '+euro(t.subs,2)+' per maand',desc:'Dat is '+euro(t.subs*12,2)+' per jaar. Vergelijk regelmatig je lopende contracten.',amount:''})}
+    for(const [cat,spent] of categorySpend()){const budget=Number(data.budgets[cat]);if(budget>0&&spent>budget){items.push({icon:'chart',title:'Je budget voor '+cat.toLowerCase()+' is overschreden',desc:'Je zit '+euro(spent-budget,2)+' boven je ingestelde limiet van '+euro(budget)+'.',amount:'Let op'});break}}
+    if(t.balance>0)items.push({icon:'target',title:'Zet een deel van je overschot apart',desc:'Je hebt op basis van je ingevoerde bedragen '+euro(t.balance,2)+' over deze maand. Maak een spaardoel en reserveer wat bij je bank.',amount:''});
+    else items.push({icon:'spark',title:'Maak een eenvoudig maandbudget',desc:'Kies in het bespaarplan een limiet per categorie en controleer je voortgang.',amount:''});
+    return items;
+  }
+  function opportunities(target,limit){const things=insightItems().slice(0,limit);$(target).innerHTML=things.map(t=>`<div class="opportunity"><span class="opportunity-symbol">${icon(t.icon)}</span><div style="flex:1;min-width:0"><strong>${esc(t.title)}</strong><p>${esc(t.desc)}</p></div>${t.amount?`<span class="amount">${esc(t.amount)}</span>`:''}</div>`).join('')||'<div class="panel-blank">Voeg transacties en abonnementen toe voor persoonlijke inzichten.</div>'}
+  function renderDashboard(){const t=totals();$('#heroBalance').textContent=euro(t.balance,2);$('#heroText').textContent=t.balance>=0?'Dit blijft over van je ingevoerde inkomsten, na je uitgaven en actieve abonnementen.':'Je geregistreerde uitgaven zijn hoger dan je inkomsten. Kijk waar je kunt bijsturen.';$('#metricIncome').textContent=euro(t.income);$('#metricExpenses').textContent=euro(t.outgoings);$('#metricSubs').textContent=euro(t.subs,2);$('#metricSubsFoot').textContent=t.active.length+' actief per maand';$('#metricSaved').textContent=euro(t.saved);$('#metricSavedFoot').textContent='Verspreid over '+data.goals.length+' doel(en)';
+    $('#dashSubs').innerHTML=t.active.slice(0,4).map(s=>`<div class="subrow">${logo(s.name)}<div class="subrow-main"><strong>${esc(s.name)}</strong><span>${esc(s.category)} · ${s.period==='year'?'Jaarlijks':'Maandelijks'}</span></div><div class="subrow-price"><strong>${euro(monthlyPrice(s),2)}</strong><span>per maand</span></div></div>`).join('')||'<div class="panel-blank">Geen actieve abonnementen. Goed overzicht!</div>';
+    const categories=categorySpend(),sum=categories.reduce((s,[,v])=>s+v,0);$('#donutTotal').textContent=euro(sum);let from=0;const pieces=[];for(const [c,v] of categories){const end=from+v/sum*100;pieces.push(`${catColors[c]||'#b0c7b0'} ${from.toFixed(4)}% ${end.toFixed(4)}%`);from=end}$('#donut').style.background=pieces.length?'conic-gradient('+pieces.join(',')+')':'#ecf0eb';$('#legend').innerHTML=categories.slice(0,5).map(([c,v])=>`<div class="legend-item"><span class="legend-name"><i class="dot" style="background:${catColors[c]||'#aec2ac'}"></i>${esc(c)}</span><span class="legend-val">${euro(v)}</span></div>`).join('')||'<div class="panel-blank">Nog geen uitgaven</div>';
+    const latest=[...data.transactions].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);$('#dashActivity').innerHTML=latest.map(a=>`<div class="activity"><div class="category-icon" style="background:${toColor(a.category)};font-size:17px">${catEmoji[a.category]||'💳'}</div><div class="activity-main"><strong>${esc(a.name)}</strong><span>${dateView(a.date)} · ${esc(a.category)}</span></div><div class="activity-price ${a.type==='income'?'pos':''}">${a.type==='income'?'+':'−'} ${euro(a.amount,2)}</div></div>`).join('')||'<div class="panel-blank">Nog geen transacties geregistreerd.</div>';opportunities('#dashOpportunities',3);
+  }
+  function renderTransactions(){const q=$('#transactionSearch').value.toLowerCase().trim(),filter=$('#transactionFilter').value;const list=[...data.transactions].filter(t=>(filter==='all'||t.type===filter)&&[t.name,t.category,t.date].join(' ').toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date));$('#transactionRows').innerHTML=list.map(t=>`<tr><td><strong>${esc(t.name)}</strong></td><td><span class="pill">${esc(t.category)}</span></td><td>${dateView(t.date)}</td><td class="${t.type==='income'?'amount-pos':'amount-neg'}">${t.type==='income'?'+':'−'} ${euro(t.amount,2)}</td><td><button class="delete-btn" data-delete-transaction="${esc(t.id)}" aria-label="Verwijder ${esc(t.name)}" title="Verwijderen">${icon('trash','icon-sm')}</button></td></tr>`).join('');$('#transactionsEmpty').hidden=list.length>0}
+  function renderSubscriptions(){const t=totals();$('#subsMonthlyTotal').textContent=euro(t.subs,2);$('#subsMonthlyDetail').textContent=t.active.length+' actieve abonnementen';$('#subsYearlyTotal').textContent=euro(t.subs*12,2);$('#subscriptionRows').innerHTML=data.subscriptions.map(s=>`<div class="subscription-card ${s.active?'':'cancelled'}">${logo(s.name,true)}<div class="subscription-detail"><strong>${esc(s.name)}</strong><span>${esc(s.category)} · ${s.period==='year'?'Jaarlijks':'Maandelijks'} ${s.active?'':'· Gemarkeerd als opgezegd'}</span><div><button class="cancel-button" data-toggle-sub="${esc(s.id)}">${s.active?'Markeer als opgezegd':'Opnieuw als actief markeren'}</button><button class="cancel-button" style="color:#b7767d;margin-left:14px" data-delete-sub="${esc(s.id)}">Verwijderen</button></div></div><div class="subscription-amount"><strong>${euro(s.amount,2)}</strong><span>per ${s.period==='year'?'jaar':'maand'}</span></div></div>`).join('')||'<div class="empty-state">Je hebt nog geen abonnementen toegevoegd.</div>'}
+  function renderGoals(){$('#goalCards').innerHTML=data.goals.map(g=>{const pct=p100(Number(g.saved)/Number(g.target)*100);return `<div class="goal-card"><div class="goal-head"><div class="goal-icon">${esc(g.emoji||'🎯')}</div><button class="btn btn-ghost btn-small" data-delete-goal="${esc(g.id)}" title="Spaardoel verwijderen" aria-label="Verwijder ${esc(g.name)}">${icon('trash','icon-sm')}</button></div><h3>${esc(g.name)}</h3><p>${pct>=100?'Gefeliciteerd, je doel is bereikt!':'Je bent '+Math.round(pct)+'% onderweg naar je doel.'}</p><div class="progress-labels"><strong>${euro(g.saved)}</strong><span>van ${euro(g.target)}</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div><div class="goal-actions"><button class="btn btn-light btn-small" data-contribute="${esc(g.id)}">${icon('plus','icon-sm')} Bedrag toevoegen</button></div></div>`}).join('')||'<div class="panel empty-state">Nog geen spaardoelen. Voeg er een toe om te beginnen.</div>'}
+  function renderInsights(){const t=totals(),most=[...t.active].sort((a,b)=>monthlyPrice(b)-monthlyPrice(a))[0];$('#insightSavings').textContent=euro(most?monthlyPrice(most)*12:0,2)+' per jaar';$('#insightSavingsText').textContent=most?`Rekenvoorbeeld: als je ${most.name} niet meer gebruikt en zelf opzegt, kun je tot dit bedrag besparen. Controleer eerst je contract.`:'Voeg abonnementen toe om te zien wat je mogelijk kunt besparen.';opportunities('#allOpportunities',8);
+    const hist=[];for(let k=5;k>=0;k--){const month=priorMonth(k),d=new Date(+month.slice(0,4),+month.slice(5)-1,1);const expense=data.transactions.filter(x=>x.type==='expense'&&x.date.startsWith(month)).reduce((s,x)=>s+Number(x.amount),0);hist.push({label:d.toLocaleDateString('nl-NL',{month:'short'}),amount:expense+(data.bankSyncActive?0:t.subs)})}const max=Math.max(1,...hist.map(x=>x.amount));$('#trendChart').innerHTML=hist.map((h,i)=>`<div class="trend-col"><div class="trend-bar-wrap"><div class="trend-bar ${i===5?'current':''}" style="height:${Math.max(2,h.amount/max*128)}px" title="${euro(h.amount,2)}">${i===5?`<span class="trend-tooltip">${euro(h.amount)}</span>`:''}</div></div><small>${esc(h.label)}</small></div>`).join('');
+    const spends=Object.fromEntries(categorySpend());$('#budgetCards').innerHTML=cats.map(c=>{const budget=Number(data.budgets[c])||0,spent=spends[c]||0,per=budget>0?spent/budget*100:0;return `<div class="budget-row"><h4>${catEmoji[c]} ${esc(c)}</h4><p>${spent>budget?'Let op: boven je maandbudget':'Houd je uitgaven binnen je grens'}</p><div class="progress-labels"><strong>${euro(spent,2)}</strong><span>${budget?Math.round(per)+'%':'Geen limiet'}</span></div><div class="progress-track"><div class="progress-fill ${per>100?'over':''}" style="width:${p100(per)}%"></div></div><div class="budget-edit"><label for="budget-${cats.indexOf(c)}">Maandlimiet (€)</label><input id="budget-${cats.indexOf(c)}" class="mini-input" type="number" min="0" step="1" value="${budget}" data-budget="${esc(c)}"></div></div>`}).join('')}
+  function render(){renderDashboard();renderTransactions();renderSubscriptions();renderGoals();renderInsights()}
+  function setModal(title,description,content){$('#modalTitle').textContent=title;$('#modalDescription').textContent=description;$('#modalBody').innerHTML=content;$('#modalWrap').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>$('#modalBody input:not([type=hidden])')?.focus(),0)}
+  const actions=`<div class="modal-actions"><button class="btn btn-outline" type="button" data-close>Annuleren</button><button class="btn btn-primary" type="submit">Opslaan ${icon('arrow','icon-sm')}</button></div>`;
+  function formTransaction(){kind='expense';currentModal='transaction';setModal('Transactie toevoegen','Registreer een bedrag. Je ziet het meteen terug in je overzicht.',`<div class="seg"><button type="button" class="active" data-kind="expense">Uitgave</button><button type="button" data-kind="income">Inkomst</button></div><form id="addTransaction"><div class="field"><label for="tname">Omschrijving</label><input id="tname" name="name" required maxlength="70" placeholder="Bijv. boodschappen"></div><div class="form-grid"><div class="field"><label for="tamount">Bedrag (€)</label><input id="tamount" name="amount" type="number" min="0.01" max="100000000" step="0.01" required placeholder="25,00"></div><div class="field"><label for="tdate">Datum</label><input id="tdate" name="date" type="date" required value="${localDate(now)}"></div><div class="field full"><label for="tcategory">Categorie</label><select name="category" id="tcategory">${cats.filter(c=>c!=='Abonnementen').map(c=>`<option value="${c}">${c}</option>`).join('')}</select></div></div>${actions}</form>`)}
+  function formSubscription(){currentModal='subscription';setModal('Abonnement toevoegen','Voer de prijs per betaalperiode in. Jaarbedragen worden omgerekend naar een maandgemiddelde.',`<form id="addSubscription"><div class="field"><label for="sname">Naam abonnement</label><input id="sname" name="name" required maxlength="65" placeholder="Bijv. streamingdienst"></div><div class="form-grid"><div class="field"><label for="samount">Bedrag (€)</label><input id="samount" name="amount" type="number" min="0.01" max="100000000" step="0.01" required placeholder="12.99"></div><div class="field"><label for="speriod">Facturatie</label><select name="period" id="speriod"><option value="month">Per maand</option><option value="year">Per jaar</option></select></div><div class="field full"><label for="scategory">Soort abonnement</label><select name="category" id="scategory"><option>Streaming</option><option>Muziek</option><option>Sport</option><option>Software</option><option>Cloudopslag</option><option>Telefonie</option><option>Verzekering</option><option>Overig</option></select></div></div>${actions}</form>`)}
+  function formGoal(){currentModal='goal';setModal('Nieuw spaardoel','Maak een doel en houd bij wat je ervoor opzijzet.',`<form id="addGoal"><div class="field"><label for="gname">Naam spaardoel</label><input id="gname" name="name" required maxlength="65" placeholder="Bijv. Nieuwe laptop"></div><div class="form-grid"><div class="field"><label for="gtarget">Doelbedrag (€)</label><input id="gtarget" name="target" type="number" min="0.01" max="100000000" step="0.01" required></div><div class="field"><label for="gsaved">Al gespaard (€)</label><input id="gsaved" name="saved" type="number" min="0" step="0.01" value="0" required></div><div class="field full"><label for="gemoji">Icoontje</label><select name="emoji" id="gemoji"><option value="🎯">🎯 Doel</option><option value="✈️">✈️ Vakantie</option><option value="🏡">🏡 Huis</option><option value="💻">💻 Technologie</option><option value="🚗">🚗 Auto</option><option value="🛟">🛟 Noodbuffer</option></select></div></div>${actions}</form>`)}
+  function formContribute(id){const goal=data.goals.find(x=>x.id===id);if(!goal)return;currentModal='contribute';setModal('Sparen voor '+goal.name,'Noteer hoeveel je extra hebt gespaard. Dit is geen echte bankoverschrijving.',`<form id="addContribute"><input type="hidden" name="id" value="${esc(id)}"><div class="field"><label for="contribution">Extra spaarbedrag (€)</label><input id="contribution" name="amount" type="number" min="0.01" max="100000000" step="0.01" required placeholder="Bijv. 50"></div>${actions}</form>`)}
+  function closeModal(){$('#modalWrap').classList.remove('open');document.body.style.overflow='';currentModal=''}
+  function amountOK(n){return Number.isFinite(n)&&n>0&&n<=100000000}
+  function addHandler(e){e.preventDefault();const f=new FormData(e.target);if(currentModal==='transaction'){const amount=Number(f.get('amount'));if(!amountOK(amount))return toast('Vul een geldig positief bedrag in.');data.demo=false;data.transactions.push({id:uid(),name:String(f.get('name')).trim(),amount,category:kind==='income'?'Inkomsten':String(f.get('category')),type:kind,date:String(f.get('date'))});toast('Transactie toegevoegd')}
+    else if(currentModal==='subscription'){const amount=Number(f.get('amount'));if(!amountOK(amount))return toast('Vul een geldig bedrag in.');data.subscriptions.push({id:uid(),name:String(f.get('name')).trim(),amount,category:String(f.get('category')),period:String(f.get('period')),active:true});toast('Abonnement toegevoegd')}
+    else if(currentModal==='goal'){const target=Number(f.get('target')),saved=Number(f.get('saved'));if(!amountOK(target)||!Number.isFinite(saved)||saved<0)return toast('Controleer de bedragen.');data.goals.push({id:uid(),name:String(f.get('name')).trim(),target,saved,emoji:String(f.get('emoji'))});toast('Spaardoel aangemaakt')}
+    else if(currentModal==='contribute'){const amount=Number(f.get('amount'));if(!amountOK(amount))return toast('Vul een geldig bedrag in.');const goal=data.goals.find(g=>g.id===f.get('id'));if(goal)goal.saved+=amount;toast('Spaargeld bijgewerkt')}
+    persist();closeModal();render();
+  }
+  function dl(filename,content,mime){const blob=new Blob([content],{type:mime});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+  function exportCSV(){const q=v=>'"'+String(v).replace(/"/g,'""')+'"';const lines=[['Datum','Omschrijving','Categorie','Type','Bedrag EUR'].map(q).join(';'),...data.transactions.map(t=>[t.date,t.name,t.category,t.type==='income'?'Inkomst':'Uitgave',t.amount.toFixed(2).replace('.',',')].map(q).join(';'))];dl('bespaarslim-transacties.csv','\uFEFF'+lines.join('\r\n'),'text/csv;charset=utf-8;');toast('CSV-bestand gedownload')}
+  document.addEventListener('click',e=>{const nav=e.target.closest('[data-view]');if(nav){go(nav.dataset.view);return}const open=e.target.closest('[data-modal]');if(open){({transaction:formTransaction,subscription:formSubscription,goal:formGoal}[open.dataset.modal]||(()=>{}))();return}if(e.target.closest('[data-close]')||e.target.closest('#modalClose')){closeModal();return}const kindBtn=e.target.closest('[data-kind]');if(kindBtn){kind=kindBtn.dataset.kind;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b===kindBtn));const cat=$('#tcategory');cat.innerHTML=(kind==='income'?['Inkomsten']:cats.filter(c=>c!=='Abonnementen')).map(c=>`<option value="${c}">${c}</option>`).join('');return}
+    const c=e.target.closest('[data-contribute]');if(c){formContribute(c.dataset.contribute);return}
+    const delT=e.target.closest('[data-delete-transaction]');if(delT){if(confirm('Deze transactie verwijderen?')){data.transactions=data.transactions.filter(x=>x.id!==delT.dataset.deleteTransaction);persist();render();toast('Transactie verwijderd')}return}
+    const delS=e.target.closest('[data-delete-sub]');if(delS){if(confirm('Dit abonnement uit de lijst verwijderen?')){data.subscriptions=data.subscriptions.filter(x=>x.id!==delS.dataset.deleteSub);persist();render();toast('Abonnement verwijderd')}return}
+    const delG=e.target.closest('[data-delete-goal]');if(delG){if(confirm('Dit spaardoel en de geregistreerde voortgang verwijderen?')){data.goals=data.goals.filter(x=>x.id!==delG.dataset.deleteGoal);persist();render();toast('Spaardoel verwijderd')}return}
+    const toggle=e.target.closest('[data-toggle-sub]');if(toggle){const s=data.subscriptions.find(x=>x.id===toggle.dataset.toggleSub);if(s){s.active=!s.active;persist();render();toast(s.active?'Abonnement opnieuw actief':'Lokaal als opgezegd gemarkeerd')}return}
+    if(e.target.id==='csvExport')exportCSV();if(e.target.id==='backupExport'){dl('bespaarslim-backup.json',JSON.stringify(data,null,2),'application/json;charset=utf-8');toast('Back-up gedownload')}
+    if(e.target.id==='clearData'){if(confirm('Weet je zeker dat je ALLE gegevens in deze browser wilt wissen? Dit kan niet ongedaan worden gemaakt.')){data={demo:false,transactions:[],subscriptions:[],goals:[],budgets:{...defaultBudgets}};persist();render();go('dashboard');toast('Je begint met een leeg overzicht')}}
+  });
+  $('#modalWrap').addEventListener('click',e=>{if(e.target===$('#modalWrap'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});$('#modalBody').addEventListener('submit',e=>{if(e.target.matches('#addTransaction,#addSubscription,#addGoal,#addContribute'))addHandler(e)});
+  $('#transactionSearch').addEventListener('input',renderTransactions);$('#transactionFilter').addEventListener('change',renderTransactions);
+  $('#budgetCards').addEventListener('change',e=>{const input=e.target.closest('[data-budget]');if(!input)return;const value=Number(input.value);if(!Number.isFinite(value)||value<0||value>100000000){toast('Gebruik een geldig niet-negatief maandbudget.');renderInsights();return}data.budgets[input.dataset.budget]=value;persist();renderInsights();renderDashboard();toast('Maandbudget opgeslagen')});
+
+  // Read-only bankkoppeling. App-geheim en RSA-sleutel staan ALTIJD op de Worker.
+  const BACKEND_STORE='bespaarslim_backend_url';
+  const ACCESS_STORE='bespaarslim_session_token';
+  const bankUrlField=$('#bankBackend'),bankKeyField=$('#bankAccess');
+  const cleanEndpoint=v=>{
+    try{const u=new URL(v.trim());if(u.protocol!=='https:' || u.username||u.password||u.search||u.hash)return '';
+      return u.origin + (u.pathname==='/'?'':u.pathname.replace(/\/$/,''));
+    }catch(_){return ''}
+  };
+  let backendUrl=cleanEndpoint(localStorage.getItem(BACKEND_STORE)||'');
+  let accessToken=sessionStorage.getItem(ACCESS_STORE)||'';
+  bankUrlField.value=backendUrl;
+  bankKeyField.value=accessToken;
+  function bankMessage(text,isError=false){const el=$('#bankConnectionState');el.textContent=text;el.classList.toggle('error',isError)}
+  async function bankRequest(path,method='GET',payload){
+    if(!backendUrl || accessToken.length<32)throw new Error('Stel eerst je backend-URL en een toegangstoken van minimaal 32 tekens in.');
+    const res=await fetch(backendUrl+path,{method,headers:{Authorization:'Bearer '+accessToken,...(payload?{'Content-Type':'application/json'}:{})},...(payload?{body:JSON.stringify(payload)}:{})});
+    const body=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error(body.error||'De backend reageert niet.');return body;
+  }
+  async function loadBankStatus(){
+    const status=await bankRequest('/api/status');
+    const accounts=status.accounts||[];
+    $('#bankAccounts').innerHTML=accounts.length?accounts.map(a=>`<div class="subrow"><span class="service-logo" style="background:#eaf6df">🏦</span><div class="subrow-main"><strong>${esc(a.bank)}</strong><span>Rekening •••• ${esc(a.last4||'onbekend')} · ${esc(a.currency||'EUR')}</span></div></div>`).join(''):'Nog geen bank gekoppeld.';
+    $('#bankSync').disabled= !accounts.length;
+    $('#bankDisconnect').disabled= !accounts.length;
+    return accounts;
+  }
+  async function setupBank(){
+    try{
+      bankMessage('Bezig met het ophalen van beschikbare banken…');
+      const [banks]=await Promise.all([bankRequest('/api/banks'),loadBankStatus()]);
+      const select=$('#bankSelect');
+      select.innerHTML='<option value="">Kies je bank</option>'+banks.banks.map(b=>`<option value="${esc(b.name)}">${esc(b.name)}</option>`).join('');
+      select.disabled=!banks.banks.length;
+      $('#bankConnect').disabled=!banks.banks.length;
+      bankMessage(banks.banks.length?`Veilige verbinding actief. ${banks.banks.length} Nederlandse banken beschikbaar.`:'Backend werkt, maar er zijn geen banken voor jouw API-app beschikbaar.');
+    }catch(e){bankMessage(e.message,true);$('#bankSelect').disabled=true;$('#bankConnect').disabled=true;}
+  }
+  $('#bankSettings').addEventListener('submit',async e=>{
+    e.preventDefault();const u=cleanEndpoint(bankUrlField.value),token=bankKeyField.value.trim();
+    if(!u)return bankMessage('Gebruik een volledige HTTPS-URL naar je eigen Worker.',true);
+    if(token.length<32)return bankMessage('Gebruik een sterk willekeurig toegangstoken van minimaal 32 tekens.',true);
+    backendUrl=u;accessToken=token;localStorage.setItem(BACKEND_STORE,u);sessionStorage.setItem(ACCESS_STORE,token);
+    await setupBank();
+  });
+  $('#bankConnect').addEventListener('click',async()=>{
+    const bank=$('#bankSelect').value;if(!bank)return bankMessage('Kies eerst een bank.',true);
+    if(!confirm(`Je gaat naar ${bank} om alleen-lezen toestemming te geven voor je transacties. Doorgaan?`))return;
+    try{bankMessage('Bankkoppeling wordt gestart…');const auth=await bankRequest('/api/connect','POST',{bank});
+      const target=new URL(auth.url);if(target.protocol!=='https:'|| !['auth.enablebanking.com','enablebanking.com'].includes(target.hostname))throw new Error('De backend stuurde geen vertrouwde banklink terug.');
+      location.assign(target.toString());
+    }catch(e){bankMessage(e.message,true)}
+  });
+  $('#bankSync').addEventListener('click',async()=>{
+    $('#bankSync').disabled=true;bankMessage('Transacties worden veilig opgehaald…');
+    try{
+      const result=await bankRequest('/api/sync','POST',{});
+      const received=(result.transactions||[]).filter(t=>t && /^bank-[A-Za-z0-9_-]{10,}$/.test(t.id) && /^\d{4}-\d{2}-\d{2}$/.test(t.date) && Number.isFinite(t.amount) && t.amount>0 && t.amount<100000000 && ['income','expense'].includes(t.type));
+      const sample=data.demo===true || (data.demo===undefined && data.transactions.length>20 && data.transactions.some(t=>t.name==='Bijverdiensten'));
+      if(received.length && sample){
+        if(!confirm('Je huidige voorbeeldtransacties en voorbeeldabonnementen worden vervangen door je echte bankgegevens. Doorgaan?'))return;
+        data.transactions=[];data.subscriptions=[];data.goals=[];data.demo=false;
+      }
+      const ids=new Set(data.transactions.map(t=>t.id));let added=0;
+      for(const t of received){if(ids.has(t.id))continue;
+        data.transactions.push({id:t.id,name:String(t.name).slice(0,100),date:t.date,amount:t.amount,type:t.type,category:cats.includes(t.category)?t.category:(t.type==='income'?'Inkomsten':'Overig')});ids.add(t.id);added++;
+      }
+      if(received.length)data.bankSyncActive=true;
+      persist();render();
+      bankMessage(`${added} nieuwe transactie(s) geïmporteerd${result.warnings?.length?' · Let op: '+result.warnings.join(' | '):'.'} Bekijk de pagina Transacties.`);
+      if(added)toast(`${added} banktransactie(s) toegevoegd`);
+    }catch(e){bankMessage(e.message,true)}finally{$('#bankSync').disabled=false;}
+  });
+  $('#bankDisconnect').addEventListener('click',async()=>{
+    if(!confirm('De toestemming bij Enable Banking intrekken? Eerder opgehaalde transacties blijven op dit apparaat staan.'))return;
+    try{const result=await bankRequest('/api/disconnect','POST',{});await loadBankStatus();bankMessage('Bankkoppeling losgekoppeld.'+(result.warnings?.length?' '+result.warnings.join(' '):''));}
+    catch(e){bankMessage(e.message,true)}
+  });
+  const bankReturn=new URL(location.href).searchParams.get('bank_status');
+  if(bankReturn){
+    const cleaned=new URL(location.href);cleaned.searchParams.delete('bank_status');history.replaceState(null,'',cleaned.href);
+    go('banking');
+    bankMessage(bankReturn==='connected'?'Banktoestemming bevestigd! Klik nu op Transacties ophalen.':bankReturn==='cancelled'?'Bankkoppeling geannuleerd.':'Koppeling mislukt. Controleer de instellingen en probeer opnieuw.',bankReturn==='error');
+  }
+  if(backendUrl&&accessToken.length>=32){setupBank().then(()=>{if(bankReturn==='connected')bankMessage('Bank gekoppeld! Klik op Transacties ophalen.');});}
+
+  $('#todayLabel').textContent=now.toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});$('#year').textContent=now.getFullYear();render();
 })();
 </script>
 </body>

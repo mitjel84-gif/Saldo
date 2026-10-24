@@ -1,0 +1,18 @@
+name = "bespaarslim-bank"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Kopieer hieronder de KV-id die Cloudflare bij de opdracht
+# 'npx wrangler kv namespace create BANK_KV' aan je teruggeeft.
+[[kv_namespaces]]
+binding = "BANK_KV"
+id = "VUL_HIER_JOUW_KV_NAMESPACE_ID_IN"
+
+# Vervang beide voorbeeld-URL's. GitHub Pages kan een submap hebben.
+[vars]
+FRONTEND_URL = "https://JOUW_NAAM.github.io/JOUW_REPOSITORY/"
+WORKER_URL = "https://bespaarslim-bank.JOUW_SUBDOMEIN.workers.dev"
+
+# De volgende waarden mogen NOOIT in dit bestand worden gezet.
+# Ze worden via 'wrangler secret put' ingesteld:
+# ENABLE_APP_ID, ENABLE_PRIVATE_KEY, APP_ACCESS_TOKEN
