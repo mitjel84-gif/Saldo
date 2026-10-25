@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f8f5">
   <meta name="description" content="BespaarSlim: je persoonlijke budgetdashboard voor uitgaven, abonnementen, spaardoelen en bespaarkansen.">
-  <title>BespaarSlim — Meer overhouden, minder gedoe</title>
+  <title>BespaarSlim — Twee gebruikers, eigen financieel overzicht</title>
   <style>
     :root{--bg:#f6f7f4;--white:#fff;--ink:#18231e;--muted:#849087;--muted2:#68776e;--green:#c8f28a;--forest:#214d36;--line:#e8ece7;--red:#c54b54;--orange:#edaa64;--purple:#a99bec;--blue:#89b7e9;--radius:22px;--shadow:0 12px 36px rgba(30,50,34,.035)}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8bcf75;outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.5}svg{display:block}a{color:inherit}.icon{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.icon-sm{width:16px;height:16px}.icon-lg{width:22px;height:22px}
@@ -41,9 +41,21 @@
     @media(max-width:940px){.week-budget-list{grid-template-columns:1fr}.planner-summary{gap:10px}}
     @media(max-width:760px){.planner-hero{padding:23px;align-items:flex-start;flex-wrap:wrap}.planner-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.planner-stat{padding:15px}.planner-stat strong{font-size:20px}.planner-item{align-items:flex-start;flex-wrap:wrap;padding:15px}.planner-item-side{width:100%;flex-direction:row;align-items:center;justify-content:space-between}.week-range{font-size:18px}.mobile-bottom{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}.mobile-bottom::-webkit-scrollbar{display:none}.mobile-tab{width:auto;min-width:74px;flex:1 0 74px}}
     @media(max-width:480px){.planner-summary{grid-template-columns:1fr 1fr}.planner-hero .btn{width:100%}.week-toolbar input{width:100%}.week-budget-amount{font-size:16px}}
+
+    /* Twee gebruikers: losse profielen in dezelfde BespaarSlim-stijl */
+    body.profile-locked .shell{visibility:hidden}
+    .profile-gate{position:fixed;inset:0;z-index:10000;background:radial-gradient(ellipse at 15% 10%,#e0f1ca 0,transparent 44%),linear-gradient(135deg,#f8fbf6,#eef3ed);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+    .profile-gate[hidden]{display:none!important}
+    .profile-login{background:#fff;border:1px solid #dfe9dc;width:min(480px,100%);padding:33px;box-shadow:0 22px 80px #24452d19;border-radius:27px;max-height:calc(100vh - 32px);overflow:auto}
+    .profile-title{display:flex;gap:12px;align-items:center;margin-bottom:20px}.profile-title .brand-mark{flex:none}.profile-title strong{font-size:22px;letter-spacing:-.8px}.profile-title small{display:block;color:#87a08b;margin-top:4px;font-size:12px}
+    .profile-login h1{font-size:27px;margin:0 0 8px;letter-spacing:-1.15px}.profile-desc{font-size:13px;line-height:1.7;color:#71877a;margin:0 0 24px}
+    .profile-choices{display:grid;gap:11px}.profile-option{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:14px;border-radius:15px;background:#f8faf6;border:1px solid #e2ecdb;color:#263c2e;cursor:pointer}.profile-option:hover{border-color:#8bcf83;background:#f1f9ea}.profile-option b{display:block;font-size:14px;margin-bottom:4px}.profile-option small{color:#87988a;font-size:11px}.profile-option .profile-round{width:39px;height:39px;border-radius:12px;background:#d5eeb8;display:grid;place-items:center;font-weight:850}
+    .profile-option .arrow-right{margin-left:auto;font-size:20px}.profile-section{display:grid;gap:15px}.profile-section label{font-size:12px;font-weight:800;color:#435a46;display:block;margin-bottom:6px}.profile-section input{background:white;border:1px solid #dce8d9;border-radius:12px;padding:13px;width:100%;color:#203525;font-size:14px;min-width:0}.profile-section input:focus{border-color:#80b47b;outline:2px solid #d9efd1}.profile-row-actions{display:flex;align-items:center;gap:10px;justify-content:space-between}.profile-row-actions .btn{flex:1}.profile-link{border:0;background:none;color:#4d7e51;font-weight:750;font-size:12px;padding:7px 0;cursor:pointer}.profile-note{margin-top:20px;background:#f1f8ea;border-radius:14px;padding:13px 15px;color:#607e60;font-size:11px;line-height:1.7}.profile-error{font-size:12px;color:#b94450;line-height:1.5;margin-top:12px;min-height:0}.profile-switch{display:flex;gap:8px;align-items:center;border:1px solid #e5ece4;background:#fff;padding:6px 10px 6px 7px;border-radius:24px;color:#244737;font-size:12px;font-weight:800;max-width:168px}.profile-switch .avatar{height:30px;width:30px;font-size:10px;border-width:2px;box-shadow:none;flex:none}.profile-switch .current-profile{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.profile-badge{margin:12px 8px 0;background:#f4f9ee;border:1px solid #e6efdf;border-radius:13px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}.profile-badge strong{color:#376442;font-size:12px;max-width:112px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}.profile-badge button{background:transparent;border:0;color:#668d67;font-size:11px;font-weight:850;cursor:pointer}.profile-sync{font-size:10px;color:#689579;padding:0 8px 0;line-height:1.5}.profile-warning{background:#fff9eb;color:#846d36;padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.6}
+    @media(max-width:850px){.topbar .demo-pill{display:none}.profile-switch .current-profile{max-width:90px}}
+    @media(max-width:600px){.profile-login{padding:24px}.profile-title strong{font-size:20px}.profile-switch{max-width:130px}.top-actions{gap:9px}.profile-switch .current-profile{max-width:74px}.date-pill{display:none}}
   </style>
 </head>
-<body>
+<body class="profile-locked">
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-8h6v8"/></symbol>
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></symbol>
@@ -65,6 +77,13 @@
   <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.01"/></symbol>
   <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></symbol>
 </svg>
+<div class="profile-gate" id="profileGate" role="dialog" aria-modal="true" aria-label="Aanmelden bij BespaarSlim">
+  <div class="profile-login">
+    <div class="profile-title"><div class="brand-mark"><svg class="icon icon-lg"><use href="#i-spark"/></svg></div><div><strong>bespaar<span style="color:#78b85a">slim.</span></strong><small>Twee personen, ieder een eigen overzicht</small></div></div>
+    <div id="profileGateContent"></div><div id="profileGateError" class="profile-error" role="alert" aria-live="polite"></div>
+    <div class="profile-note" id="profileGateFooter"></div>
+  </div>
+</div>
 <div class="shell">
   <aside class="sidebar" aria-label="Hoofdnavigatie">
     <div class="brand"><div class="brand-mark"><svg class="icon icon-lg"><use href="#i-spark"/></svg></div><span class="brand-name">bespaar<span>slim.</span></span></div>
@@ -79,10 +98,10 @@
       <button class="nav-btn" data-view="goals"><svg class="icon"><use href="#i-target"/></svg><span class="nav-label">Spaardoelen</span></button>
       <button class="nav-btn" data-view="insights"><svg class="icon"><use href="#i-chart"/></svg><span class="nav-label">Bespaartips</span></button>
     </nav>
-    <div class="side-bottom"><div class="tip-panel"><div class="tip-icon"><svg class="icon"><use href="#i-spark"/></svg></div><h4>Kleine stappen.<br>Groot verschil.</h4><p>Ontdek wat jij kunt besparen en werk aan je doelen.</p></div><div class="privacy"><svg class="icon icon-sm"><use href="#i-lock"/></svg>Je gegevens blijven in je browser</div></div>
+    <div class="side-bottom"><div class="profile-badge"><strong id="sideProfileName">Mijn profiel</strong><button type="button" id="sideSignOut">Wisselen</button></div><div class="tip-panel"><div class="tip-icon"><svg class="icon"><use href="#i-spark"/></svg></div><h4>Kleine stappen.<br>Groot verschil.</h4><p>Ontdek wat jij kunt besparen en werk aan je doelen.</p></div><div class="profile-sync" id="syncStatus">Alleen dit apparaat</div><div class="privacy"><svg class="icon icon-sm"><use href="#i-lock"/></svg><span id="privacyModeText">Gegevens per profiel gescheiden</span></div></div>
   </aside>
   <div class="workspace">
-    <header class="topbar"><div class="crumb">Mijn geld &nbsp;/&nbsp; <strong id="breadcrumb">Dashboard</strong></div><div class="top-actions"><span class="demo-pill">100% handmatig · geen bankkoppeling</span><span class="date-pill"><svg class="icon icon-sm"><use href="#i-calendar"/></svg><span id="todayLabel"></span></span><div class="avatar" title="Mijn dashboard">BS</div></div></header>
+    <header class="topbar"><div class="crumb">Mijn geld &nbsp;/&nbsp; <strong id="breadcrumb">Dashboard</strong></div><div class="top-actions"><span class="demo-pill">100% handmatig · geen bankkoppeling</span><span class="date-pill"><svg class="icon icon-sm"><use href="#i-calendar"/></svg><span id="todayLabel"></span></span><button type="button" class="profile-switch" id="profileSwitch" title="Wissel van gebruiker"><span class="avatar" id="profileAvatar">BS</span><span class="current-profile" id="topProfileName">Mijn profiel</span><svg class="icon icon-sm"><use href="#i-down"/></svg></button></div></header>
     <main class="page">
       <section class="view active" id="view-dashboard" aria-label="Dashboard">
         <div class="page-head"><div><p class="eyebrow">JOUW FINANCIËLE OVERZICHT</p><h1>Goed bezig met je geld. <span aria-hidden="true">✳</span></h1><p class="page-sub">Alle cijfers op een rij, zodat jij slimmer kunt sparen.</p></div><button class="btn btn-primary" data-modal="transaction"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Uitgave toevoegen</span></button></div>
@@ -106,7 +125,7 @@
           <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Recente transacties</h2><div class="panel-subtitle">Je laatst geregistreerde bedragen</div></div><button class="text-link" data-view="transactions">Bekijk alles <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div id="dashActivity"></div></div>
         </div>
         <div class="section-grid" style="margin-top:19px"><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Vaste lasten</h2><div class="panel-subtitle">Huur, verzekeringen en andere terugkerende kosten</div></div><button class="text-link" data-view="fixed">Beheren</button></div><div id="dashFixedSummary" class="account-muted">Nog geen vaste lasten</div></div><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Weekbudgetten</h2><div class="panel-subtitle">Maandag tot en met zondag</div></div><button class="text-link" data-view="weeks">Bekijken</button></div><div id="dashWeekSummary" class="account-muted">Stel je weekbudget in</div></div></div>
-        <div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Je saldo en transacties worden alleen in deze browser bijgehouden. <button class="text-link" data-view="accounts">Stel je rekeningen in</button> om vanaf vandaag te beginnen. Er wordt niets bij een echte bank afgeschreven.</span></div>
+        <div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Je saldo en transacties worden uitsluitend voor je eigen profiel bijgehouden. <button class="text-link" data-view="accounts">Stel je rekeningen in</button> om vanaf vandaag te beginnen. Er wordt niets bij een echte bank afgeschreven.</span></div>
       </section>
       <section class="view" id="view-transactions" aria-label="Transacties"><div class="page-head"><div><p class="eyebrow">HOU JE UITGAVEN BIJ</p><h1>Transacties</h1><p class="page-sub">Voeg bedragen toe en zie waar je geld naartoe gaat.</p></div><button class="btn btn-primary" data-modal="transaction"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Transactie toevoegen</span></button></div><div class="toolbar"><div class="search"><svg class="icon icon-sm"><use href="#i-search"/></svg><input id="transactionSearch" type="search" placeholder="Zoek een transactie…" aria-label="Zoek een transactie"></div><select id="transactionFilter" class="select" aria-label="Filter transacties"><option value="all">Alle transacties</option><option value="expense">Alleen uitgaven</option><option value="income">Alleen inkomsten</option><option value="transfer">Overboekingen</option></select><button class="btn btn-outline btn-small" id="csvExport"><svg class="icon icon-sm"><use href="#i-download"/></svg>CSV exporteren</button></div><div class="panel" style="padding:9px 8px"><div class="table-scroll"><table class="transaction-table"><thead><tr><th>Omschrijving</th><th>Categorie</th><th>Rekening</th><th>Datum</th><th>Bedrag</th><th></th></tr></thead><tbody id="transactionRows"></tbody></table></div><div id="transactionsEmpty" class="empty-state" hidden>Geen transacties gevonden. Voeg er een toe met de knop hierboven.</div></div></section>
       <section class="view" id="view-subscriptions" aria-label="Abonnementen"><div class="page-head"><div><p class="eyebrow">VASTE LASTEN ONDER CONTROLE</p><h1>Abonnementen</h1><p class="page-sub">Houd bij wat je maandelijks betaalt en ontdek bespaarkansen.</p></div><button class="btn btn-primary" data-modal="subscription"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Abonnement toevoegen</span></button></div><div class="subscriptions-layout"><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Mijn abonnementen</h2><div class="panel-subtitle">Markeer een abonnement als opgezegd als je dit zelf bij de aanbieder hebt geregeld.</div></div></div><div id="subscriptionRows"></div></div><div><div class="sub-large"><small>MAANDELIJKSE KOSTEN</small><strong id="subsMonthlyTotal">€ 0</strong><p id="subsMonthlyDetail">Totaal voor actieve abonnementen</p></div><div class="panel"><h2 class="panel-title">Op jaarbasis</h2><div class="metric-number" id="subsYearlyTotal">€ 0</div><p class="page-sub">Dit betaal je in 12 maanden als niets verandert.</p><div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Een abonnement markeren als opgezegd beëindigt het <strong>niet</strong> bij de aanbieder.</span></div></div></div></div></section>
@@ -153,7 +172,17 @@
 <div class="toast" role="status" aria-live="polite" id="toast"><svg class="icon icon-sm"><use href="#i-check"/></svg><span id="toastMessage"></span></div>
 <script>
 (function(){'use strict';
-  const STORE='bespaarslim_data_v1';
+  const STORE='bespaarslim_data_v1'; // Oude opslag blijft bestaan voor migratie van je eigen profiel.
+  // Optioneel: vul hieronder de PUBLIEKE Supabase-project-URL en publishable/anon key in.
+  // Laat leeg voor twee lokale testprofielen op dit apparaat. NOOIT een service_role of secret key toevoegen!
+  const SUPABASE_URL = '';
+  const SUPABASE_PUBLIC_KEY = '';
+  const CLOUD_MODE = /^https:\/\/[-a-zA-Z0-9]+\.supabase\.co\/?$/.test(SUPABASE_URL.trim()) && !!SUPABASE_PUBLIC_KEY.trim();
+  const PROFILES_KEY='bespaarslim_test_profiles_v2';
+  const ACTIVE_KEY='bespaarslim_active_profile_v2';
+  const CLOUD_SESSION_KEY='bespaarslim_supabase_session_v1';
+  let activeProfile=null, cloudSession=null, cloudSaveChain=Promise.resolve(), cloudDirty=false, cloudInviteMode=false;
+
   try{localStorage.removeItem('bespaarslim_backend_url');sessionStorage.removeItem('bespaarslim_session_token')}catch(_){/* Verwijder oude bankverbindingsgegevens */}
   const euro=(n,d=0)=>new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR',minimumFractionDigits:d,maximumFractionDigits:d}).format(Number(n)||0);
   const esc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -189,10 +218,141 @@
     }
     return {demo:true,transactions,subscriptions:[{id:uid(),name:'Netflix',amount:15.99,period:'month',category:'Streaming',active:true},{id:uid(),name:'Spotify',amount:10.99,period:'month',category:'Muziek',active:true},{id:uid(),name:'Adobe Creative Cloud',amount:24.19,period:'month',category:'Software',active:true},{id:uid(),name:'iCloud+',amount:2.99,period:'month',category:'Cloudopslag',active:true},{id:uid(),name:'Basic-Fit',amount:24.99,period:'month',category:'Sport',active:true},{id:uid(),name:'Videoland',amount:9.99,period:'month',category:'Streaming',active:true}],goals:[{id:uid(),name:'Vakantie naar Italië',target:2500,saved:1050,emoji:'✈️'},{id:uid(),name:'Noodbuffer',target:5000,saved:1850,emoji:'🛟'}],budgets:{...defaultBudgets},categories:[],fixedCosts:[],weekBudgets:[]};
   }
-  function readData(){try{const raw=localStorage.getItem(STORE);if(raw){const d=JSON.parse(raw);if(d&&Array.isArray(d.transactions)&&Array.isArray(d.subscriptions)&&Array.isArray(d.goals)){return {...d,categories:Array.isArray(d.categories)?d.categories:[],fixedCosts:Array.isArray(d.fixedCosts)?d.fixedCosts:[],weekBudgets:Array.isArray(d.weekBudgets)?d.weekBudgets:[],budgets:{...defaultBudgets,...d.budgets},accounts:(d.accounts&&/^\d{4}-\d{2}-\d{2}$/.test(d.accounts.startDate)&&Number.isFinite(Number(d.accounts.checking))&&Number.isFinite(Number(d.accounts.savings)))?d.accounts:null}}}}catch(e){console.warn('Kan lokale gegevens niet lezen.',e)}return makeDemo()}
-  let data=readData();let view='dashboard',currentModal='',kind='expense',toastTimeout;
-  function persist(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){toast('Opslaan is geblokkeerd door je browser. Exporteren kan wel.')}}
-  if(!localStorage.getItem(STORE))persist();
+  // Elk profiel krijgt eigen gegevens. Er wordt nooit data van een andere gebruiker geladen.
+  function emptyData(){return {demo:false,transactions:[],subscriptions:[],goals:[],budgets:{...defaultBudgets},categories:[],fixedCosts:[],weekBudgets:[],accounts:null};}
+  function parseData(raw){
+    try{const d=typeof raw==='string'?JSON.parse(raw):raw;
+      if(d&&Array.isArray(d.transactions)&&Array.isArray(d.subscriptions)&&Array.isArray(d.goals)){
+        return {...d,categories:Array.isArray(d.categories)?d.categories:[],fixedCosts:Array.isArray(d.fixedCosts)?d.fixedCosts:[],weekBudgets:Array.isArray(d.weekBudgets)?d.weekBudgets:[],budgets:{...defaultBudgets,...d.budgets},accounts:(d.accounts&&/^\d{4}-\d{2}-\d{2}$/.test(d.accounts.startDate)&&Number.isFinite(Number(d.accounts.checking))&&Number.isFinite(Number(d.accounts.savings)))?d.accounts:null};
+      }
+    }catch(e){console.warn('Kan opgeslagen gegevens niet lezen.',e)}
+    return emptyData();
+  }
+  function localDataKey(id){return `bespaarslim_data_user_v2_${id}`}
+  function readData(){if(!activeProfile)return emptyData();try{return parseData(localStorage.getItem(localDataKey(activeProfile.id)))}catch(_){return emptyData()}}
+  let data=emptyData(),view='dashboard',currentModal='',kind='expense',toastTimeout;
+  function persist(){
+    if(!activeProfile)return;
+    if(activeProfile.mode==='cloud'){
+      cloudDirty=true;
+      $('#syncStatus').textContent='Wijzigingen opslaan…';
+      const uid=activeProfile.id,snapshot=JSON.parse(JSON.stringify(data));
+      cloudSaveChain=cloudSaveChain.catch(()=>{}).then(async()=>{
+        if(!cloudSession||cloudSession.user?.id!==uid)return;
+        try{await cloudWrite(uid,snapshot);cloudDirty=false;$('#syncStatus').textContent='Opgeslagen in privéaccount ✓'}
+        catch(e){cloudDirty=true;$('#syncStatus').textContent='Opslaan mislukt!';toast('Online opslaan is mislukt. Controleer je internetverbinding.');console.warn(e)}
+      });
+    }else{
+      try{localStorage.setItem(localDataKey(activeProfile.id),JSON.stringify(data))}
+      catch(e){toast('Opslaan is geblokkeerd door je browser. Exporteren kan wel.')}
+    }
+  }
+  // Accountprofielen verschijnen over het bestaande dashboard: alle oude functies blijven werken.
+  function profileInitials(name){return String(name||'BS').trim().split(/\s+/).slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('').slice(0,2)}
+  function gateError(msg=''){$('#profileGateError').textContent=msg}
+  function showGate(){document.body.classList.add('profile-locked');$('#profileGate').hidden=false;gateError();renderGate()}
+  function hideGate(){document.body.classList.remove('profile-locked');$('#profileGate').hidden=true;gateError()}
+  function getProfiles(){try{const x=JSON.parse(localStorage.getItem(PROFILES_KEY)||'[]');return Array.isArray(x)?x.slice(0,2):[]}catch(_){return []}}
+  function setProfiles(profiles){localStorage.setItem(PROFILES_KEY,JSON.stringify(profiles))}
+  async function pinHash(pin,salt){
+    if(!crypto?.subtle)throw new Error('Open de site via HTTPS (GitHub Pages) om in te loggen.');
+    const input=new TextEncoder().encode(`${salt}:bespaarslim:${pin}`),bytes=await crypto.subtle.digest('SHA-256',input);
+    return Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function renderGate(mode='choose',id=''){
+    const c=$('#profileGateContent'),foot=$('#profileGateFooter');
+    if(CLOUD_MODE){
+      if(cloudInviteMode){
+        c.innerHTML=`<h1>Kies je wachtwoord</h1><p class="profile-desc">Je uitnodiging is bevestigd. Kies nu een persoonlijk wachtwoord van minimaal 12 tekens voor je BespaarSlim-account.</p><form class="profile-section" id="cloudPasswordForm"><div><label for="cloudNewPassword">Nieuw wachtwoord</label><input id="cloudNewPassword" name="password" type="password" minlength="12" autocomplete="new-password" required></div><div><label for="cloudNewConfirm">Herhaal wachtwoord</label><input id="cloudNewConfirm" name="confirm" type="password" minlength="12" autocomplete="new-password" required></div><button class="btn btn-primary" type="submit">Wachtwoord opslaan en doorgaan</button></form>`;
+        foot.textContent='Je wachtwoord wordt uitsluitend naar de beveiligde Supabase-authenticatieserver verstuurd, niet opgeslagen in de HTML of GitHub.';return;
+      }
+      c.innerHTML=`<h1>Inloggen op BespaarSlim</h1><p class="profile-desc">Voor jullie twee testaccounts. Met je eigen e-mailadres en wachtwoord blijven je gegevens ook op verschillende apparaten gescheiden.</p><form class="profile-section" id="cloudLoginForm"><div><label for="cloudEmail">E-mailadres</label><input type="email" id="cloudEmail" name="email" autocomplete="username" required placeholder="naam@voorbeeld.nl"></div><div><label for="cloudPassword">Wachtwoord</label><input type="password" id="cloudPassword" name="password" minlength="6" autocomplete="current-password" required></div><button class="btn btn-primary" type="submit">Veilig inloggen</button></form>`;
+      foot.textContent='De app heeft geen openbare registratie. Maak precies twee gebruikers aan of nodig ze uit in je eigen Supabase-project. Je bank wordt niet gekoppeld.';return;
+    }
+    const profiles=getProfiles(),selected=profiles.find(p=>p.id===id);
+    if(mode==='create' || !profiles.length){
+      const first=!profiles.length;
+      c.innerHTML=`<h1>${first?'Maak jouw profiel':'Tweede testprofiel'}</h1><p class="profile-desc">${first?'Je bestaande BespaarSlim-gegevens gaan naar jouw eerste profiel, als je die al hebt.':'De tweede tester krijgt een leeg, zelfstandig overzicht.'}</p><form class="profile-section" id="createProfileForm"><div><label for="profileNewName">Naam</label><input id="profileNewName" name="name" maxlength="28" minlength="2" placeholder="${first?'Bijv. Mijn account':'Naam van je tester'}" required autocomplete="off"></div><div><label for="profileNewPin">Pincode (4 tot 8 cijfers)</label><input id="profileNewPin" name="pin" pattern="[0-9]{4,8}" inputmode="numeric" minlength="4" maxlength="8" type="password" placeholder="••••" required autocomplete="new-password"></div><div class="profile-row-actions">${!first?'<button class="profile-link" type="button" data-gate-action="back">Terug</button>':''}<button class="btn btn-primary" type="submit">${first?'Mijn profiel maken':'Testpersoon toevoegen'}</button></div></form>`;
+    }else if(mode==='login'&&selected){
+      c.innerHTML=`<h1>Welkom terug, ${esc(selected.name)}</h1><p class="profile-desc">Voer je pincode in om jouw eigen gegevens te openen.</p><form class="profile-section" id="localLoginForm"><input type="hidden" name="id" value="${esc(selected.id)}"><div><label for="loginPin">Pincode</label><input id="loginPin" name="pin" type="password" pattern="[0-9]{4,8}" inputmode="numeric" autocomplete="off" required autofocus placeholder="Je pincode"></div><div class="profile-row-actions"><button type="button" class="profile-link" data-gate-action="back">Terug</button><button type="submit" class="btn btn-primary">Inloggen</button></div></form>`;
+    }else{
+      c.innerHTML=`<h1>Wie gebruikt BespaarSlim?</h1><p class="profile-desc">Kies je eigen profiel. Saldo, transacties, abonnementen, spaardoelen, vaste lasten en weekbudgetten zijn per persoon gescheiden.</p><div class="profile-choices">${profiles.map(p=>`<button type="button" class="profile-option" data-gate-login="${esc(p.id)}"><span class="profile-round">${esc(profileInitials(p.name))}</span><span><b>${esc(p.name)}</b><small>Eigen financieel overzicht</small></span><span class="arrow-right">→</span></button>`).join('')}${profiles.length<2?`<button type="button" class="profile-option" data-gate-action="create"><span class="profile-round">+</span><span><b>Tweede tester toevoegen</b><small>Er is plaats voor maximaal twee profielen</small></span><span class="arrow-right">→</span></button>`:''}</div>`;
+    }
+    foot.innerHTML='<strong>Lokale testmodus:</strong> profielen en pincodes zijn alleen bedoeld om op dit apparaat apart te testen; dit zijn <strong>geen beveiligde online accounts</strong>. Op een ander apparaat bestaan deze profielen niet. Voor echte accounts op twee apparaten: zie de meegeleverde online-installatiehandleiding.';
+  }
+  function activateProfile(profile,initial){
+    activeProfile=profile;data=initial||readData();selectedWeek=mondayOf(localDate(new Date()));
+    try{sessionStorage.setItem(ACTIVE_KEY,JSON.stringify({mode:profile.mode,id:profile.id}))}catch(_){}
+    $('#sideProfileName').textContent=profile.name;$('#topProfileName').textContent=profile.name;$('#profileAvatar').textContent=profileInitials(profile.name);
+    $('#privacyModeText').textContent=profile.mode==='cloud'?'Jouw gegevens staan veilig in je persoonlijke account':'Twee gescheiden profielen in deze browser';
+    $('#syncStatus').textContent=profile.mode==='cloud'?'Opgeslagen in persoonlijk account':'Alleen op dit apparaat opgeslagen';
+    $('#transactionSearch').value='';$('#transactionFilter').value='all';
+    hideGate();closeModal();go('dashboard');
+  }
+  async function makeLocalProfile(e){e.preventDefault();const f=new FormData(e.target),name=String(f.get('name')||'').trim().slice(0,28),pin=String(f.get('pin')||'');const profiles=getProfiles();
+    if(profiles.length>=2)return gateError('Er kunnen maximaal twee testprofielen worden aangemaakt.');
+    if(name.length<2||!/^[0-9]{4,8}$/.test(pin))return gateError('Vul een naam en een pincode van 4 tot 8 cijfers in.');
+    if(profiles.some(p=>p.name.toLocaleLowerCase('nl')===name.toLocaleLowerCase('nl')))return gateError('Deze profielnaam bestaat al.');
+    try{const salt=uid(),profile={id:uid(),name,salt,hash:await pinHash(pin,salt),mode:'local'},initial=profiles.length===0&&localStorage.getItem(STORE)?parseData(localStorage.getItem(STORE)):emptyData();
+      localStorage.setItem(localDataKey(profile.id),JSON.stringify(initial));setProfiles([...profiles,profile]);activateProfile(profile,initial);toast(profiles.length?'Tweede profiel aangemaakt':'Jouw profiel is aangemaakt');
+    }catch(err){gateError(err.message)}
+  }
+  async function loginLocal(e){e.preventDefault();const f=new FormData(e.target),id=String(f.get('id')),pin=String(f.get('pin')||''),profile=getProfiles().find(p=>p.id===id);if(!profile)return gateError('Profiel niet gevonden.');
+    try{if(await pinHash(pin,profile.salt)!==profile.hash)return gateError('De pincode klopt niet.');activateProfile(profile)}catch(err){gateError(err.message)}
+  }
+  function switchProfile(){
+    if(activeProfile?.mode==='cloud'){
+      $('#syncStatus').textContent='Opslaan controleren…';
+      cloudSaveChain.finally(async()=>{try{await cloudApi('/auth/v1/logout',{method:'POST'},true)}catch(_){} cloudSession=null;sessionStorage.removeItem(CLOUD_SESSION_KEY);activeProfile=null;data=emptyData();showGate()});
+    }else{activeProfile=null;data=emptyData();sessionStorage.removeItem(ACTIVE_KEY);showGate()}
+  }
+  function cloudHeaders(auth=false){return {'apikey':SUPABASE_PUBLIC_KEY,'Content-Type':'application/json',...(auth?{'Authorization':`Bearer ${cloudSession?.access_token||SUPABASE_PUBLIC_KEY}`}:{'Authorization':`Bearer ${SUPABASE_PUBLIC_KEY}`})}}
+  async function cloudApi(path,options={},authorized=false,allowRetry=true){
+    if(authorized&&cloudSession&&Date.now()>((cloudSession.expires_at||0)-60)*1000)await cloudRefresh();
+    let response=await fetch(`${SUPABASE_URL.replace(/\/$/,'')}${path}`,{...options,headers:{...cloudHeaders(authorized),...(options.headers||{})}});
+    if(response.status===401&&authorized&&allowRetry){await cloudRefresh();return cloudApi(path,options,authorized,false)}
+    if(!response.ok){const j=await response.json().catch(()=>({}));throw new Error(j.msg||j.message||j.error_description||j.error||`Serverfout (${response.status})`)}
+    if(response.status===204)return null;const raw=await response.text();return raw?JSON.parse(raw):null;
+  }
+  async function cloudRefresh(){if(!cloudSession?.refresh_token)throw new Error('Je sessie is verlopen. Log opnieuw in.');
+    const r=await cloudApi('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:cloudSession.refresh_token})},false,false);
+    cloudSession={...r,expires_at:Math.floor(Date.now()/1000)+(r.expires_in||3600)};sessionStorage.setItem(CLOUD_SESSION_KEY,JSON.stringify(cloudSession));
+  }
+  async function cloudRead(uid){const rows=await cloudApi(`/rest/v1/bespaarslim_data?user_id=eq.${encodeURIComponent(uid)}&select=document`,{method:'GET'},true);return Array.isArray(rows)&&rows.length?parseData(rows[0].document):null;}
+  async function cloudWrite(uid,content){await cloudApi('/rest/v1/bespaarslim_data?on_conflict=user_id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:uid,document:content})},true)}
+  async function loginCloud(e){e.preventDefault();gateError();const form=e.target,button=form.querySelector('button[type=submit]');button.disabled=true;button.textContent='Bezig met inloggen…';
+    try{const f=new FormData(form),email=String(f.get('email')||'').trim(),password=String(f.get('password')||'');const r=await cloudApi('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})});
+      cloudSession={...r,expires_at:Math.floor(Date.now()/1000)+(r.expires_in||3600)};sessionStorage.setItem(CLOUD_SESSION_KEY,JSON.stringify(cloudSession));
+      const uid=r.user?.id;if(!uid)throw new Error('Het account kon niet worden geladen.');let loaded=await cloudRead(uid);
+      if(!loaded){loaded=emptyData();if(localStorage.getItem(STORE)&&confirm('Er staan oude BespaarSlim-gegevens in deze browser. Wil je die alleen naar JOUW nieuwe online account kopiëren? Klik op Annuleren als deze gegevens niet van jou zijn.'))loaded=parseData(localStorage.getItem(STORE));await cloudWrite(uid,loaded)}
+      activateProfile({mode:'cloud',id:uid,name:email.split('@')[0],email},loaded);
+    }catch(err){gateError('Inloggen is niet gelukt: '+err.message)}finally{button.disabled=false;button.textContent='Veilig inloggen'}
+  }
+  async function cloudSetPassword(e){e.preventDefault();gateError();const f=new FormData(e.target),password=String(f.get('password')||''),confirmPassword=String(f.get('confirm')||'');
+    if(password.length<12||password!==confirmPassword)return gateError('Wachtwoorden moeten gelijk zijn en minstens 12 tekens bevatten.');
+    const button=e.target.querySelector('button[type="submit"]');button.disabled=true;
+    try{
+      const user=await cloudApi('/auth/v1/user',{method:'PUT',body:JSON.stringify({password})},true);
+      const uid=user?.id||user?.user?.id;if(!uid)throw new Error('Het account is niet bevestigd.');
+      cloudSession.user=user?.user||user;sessionStorage.setItem(CLOUD_SESSION_KEY,JSON.stringify(cloudSession));
+      let loaded=await cloudRead(uid);if(!loaded){loaded=emptyData();await cloudWrite(uid,loaded)}
+      cloudInviteMode=false;activateProfile({mode:'cloud',id:uid,name:(user?.email||'Tester').split('@')[0],email:user?.email},loaded);
+    }catch(err){gateError('Het wachtwoord kon niet worden opgeslagen: '+err.message)}finally{button.disabled=false}
+  }
+  $('#profileGate').addEventListener('click',e=>{const p=e.target.closest('[data-gate-login]');if(p){renderGate('login',p.dataset.gateLogin);gateError();return}const a=e.target.closest('[data-gate-action]');if(a){renderGate(a.dataset.gateAction==='create'?'create':'choose');gateError()}});
+  $('#profileGate').addEventListener('submit',async e=>{if(e.target.getAttribute('id')==='createProfileForm')return makeLocalProfile(e);if(e.target.getAttribute('id')==='localLoginForm')return loginLocal(e);if(e.target.getAttribute('id')==='cloudLoginForm')return loginCloud(e);if(e.target.getAttribute('id')==='cloudPasswordForm')return cloudSetPassword(e)});
+  $('#profileSwitch').addEventListener('click',switchProfile);$('#sideSignOut').addEventListener('click',switchProfile);
+  async function initProfiles(){
+    if(CLOUD_MODE){
+      const hash=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):'');
+      if(hash.has('access_token')&&hash.has('refresh_token')&&['invite','recovery','signup'].includes(hash.get('type'))){
+        cloudSession={access_token:hash.get('access_token'),refresh_token:hash.get('refresh_token'),expires_at:Math.floor(Date.now()/1000)+Number(hash.get('expires_in')||3600)};
+        sessionStorage.setItem(CLOUD_SESSION_KEY,JSON.stringify(cloudSession));cloudInviteMode=true;
+        history.replaceState(null,'',location.pathname+location.search);showGate();return;
+      }
+      try{cloudSession=JSON.parse(sessionStorage.getItem(CLOUD_SESSION_KEY)||'null');if(cloudSession){const result=await cloudApi('/auth/v1/user',{},true);const user=result?.user||result;if(user?.id){let loaded=await cloudRead(user.id);if(!loaded){loaded=emptyData();await cloudWrite(user.id,loaded)}activateProfile({mode:'cloud',id:user.id,name:(user.email||'Account').split('@')[0],email:user.email},loaded);return}}}catch(err){cloudSession=null;sessionStorage.removeItem(CLOUD_SESSION_KEY);console.warn('Online sessie verlopen',err)}showGate();return}
+    const profiles=getProfiles();try{const remembered=JSON.parse(sessionStorage.getItem(ACTIVE_KEY)||'null');const p=profiles.find(x=>x.id===remembered?.id);if(p){activateProfile(p);return}}catch(_){}showGate();
+  }
   // Beginsaldo plus uitsluitend vanaf die datum bewust aan een rekening gekoppelde bewegingen.
   const accountsReady=()=>!!data.accounts;
   const accountNames={checking:'Betaalrekening',savings:'Spaarrekening'};
@@ -392,8 +552,8 @@
     const delS=e.target.closest('[data-delete-sub]');if(delS){if(confirm('Dit abonnement uit de lijst verwijderen?')){data.subscriptions=data.subscriptions.filter(x=>x.id!==delS.dataset.deleteSub);persist();render();toast('Abonnement verwijderd')}return}
     const delG=e.target.closest('[data-delete-goal]');if(delG){if(confirm('Dit spaardoel en de geregistreerde voortgang verwijderen?')){data.goals=data.goals.filter(x=>x.id!==delG.dataset.deleteGoal);persist();render();toast('Spaardoel verwijderd')}return}
     const toggle=e.target.closest('[data-toggle-sub]');if(toggle){const s=data.subscriptions.find(x=>x.id===toggle.dataset.toggleSub);if(s){s.active=!s.active;persist();render();toast(s.active?'Abonnement opnieuw actief':'Lokaal als opgezegd gemarkeerd')}return}
-    if(e.target.id==='csvExport')exportCSV();if(e.target.id==='backupExport'){dl('bespaarslim-backup.json',JSON.stringify(data,null,2),'application/json;charset=utf-8');toast('Back-up gedownload')}
-    if(e.target.id==='clearData'){if(confirm('Weet je zeker dat je ALLE gegevens in deze browser wilt wissen? Dit kan niet ongedaan worden gemaakt.')){data={demo:false,transactions:[],subscriptions:[],goals:[],budgets:{...defaultBudgets},categories:[],fixedCosts:[],weekBudgets:[],accounts:null};selectedWeek=mondayOf(localDate(new Date()));persist();render();go('dashboard');toast('Je begint met een leeg overzicht')}}
+    if(e.target.id==='csvExport')exportCSV();if(e.target.id==='backupExport'){dl('bespaarslim-backup-'+(activeProfile?.name||'profiel').toLowerCase().replace(/[^a-z0-9-]/g,'-')+'.json',JSON.stringify(data,null,2),'application/json;charset=utf-8');toast('Back-up gedownload')}
+    if(e.target.id==='clearData'){if(confirm('Weet je zeker dat je ALLE gegevens van DIT PROFIEL wilt wissen? Dit kan niet ongedaan worden gemaakt.')){data={demo:false,transactions:[],subscriptions:[],goals:[],budgets:{...defaultBudgets},categories:[],fixedCosts:[],weekBudgets:[],accounts:null};selectedWeek=mondayOf(localDate(new Date()));persist();render();go('dashboard');toast('Je begint met een leeg overzicht')}}
   });
   $('#modalWrap').addEventListener('click',e=>{if(e.target===$('#modalWrap'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});$('#modalBody').addEventListener('submit',e=>{if(e.target.matches('#addTransaction,#addSubscription,#addGoal,#addContribute,#setBalances,#makeTransfer,#fixedForm,#payFixedForm,#weekForm,#categoryForm'))addHandler(e)});
   $('#modalBody').addEventListener('change',e=>{const select=e.target.closest('[data-category-select]');if(!select)return;const wrapper=select.closest('.field'),field=wrapper?.querySelector('.new-category-field');if(field){field.hidden=select.value!=='__new__';const input=field.querySelector('input');if(input){input.required=!field.hidden;if(!field.hidden)input.focus()}}});
@@ -401,7 +561,7 @@
   $('#transactionSearch').addEventListener('input',renderTransactions);$('#transactionFilter').addEventListener('change',renderTransactions);
   $('#budgetCards').addEventListener('change',e=>{const input=e.target.closest('[data-budget]');if(!input)return;const value=Number(input.value);if(!Number.isFinite(value)||value<0||value>100000000){toast('Gebruik een geldig niet-negatief maandbudget.');renderInsights();return}data.budgets[input.dataset.budget]=value;persist();renderInsights();renderDashboard();toast('Maandbudget opgeslagen')});
 
-  $('#todayLabel').textContent=now.toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});$('#year').textContent=now.getFullYear();render();
+  $('#todayLabel').textContent=now.toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});$('#year').textContent=now.getFullYear();initProfiles();
 })();
 </script>
 </body>

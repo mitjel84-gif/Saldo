@@ -1,0 +1,55 @@
+BESPAARSLIM — TWEE TESTGEBRUIKERS
+=================================
+
+1. DIRECT TESTEN OP HETZELFDE APPARAAT
+-------------------------------------
+1. Upload de nieuwe index.html naar GitHub in de repository Saldo.
+2. Open jouw bestaande GitHub Pages-website.
+3. Maak je eerste profiel en een pincode van 4–8 cijfers.
+4. Bestaande gegevens in DEZELFDE browser worden aan het eerste profiel toegevoegd.
+5. Klik rechtsboven op jouw naam > wisselen; voeg één tweede profiel toe.
+6. Beide profielen hebben losse rekeningen, transacties, weekbudgetten, vaste lasten,
+   abonnementen en spaardoelen.
+
+LET OP: DEZE PINCODE IS GEEN STERKE BEVEILIGING.
+Deze lokale profielen bestaan alleen binnen die browser op dat apparaat.
+De tweede persoon kan niet met hetzelfde profiel inloggen vanaf een ander apparaat.
+Bewaar backups per persoon bij Bespaartips. Gebruik geen echte gevoelige data als
+je een gedeeld apparaat gebruikt.
+
+2. ECHTE TWEEDelige ONLINE ACCOUNTS (VERSCHILLENDE APPARATEN)
+-------------------------------------------------------------
+Hiervoor is externe login en dataopslag nodig; GitHub Pages alleen kan dit niet.
+Je kunt de Supabase-optie inschakelen in DEZELFDE HTML. Hiervoor:
+  A. Maak een eigen Supabase project aan op https://supabase.com.
+  B. Open SQL Editor en voer supabase_setup.sql uit. Dat maakt een tabel met
+     Row Level Security, zodat gebruikers uitsluitend hun eigen rij mogen lezen
+     of wijzigen.
+  C. Ga naar Authentication > Providers > Email en schakel publieke nieuwe
+     registraties UIT. Nodig via Authentication > Users precies twee personen uit
+     en laat beiden via hun uitnodigingslink zelf een sterk wachtwoord kiezen.
+     Stel onder Authentication > URL Configuration de Site URL in op jouw
+     volledige GitHub Pages-adres (https://mitjel84-gif.github.io/Saldo/),
+     en voeg het adres indien nodig toe aan de redirect allowlist.
+     De exacte dashboardlabels kunnen verschillen.
+  D. Ga naar Project Settings > API Keys / Connect en kopieer de Project URL
+     en de PUBLIEKE publishable (of legacy anon) API key.
+  E. Open index.html in een teksteditor en zoek in de <script>-code naar:
+        const SUPABASE_URL = '';
+        const SUPABASE_PUBLIC_KEY = '';
+     Vul de URL en publieke key tussen de aanhalingstekens in.
+  F. Sla index.html op en upload opnieuw naar GitHub Pages.
+  G. De site toont nu e-mail/wachtwoord login. Gebruik je twee uitgenodigde
+     accounts. Iedere persoon ziet alleen zijn/haar eigen dashboard en kan
+     ook op een ander apparaat inloggen. De opslag is online.
+
+BELANGRIJK:
+* Gebruik NOOIT een service_role key, Supabase secret key, databasewachtwoord
+  of persoonlijk wachtwoord in de HTML of GitHub.
+* Zodra cloudmodus is aangezet, worden lokale profielen niet meer gebruikt.
+  Log als JIJZELF eerst in om desgewenst je eigen oude browserdata te importeren.
+* Controleer de regels voor privacy en toegang voordat je echte bankgegevens
+  opslaat. Dit is testsoftware, geen gekoppelde bankapp.
+* De browser toont wijzigingen direct en slaat cloudwijzigingen online op.
+  Wacht na het laatste invullen totdat "Opgeslagen in privéaccount" verschijnt
+  voordat je de pagina sluit.
