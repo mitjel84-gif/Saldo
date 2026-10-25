@@ -6,7 +6,7 @@ compatibility_date = "2026-10-01"
 # 'npx wrangler kv namespace create BANK_KV' aan je teruggeeft.
 [[kv_namespaces]]
 binding = "BANK_KV"
-id = "VUL_HIER_JOUW_KV_NAMESPACE_ID_IN"
+id = "072734345be443fea8f1849a1e5486d9"
 
 # Vervang beide voorbeeld-URL's. GitHub Pages kan een submap hebben.
 [vars]
