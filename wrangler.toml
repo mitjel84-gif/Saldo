@@ -10,8 +10,8 @@ id = "072734345be443fea8f1849a1e5486d9"
 
 # Vervang beide voorbeeld-URL's. GitHub Pages kan een submap hebben.
 [vars]
-FRONTEND_URL = "https://JOUW_NAAM.github.io/JOUW_REPOSITORY/"
-WORKER_URL = "https://bespaarslim-bank.JOUW_SUBDOMEIN.workers.dev"
+FRONTEND_URL = "https://mitjel84-gif.github.io/Saldo/"
+WORKER_URL = "https://bespaarslim-bank.mitjel84.workers.dev"
 
 # De volgende waarden mogen NOOIT in dit bestand worden gezet.
 # Ze worden via 'wrangler secret put' ingesteld:
