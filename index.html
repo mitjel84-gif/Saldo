@@ -316,6 +316,38 @@ select option{background:#0a2039;color:#edfaff}
   #view-transactions .tx-type-select{flex:1;min-width:0}
   #view-transactions .tx-export{flex:none}
 }
+
+/* Blauw Modern – duidelijk contrasterende categorieën, inclusief nieuwe eigen categorieën. */
+#view-dashboard .spend-composition{gap:22px;align-items:center;justify-content:space-between}
+#view-dashboard .donut{width:180px;height:180px;box-shadow:0 0 0 1px #31506d,0 8px 25px #06132655;transition:background .2s ease}
+#view-dashboard .donut::before{width:66%;height:66%;background:#102741;box-shadow:0 0 0 1px #233e5b}
+#view-dashboard .donut-inner span{font-size:12px;color:#a5beda}
+#view-dashboard .donut-inner strong{font-size:24px;letter-spacing:-.7px;color:#f6fbff}
+#view-dashboard .legend{min-width:0;max-height:295px;overflow-y:auto;padding-right:5px;scrollbar-color:#325d8b transparent;scrollbar-width:thin}
+#view-dashboard .legend-item{margin:0;padding:10px 5px;gap:11px;border-bottom:1px solid #24415a;font-size:12px;border-radius:6px}
+#view-dashboard .legend-item:last-child{border-bottom:0}
+#view-dashboard .legend-item:hover{background:#173753}
+#view-dashboard .legend-name{display:flex;align-items:center;gap:10px;white-space:normal;min-width:0;overflow-wrap:anywhere;color:#d9e9f9;font-size:12px;line-height:1.35}
+#view-dashboard .legend-name .dot{width:13px;height:13px;border-radius:50%;border:1px solid #ffffff66;box-shadow:0 0 0 2px #ffffff0e;flex:0 0 13px}
+#view-dashboard .legend-val{font-size:12px;font-weight:800;color:#f4f9ff;white-space:nowrap;margin-left:auto;text-align:right}
+#view-dashboard .legend-val small{font-size:10px;font-weight:600;color:#88a8c7}
+@media(max-width:1230px){#view-dashboard .donut{width:155px;height:155px}}
+@media(max-width:600px){
+ #view-dashboard .spend-composition{flex-direction:column;align-items:stretch;gap:19px}
+ #view-dashboard .donut{width:176px;height:176px;align-self:center}
+ #view-dashboard .legend{max-height:250px;width:100%}
+ #view-dashboard .legend-item{font-size:12px}
+}
+
+
+/* Een smalle grafiekkaart krijgt automatisch een legenda onder de ring, ook op desktop. */
+#view-dashboard .category-chart-panel{container-type:inline-size}
+@container (max-width:520px){
+  .spend-composition{flex-direction:column;align-items:stretch;gap:18px}
+  .donut{align-self:center;width:180px;height:180px}
+  .legend{width:100%;max-height:280px}
+  .legend-name{overflow-wrap:break-word}
+}
 </style>
 </head>
 <body class="profile-locked">
@@ -381,7 +413,7 @@ select option{background:#0a2039;color:#edfaff}
         </div>
         <div class="section-grid">
           <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Jouw abonnementen</h2><div class="panel-subtitle">Waar gaat elke maand geld naartoe?</div></div><button class="text-link" data-view="subscriptions">Bekijk alles <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div id="dashSubs"></div></div>
-          <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Uitgaven per categorie</h2><div class="panel-subtitle">Verdeling van deze maand</div></div></div><div class="spend-composition"><div class="donut" id="donut"><div class="donut-inner"><span>Totaal</span><strong id="donutTotal">€ 0</strong></div></div><div class="legend" id="legend"></div></div></div>
+          <div class="panel category-chart-panel"><div class="panel-head"><div><h2 class="panel-title">Uitgaven per categorie</h2><div class="panel-subtitle">Verdeling van deze maand</div></div></div><div class="spend-composition"><div class="donut" id="donut"><div class="donut-inner"><span>Totaal</span><strong id="donutTotal">€ 0</strong></div></div><div class="legend" id="legend"></div></div></div>
         </div>
         <div class="bottom-grid">
           <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Jouw bespaarkansen <span aria-hidden="true">✨</span></h2><div class="panel-subtitle">Handige inzichten op basis van je gegevens</div></div><button class="text-link" data-view="insights">Meer tips <svg class="icon icon-sm"><use href="#i-arrow"/></svg></button></div><div id="dashOpportunities"></div></div>
@@ -699,6 +731,59 @@ select option{background:#0a2039;color:#edfaff}
   function go(name){if(!document.getElementById('view-'+name))return;view=name;document.querySelectorAll('.view').forEach(e=>e.classList.toggle('active',e.id==='view-'+name));document.querySelectorAll('[data-view]').forEach(e=>e.classList.toggle('active',e.dataset.view===name));const labels={dashboard:'Dashboard',accounts:'Rekeningen',transactions:'Transacties',subscriptions:'Abonnementen',fixed:'Vaste lasten',weeks:'Weekbudgetten',goals:'Spaardoelen',insights:'Bespaartips'};$('#breadcrumb').textContent=labels[name];window.scrollTo({top:0,behavior:'auto'});render()}
   const p100=(n)=>Math.max(0,Math.min(100,n));
   function categorySpend(){const out={};for(const t of data.transactions){if(t.type==='expense'&&t.date.startsWith(currentMonth)&&(!accountsReady()||(t.date>=data.accounts.startDate&&['checking','savings'].includes(t.account))))out[t.category]=(out[t.category]||0)+Number(t.amount)}if(!accountsReady())out['Abonnementen']=(out['Abonnementen']||0)+totals().subs;return Object.entries(out).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1])}
+  // Blauw Modern: een eigen kleur per categorie, ook voor zelf toegevoegde categorieën.
+  // De eerste 18 kleuren zijn bewust helder en onderling contrasterend op een donkerblauwe achtergrond.
+  // Voor extra categorieën volgen aanvullende goudhoek-kleuren; de tekstlegenda blijft altijd volledig.
+  const BLUE_MODERN_CHART_COLORS=[
+    '#1683FF','#05CFF5','#9059FF','#FF4FB4','#FF9C31','#FFE04A',
+    '#29DD83','#FF536B','#5475FF','#00AFA9','#D18CFF','#F76B35',
+    '#A3E74F','#FF77A9','#61B8FF','#C78A41','#7E6EFF','#EDDB62'
+  ];
+  function chartColorByIndex(index){
+    if(index<BLUE_MODERN_CHART_COLORS.length)return BLUE_MODERN_CHART_COLORS[index];
+    const extra=index-BLUE_MODERN_CHART_COLORS.length;
+    const hue=(extra*137.508+24)%360;
+    const brightness=[58,65,52,62][extra%4];
+    return `hsl(${hue.toFixed(2)} 88% ${brightness}%)`;
+  }
+  function categoryChartColors(displayed){
+    // Gebruik de vaste volgorde uit de categorie-instellingen in plaats van de uitgavenranglijst:
+    // de kleur van bijvoorbeeld 'Boodschappen' blijft gelijk wanneer de bedragen veranderen.
+    const sortedAdditional=[...new Set(data.transactions.map(t=>t.category).filter(Boolean))]
+      .filter(c=>!allCategories().includes(c)).sort((a,b)=>a.localeCompare(b,'nl'));
+    const ordered=[...new Set([...allCategories(),...sortedAdditional,...displayed.map(([name])=>name)])];
+    return new Map(ordered.map((name,i)=>[name,chartColorByIndex(i)]));
+  }
+  function renderCategoryDonut(){
+    const categories=categorySpend();
+    const sum=categories.reduce((s,[,v])=>s+v,0);
+    const colors=categoryChartColors(categories);
+    $('#donutTotal').textContent=euro(sum);
+    const donut=$('#donut');
+    let offset=0;
+    const slices=[];
+    for(const [category,value] of categories){
+      const width=(value/sum)*100;
+      const end=Math.min(100,offset+width);
+      const color=colors.get(category);
+      // Dunne donkere scheidingslijnen zorgen ook bij vergelijkbare tinten voor herkenbare segmenten.
+      const separator=categories.length>1?Math.min(0.26,width*0.16):0;
+      slices.push(`${color} ${offset.toFixed(4)}% ${(end-separator).toFixed(4)}%`);
+      if(separator>0)slices.push(`#102741 ${(end-separator).toFixed(4)}% ${end.toFixed(4)}%`);
+      offset=end;
+    }
+    donut.style.background=slices.length?`conic-gradient(${slices.join(',')})`:'#284866';
+    donut.setAttribute('role','img');
+    donut.setAttribute('aria-label',sum>0?'Uitgaven per categorie. '+categories.map(([c,v])=>`${c}: ${euro(v,2)}`).join('; '):'Nog geen uitgaven deze maand');
+    $('#legend').innerHTML=categories.map(([category,value])=>{
+      const pct=sum>0?Math.round(value/sum*100):0;
+      return `<div class="legend-item" title="${esc(category)}: ${euro(value,2)} (${pct}%)">
+        <span class="legend-name"><i class="dot" style="background:${colors.get(category)}" aria-hidden="true"></i><span>${esc(category)}</span></span>
+        <span class="legend-val">${euro(value)} <small>(${pct}%)</small></span>
+      </div>`;
+    }).join('')||'<div class="panel-blank">Nog geen uitgaven</div>';
+    $('#legend').setAttribute('aria-label',`${categories.length} categorieën in de uitgavengrafiek`);
+  }
   function insightItems(){const t=totals(),items=[];
     if(t.active.length){const sorted=[...t.active].sort((a,b)=>monthlyPrice(b)-monthlyPrice(a));const top=sorted[0];items.push({icon:'repeat',title:'Controleer je abonnement op '+top.name,desc:'Gebruik je dit nog? Als je het zelf opzegt, kan dat tot '+euro(monthlyPrice(top)*12,2)+' per jaar schelen.',amount:euro(monthlyPrice(top)*12)+'/jr'});items.push({icon:'wallet',title:'Je vaste abonnementskosten zijn '+euro(t.subs,2)+' per maand',desc:'Dat is '+euro(t.subs*12,2)+' per jaar. Vergelijk regelmatig je lopende contracten.',amount:''})}
     for(const [cat,spent] of categorySpend()){const budget=Number(data.budgets[cat]);if(budget>0&&spent>budget){items.push({icon:'chart',title:'Je budget voor '+cat.toLowerCase()+' is overschreden',desc:'Je zit '+euro(spent-budget,2)+' boven je ingestelde limiet van '+euro(budget)+'.',amount:'Let op'});break}}
@@ -709,7 +794,7 @@ select option{background:#0a2039;color:#edfaff}
   function opportunities(target,limit){const things=insightItems().slice(0,limit);$(target).innerHTML=things.map(t=>`<div class="opportunity"><span class="opportunity-symbol">${icon(t.icon)}</span><div style="flex:1;min-width:0"><strong>${esc(t.title)}</strong><p>${esc(t.desc)}</p></div>${t.amount?`<span class="amount">${esc(t.amount)}</span>`:''}</div>`).join('')||'<div class="panel-blank">Voeg transacties en abonnementen toe voor persoonlijke inzichten.</div>'}
   function renderDashboard(){const t=totals();$('#heroBalance').textContent=accountsReady()?euro(combinedBalance(),2):'€ 0,00';$('#heroText').textContent=accountsReady()?'Betaal- en spaarrekening samen. Bij een nieuwe transactie wordt het saldo automatisch bijgewerkt.':'Begin vandaag: vul bij Rekeningen je actuele betaal- en spaarsaldo in.';$('#metricIncome').textContent=euro(t.income);$('#metricExpenses').textContent=euro(t.outgoings);$('#metricSubs').textContent=euro(t.subs,2);$('#metricSubsFoot').textContent=t.active.length+' actief per maand';$('#metricSaved').textContent=euro(t.saved);$('#metricSavedFoot').textContent='Verspreid over '+data.goals.length+' doel(en)';
     $('#dashSubs').innerHTML=t.active.slice(0,4).map(s=>`<div class="subrow">${logo(s.name)}<div class="subrow-main"><strong>${esc(s.name)}</strong><span>${esc(s.category)} · ${s.period==='year'?'Jaarlijks':'Maandelijks'}</span></div><div class="subrow-price"><strong>${euro(monthlyPrice(s),2)}</strong><span>per maand</span></div></div>`).join('')||'<div class="panel-blank">Geen actieve abonnementen. Goed overzicht!</div>';
-    const categories=categorySpend(),sum=categories.reduce((s,[,v])=>s+v,0);$('#donutTotal').textContent=euro(sum);let from=0;const pieces=[];for(const [c,v] of categories){const end=from+v/sum*100;pieces.push(`${catColors[c]||'#b0c7b0'} ${from.toFixed(4)}% ${end.toFixed(4)}%`);from=end}$('#donut').style.background=pieces.length?'conic-gradient('+pieces.join(',')+')':'#ecf0eb';$('#legend').innerHTML=categories.slice(0,5).map(([c,v])=>`<div class="legend-item"><span class="legend-name"><i class="dot" style="background:${catColors[c]||'#aec2ac'}"></i>${esc(c)}</span><span class="legend-val">${euro(v)}</span></div>`).join('')||'<div class="panel-blank">Nog geen uitgaven</div>';
+    renderCategoryDonut();
     const latest=[...data.transactions].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);$('#dashActivity').innerHTML=latest.map(a=>`<div class="activity"><div class="category-icon" style="background:${toColor(a.category)};font-size:17px">${catEmoji[a.category]||'💳'}</div><div class="activity-main"><strong>${esc(a.name)}</strong><span>${dateView(a.date)} · ${esc(a.category)} · ${esc(accountLabel(a))}</span></div><div class="activity-price ${a.type==='income'?'pos':a.type==='transfer'?'account-amount-transfer':'expense-red'}">${movementText(a)} ${euro(a.amount,2)}</div></div>`).join('')||'<div class="panel-blank">Nog geen transacties geregistreerd.</div>';opportunities('#dashOpportunities',3);$('#dashFixedSummary').innerHTML=`<strong style="font-size:19px;color:#2f5a3a">${euro(fixedMonthlyTotal(),2)} / maand</strong><p class="page-sub">${data.fixedCosts.filter(x=>x.active).length} actieve vaste lasten</p>`;const ws=mondayOf(localDate(new Date()));const wbs=data.weekBudgets.filter(x=>x.start===ws);const spent=wbs.reduce((sum,b)=>sum+weekSpent(b,ws),0),limit=wbs.reduce((sum,b)=>sum+Number(b.amount),0);$('#dashWeekSummary').innerHTML=`<strong style="font-size:19px;color:#2f5a3a">${euro(spent,2)} van ${euro(limit,2)}</strong><p class="page-sub">${wbs.length} budgetten · ${esc(weekLabel(ws))}</p>`;
   }
   function txDayHeading(s){const today=localDate(new Date()),yesterday=shiftDays(today,-1);if(s===today)return 'Vandaag';if(s===yesterday)return 'Gisteren';return parsedDate(s).toLocaleDateString('nl-NL',{weekday:'long'}).replace(/^./,c=>c.toUpperCase())}
