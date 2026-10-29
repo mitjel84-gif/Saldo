@@ -37,6 +37,11 @@
     .planner-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:20px}.planner-stat{border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px 20px}.planner-stat small{font-size:11px;color:#849588;font-weight:750;display:block}.planner-stat strong{font-size:23px;letter-spacing:-.9px;display:block;margin-top:7px}.planner-stat span{font-size:11px;color:#91a098}
     .planner-list{display:grid;gap:12px}.planner-item{border:1px solid #e8ede6;background:white;border-radius:17px;padding:17px 19px;display:flex;align-items:center;gap:14px}.planner-item-icon{height:45px;width:45px;border-radius:13px;display:grid;place-items:center;font-size:21px;background:#eaf5de;flex:none}.planner-item-main{flex:1;min-width:0}.planner-item-main strong{display:block;font-size:14px;overflow-wrap:anywhere}.planner-item-main p{margin:6px 0 0;color:#8a9a90;font-size:11px;line-height:1.5}.planner-item-side{display:flex;align-items:flex-end;gap:7px;flex-direction:column}.planner-item-side strong{font-size:15px;white-space:nowrap}.planner-item-buttons{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
     .planner-categories{display:flex;flex-wrap:wrap;gap:8px;padding-top:15px}.category-tag{display:inline-flex;align-items:center;border-radius:20px;background:#edf5e7;color:#4b7250;font-size:11px;font-weight:800;padding:9px 12px}
+    .fixed-month-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+    .fixed-month-toolbar input{min-height:41px;border:1px solid #dfe8dd;border-radius:11px;padding:0 12px;background:#fff;color:#354d38;max-width:210px}
+    .fixed-month-note{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#4a93d1;background:#eaf4ff;border-radius:12px;padding:5px 9px;margin-top:7px;font-weight:800}
+    .fixed-due-tag{display:inline-block;color:#6b93b5;font-weight:700;margin-top:5px}
+    @media(max-width:480px){.fixed-month-toolbar input{flex:1;min-width:145px}.fixed-month-toolbar .btn{flex:0 0 auto}.fixed-month-toolbar #fixedCurrentMonth{flex:1}}
     .week-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.week-toolbar input{height:41px;border:1px solid #dfe8dd;border-radius:11px;padding:0 10px;background:#fff;color:#354d38;max-width:175px}.week-toolbar .btn{height:41px}.week-range{font-size:20px;font-weight:850;letter-spacing:-.5px}.week-budget-card{border:1px solid #e7ede4;border-radius:18px;background:#fff;padding:21px}.week-budget-top{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;margin-bottom:16px}.week-budget-top h3{font-size:15px;margin:0 0 5px}.week-budget-top p{font-size:11px;color:#8d9b90;margin:0}.week-budget-amount{font-size:17px;font-weight:850;white-space:nowrap}.week-budget-foot{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#8a9b8c;margin-top:12px}.week-budget-foot strong{color:#426a44}.week-budget-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.week-status{display:inline-flex;font-size:11px;font-weight:800;background:#e5f3de;color:#49764e;border-radius:20px;padding:6px 9px}.week-status.future{background:#e7eefb;color:#587ca3}.week-status.past{background:#f0f2ef;color:#788479}.planner-note{font-size:12px;color:#829486;line-height:1.6;margin:12px 0}.scheduled-list{max-height:370px;overflow:auto;display:grid;gap:8px}.scheduled-item{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #ecf0e9;border-radius:12px;padding:11px 13px;font-size:12px}.scheduled-item div{min-width:0}.scheduled-item strong{display:block}.scheduled-item span{color:#91a094;font-size:11px;display:block;margin-top:4px}
     .new-category-field[hidden]{display:none}.mini-link{border:0;background:transparent;color:#3b854b;font-size:11px;font-weight:800;padding:6px;cursor:pointer}.inline-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.compact-empty{padding:30px 18px;color:#8a9c8d;background:#fafcf9;border-radius:16px;text-align:center;line-height:1.7}
     @media(max-width:940px){.week-budget-list{grid-template-columns:1fr}.planner-summary{gap:10px}}
@@ -173,7 +178,7 @@ button:focus-visible,input:focus-visible,select:focus-visible {outline-color:#16
 .over{background:#ff7e94}
 .insight-hero{background:linear-gradient(135deg,#10385d,#0e527e);color:#f5faff}
 .insight-hero p{color:#c8dff3}
-.mini-input,.field input,.field select,.profile-section input,.week-toolbar input{
+.mini-input,.field input,.field select,.profile-section input,.week-toolbar input,.fixed-month-toolbar input{
   background:#0a2039;border:1px solid #2a5378;color:#f3f9ff;
 }
 .field input::placeholder,.profile-section input::placeholder{color:#8ba6c4}
@@ -199,6 +204,7 @@ button:focus-visible,input:focus-visible,select:focus-visible {outline-color:#16
 .planner-hero{background:linear-gradient(115deg,#0f3765,#0e548c)}
 .planner-stat{background:#112940}
 .planner-item-icon{background:#17395b;color:#44daff}
+.fixed-month-note{background:#153d60;color:#8ce0ff}
 .week-status{background:#153d60;color:#83e7ff}
 .week-status.future{background:#1c3670;color:#90cfff}
 .week-status.past{background:#243953;color:#b6c6de}
@@ -445,9 +451,10 @@ select option{background:#0a2039;color:#edfaff}
       <section class="view" id="view-subscriptions" aria-label="Abonnementen"><div class="page-head"><div><p class="eyebrow">VASTE LASTEN ONDER CONTROLE</p><h1>Abonnementen</h1><p class="page-sub">Houd bij wat je maandelijks betaalt en ontdek bespaarkansen.</p></div><button class="btn btn-primary" data-modal="subscription"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Abonnement toevoegen</span></button></div><div class="subscriptions-layout"><div class="panel"><div class="panel-head"><div><h2 class="panel-title">Mijn abonnementen</h2><div class="panel-subtitle">Markeer een abonnement als opgezegd als je dit zelf bij de aanbieder hebt geregeld.</div></div></div><div id="subscriptionRows"></div></div><div><div class="sub-large"><small>MAANDELIJKSE KOSTEN</small><strong id="subsMonthlyTotal">€ 0</strong><p id="subsMonthlyDetail">Totaal voor actieve abonnementen</p></div><div class="panel"><h2 class="panel-title">Op jaarbasis</h2><div class="metric-number" id="subsYearlyTotal">€ 0</div><p class="page-sub">Dit betaal je in 12 maanden als niets verandert.</p><div class="notice"><svg class="icon"><use href="#i-info"/></svg><span>Een abonnement markeren als opgezegd beëindigt het <strong>niet</strong> bij de aanbieder.</span></div></div></div></div></section>
       <section class="view" id="view-fixed" aria-label="Vaste lasten">
         <div class="page-head"><div><p class="eyebrow">KOSTEN DIE TERUGKOMEN</p><h1>Mijn vaste lasten.</h1><p class="page-sub">Huur, energie, internet en andere terugkerende betalingen. Met je eigen categorieën.</p></div><button class="btn btn-primary" data-modal="fixed"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span>Vaste last toevoegen</span></button></div>
-        <div class="planner-hero"><div><p class="eyebrow">JOUW VASTE LASTEN</p><strong id="fixedMonthly">€ 0,00 per maand</strong><p>Een planning van terugkerende kosten. Alleen een betaling die je zelf als betaald boekt, wordt afgetrokken van je rekening.</p></div><button class="btn btn-lime" data-modal="fixed">+ Nieuwe vaste last</button></div>
-        <div class="planner-summary"><div class="planner-stat"><small>Per jaar (geschat)</small><strong id="fixedYearly">€ 0,00</strong><span>Op basis van actieve lasten</span></div><div class="planner-stat"><small>Actieve vaste lasten</small><strong id="fixedCount">0</strong><span>In jouw overzicht</span></div><div class="planner-stat"><small>Volgende betaaldatum</small><strong id="fixedNext">—</strong><span>Volgens je eigen planning</span></div></div>
-        <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Terugkerende betalingen</h2><div class="panel-subtitle">Boek ze handmatig als betaald om je rekeningsaldo bij te werken.</div></div><button class="btn btn-outline btn-small" data-modal="category">+ Eigen categorie</button></div><div class="planner-list" id="fixedList"></div></div>
+        <div class="planner-hero"><div><p class="eyebrow">JOUW VASTE LASTEN</p><strong id="fixedMonthly">€ 0,00 in deze maand</strong><p>Bekijk een maand en pas een bedrag alleen voor die maand aan. Alleen betalingen die je zelf als betaald boekt, worden van je rekening afgetrokken.</p></div><button class="btn btn-lime" data-modal="fixed">+ Nieuwe vaste last</button></div>
+        <div class="panel fixed-month-panel" style="margin-bottom:18px"><div class="panel-head"><div><h2 class="panel-title">Bedragen per maand</h2><div class="panel-subtitle">Je kunt ook toekomstige maanden instellen. Eerder geboekte betalingen blijven staan.</div></div></div><div class="fixed-month-toolbar"><button type="button" class="btn btn-outline btn-small" data-fixed-month-step="-1" aria-label="Vorige maand">← Vorige</button><label for="fixedMonthInput" class="sr-only">Selecteer maand voor vaste lasten</label><input id="fixedMonthInput" type="month" aria-label="Selecteer maand voor vaste lasten"><button type="button" class="btn btn-outline btn-small" data-fixed-month-step="1" aria-label="Volgende maand">Volgende →</button><button type="button" class="btn btn-light btn-small" id="fixedCurrentMonth">Deze maand</button></div><p class="planner-note"><strong id="fixedMonthLabel"></strong> · Verander per vaste last het maandbedrag met de knop <strong>Maandbedrag</strong>.</p></div>
+        <div class="planner-summary"><div class="planner-stat"><small>Gepland in gekozen maand</small><strong id="fixedMonthPlan">€ 0,00</strong><span>Betaald + nog te betalen</span></div><div class="planner-stat"><small>Actieve vaste lasten</small><strong id="fixedCount">0</strong><span>In jouw overzicht</span></div><div class="planner-stat"><small>Nog niet betaald in deze maand</small><strong id="fixedNext">0</strong><span>Geplande betaalmomenten</span></div></div>
+        <div class="panel"><div class="panel-head"><div><h2 class="panel-title">Terugkerende betalingen <span id="fixedListMonth"></span></h2><div class="panel-subtitle">Pas het bedrag per maand aan, en boek betalingen handmatig als betaald.</div></div><button class="btn btn-outline btn-small" data-modal="category">+ Eigen categorie</button></div><div class="planner-list" id="fixedList"></div></div>
         <div class="panel" style="margin-top:18px"><div class="panel-head"><div><h2 class="panel-title">Mijn eigen categorieën</h2><div class="panel-subtitle">Ook beschikbaar bij transacties en weekbudgetten.</div></div><button class="text-link" data-modal="category">Categorie toevoegen</button></div><div class="planner-categories" id="fixedCategories"></div></div>
       </section>
       <section class="view" id="view-weeks" aria-label="Weekbudgetten">
@@ -518,6 +525,7 @@ select option{background:#0a2039;color:#edfaff}
   const weekLabel=s=>`${dateView(s)} – ${dateView(sundayOf(s))}`;
   const nextWeekDate=(s,n=1)=>shiftDays(s,7*n);
   let selectedWeek=mondayOf(localDate(new Date()));
+  let selectedFixedMonth=currentMonth;
   let txMonth=currentMonth,txCategory='all';
   function allCategories(){return [...new Set([...cats,...(data.categories||[])])];}
   function normalizeCat(value){return String(value||'').trim().replace(/\s+/g,' ').slice(0,38)}
@@ -602,7 +610,7 @@ select option{background:#0a2039;color:#edfaff}
     foot.innerHTML='<strong>Lokale testmodus:</strong> profielen en pincodes zijn alleen bedoeld om op dit apparaat apart te testen; dit zijn <strong>geen beveiligde online accounts</strong>. Op een ander apparaat bestaan deze profielen niet. Voor echte accounts op twee apparaten: zie de meegeleverde online-installatiehandleiding.';
   }
   function activateProfile(profile,initial){
-    activeProfile=profile;data=initial||readData();selectedWeek=mondayOf(localDate(new Date()));
+    activeProfile=profile;data=initial||readData();selectedWeek=mondayOf(localDate(new Date()));selectedFixedMonth=currentMonth;
     try{sessionStorage.setItem(ACTIVE_KEY,JSON.stringify({mode:profile.mode,id:profile.id}))}catch(_){}
     $('#sideProfileName').textContent=profile.name;$('#topProfileName').textContent=profile.name;$('#profileAvatar').textContent=profileInitials(profile.name);
     $('#privacyModeText').textContent=profile.mode==='cloud'?'Jouw gegevens staan veilig in je persoonlijke account':'Twee gescheiden profielen in deze browser';
@@ -840,20 +848,64 @@ select option{background:#0a2039;color:#edfaff}
     kind='expense';currentModal='transaction';
     setModal('Transactie toevoegen','Elke uitgave gaat van je gekozen rekening af, elke inkomst komt erbij. Dit werkt vanaf je begindatum.',`<div class="seg"><button type="button" class="active" data-kind="expense">Uitgave</button><button type="button" data-kind="income">Inkomst</button></div><form id="addTransaction"><div class="field"><label for="tname">Omschrijving</label><input id="tname" name="name" required maxlength="70" placeholder="Bijv. boodschappen"></div><div class="form-grid"><div class="field"><label for="tamount">Bedrag (€)</label><input id="tamount" name="amount" type="number" min="0.01" max="100000000" step="0.01" required placeholder="25.00"></div><div class="field"><label for="tdate">Datum</label><input id="tdate" name="date" type="date" min="${esc(data.accounts.startDate)}" max="${localDate(new Date())}" required value="${localDate(new Date())}"></div><div class="field full"><label for="taccount">Van / naar welke rekening?</label><select name="account" id="taccount"><option value="checking">💳 Betaalrekening</option><option value="savings">🐷 Spaarrekening</option></select></div><div class="field full"><label for="tcategory">Categorie</label><select name="category" id="tcategory" data-category-select>${categoryOptions()}</select><div class="new-category-field field" hidden><label for="newTxnCategory">Naam nieuwe categorie</label><input id="newTxnCategory" name="newCategory" maxlength="38" placeholder="Bijv. Huisdieren"></div></div></div>${actions}</form>`)
   }
-  // Een vaste last is een planning. Alleen handmatig als betaald geboekt = echte transactie.
+  // Vaste lasten blijven planningen: alleen handmatig betaalde momenten veranderen rekeningsaldi.
+  // Maandspecifieke bedragen staan bij de vaste last als monthAmounts: {"2026-11":145}.
+  // Oudere bestaande accounts zonder dit veld blijven compatibel met de nieuwe versie.
   function monthlyForFixed(f){return Number(f.amount)*(f.frequency==='week'?52/12:f.frequency==='year'?1/12:1)}
-  function fixedMonthlyTotal(){return data.fixedCosts.filter(f=>f.active).reduce((sum,f)=>sum+monthlyForFixed(f),0)}
+  function fixedAmountForMonth(f,month){
+    const saved=f.monthAmounts&&Object.prototype.hasOwnProperty.call(f.monthAmounts,month)?Number(f.monthAmounts[month]):NaN;
+    return Number.isFinite(saved)&&saved>0?saved:Number(f.amount)||0;
+  }
+  function hasFixedMonthOverride(f,month){return Boolean(f.monthAmounts&&Object.prototype.hasOwnProperty.call(f.monthAmounts,month))}
+  function fixedMonthDisplay(month){return new Intl.DateTimeFormat('nl-NL',{month:'long',year:'numeric'}).format(parsedDate(month+'-01'))}
+  function shiftFixedMonth(month,diff){const [y,m]=month.split('-').map(Number);const d=new Date(y,m-1+diff,1,12);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
   function dueOn(f,i){
     if(f.frequency==='week')return shiftDays(f.firstDate,i*7);
     const anchor=parsedDate(f.firstDate),target=new Date(anchor.getFullYear(),anchor.getMonth()+(f.frequency==='year'?12*i:i),1,12);
     const last=new Date(target.getFullYear(),target.getMonth()+1,0,12).getDate();target.setDate(Math.min(anchor.getDate(),last));return localDate(target);
   }
+  function fixedDuesForMonth(f,month){
+    const [year,monthNum]=month.split('-').map(Number),first=f.firstDate;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(first)||!['week','month','year'].includes(f.frequency))return [];
+    const begin=month+'-01',lastDay=new Date(year,monthNum,0,12).getDate(),end=month+'-'+String(lastDay).padStart(2,'0');
+    if(first>end)return [];
+    if(f.frequency==='week'){
+      const days=Math.round((parsedDate(begin)-parsedDate(first))/86400000);
+      let i=Math.max(0,Math.ceil(days/7)),dates=[];
+      for(let j=0;j<6;j++,i++){const d=dueOn(f,i);if(d>end)break;if(d>=begin)dates.push(d)}
+      return dates;
+    }
+    const [fy,fm]=first.split('-').map(Number),delta=(year-fy)*12+monthNum-fm;
+    if(delta<0||f.frequency==='year'&&delta%12!==0)return [];
+    const date=dueOn(f,f.frequency==='year'?delta/12:delta);
+    return date>=begin&&date<=end?[date]:[];
+  }
+  function fixedPayment(f,due){return data.transactions.find(t=>t.fixedId===f.id&&t.fixedDue===due)}
+  function fixedMonthTotal(month){return data.fixedCosts.filter(f=>f.active).reduce((sum,f)=>{
+    return sum+fixedDuesForMonth(f,month).reduce((amount,due)=>amount+cents(fixedPayment(f,due)?.amount??fixedAmountForMonth(f,month)),0);
+  },0)/100}
+  function fixedMonthlyTotal(){return fixedMonthTotal(currentMonth)}
   function nextDue(f){const paid=new Set(data.transactions.filter(t=>t.fixedId===f.id).map(t=>t.fixedDue));for(let i=0;i<2400;i++){const date=dueOn(f,i);if(!paid.has(date))return date}return ''}
   function renderFixed(){
-    const active=data.fixedCosts.filter(x=>x.active),total=fixedMonthlyTotal();
-    $('#fixedMonthly').textContent=euro(total,2)+' per maand';$('#fixedYearly').textContent=euro(total*12,2);$('#fixedCount').textContent=String(active.length);
-    const up=active.map(x=>nextDue(x)).filter(Boolean).sort()[0];$('#fixedNext').textContent=up?dateView(up):'—';
-    $('#fixedList').innerHTML=data.fixedCosts.map(f=>{const next=f.active?nextDue(f):'',period=({week:'week',month:'maand',year:'jaar'})[f.frequency]||'maand';return `<div class="planner-item"><div class="planner-item-icon">${catEmoji[f.category]||'🧾'}</div><div class="planner-item-main"><strong>${esc(f.name)}</strong><p>${esc(f.category)} · Elke ${period} · ${esc(accountNames[f.account]||'Betaalrekening')}<br>${f.active?`Volgende betaalmoment: ${dateView(next)}`:'Gepauzeerd'}</p></div><div class="planner-item-side"><strong>${euro(f.amount,2)}</strong><div class="planner-item-buttons">${f.active?`<button class="btn btn-lime btn-small" data-pay-fixed="${esc(f.id)}">Als betaald boeken</button>`:''}<button class="btn btn-outline btn-small" data-edit-fixed="${esc(f.id)}">Bewerken</button><button class="btn btn-light btn-small" data-toggle-fixed="${esc(f.id)}">${f.active?'Pauzeer':'Activeer'}</button><button class="delete-btn" data-delete-fixed="${esc(f.id)}" aria-label="Vaste last verwijderen">${icon('trash','icon-sm')}</button></div></div></div>`}).join('')||'<div class="compact-empty">Nog geen vaste lasten. Voeg bijvoorbeeld huur, energie of een verzekering toe.</div>';
+    const month=selectedFixedMonth,active=data.fixedCosts.filter(x=>x.active),total=fixedMonthTotal(month),today=localDate(new Date());
+    $('#fixedMonthInput').value=month;
+    $('#fixedMonthLabel').textContent=fixedMonthDisplay(month);
+    $('#fixedListMonth').textContent='· '+fixedMonthDisplay(month);
+    $('#fixedMonthly').textContent=euro(total,2)+' in '+fixedMonthDisplay(month);
+    $('#fixedMonthPlan').textContent=euro(total,2);
+    $('#fixedCount').textContent=String(active.length);
+    const unpaid=active.reduce((sum,f)=>sum+fixedDuesForMonth(f,month).filter(d=>!fixedPayment(f,d)).length,0);
+    $('#fixedNext').textContent=String(unpaid);
+    $('#fixedList').innerHTML=data.fixedCosts.map(f=>{
+      const period=({week:'week',month:'maand',year:'jaar'})[f.frequency]||'maand';
+      const dues=fixedDuesForMonth(f,month),monthAmount=fixedAmountForMonth(f,month),override=hasFixedMonthOverride(f,month);
+      const paid=dues.filter(d=>fixedPayment(f,d));
+      const rowTotal=dues.reduce((sum,d)=>sum+cents(fixedPayment(f,d)?.amount??monthAmount),0)/100;
+      const dueSummary=dues.length?dues.map(d=>`${dateView(d)}: ${fixedPayment(f,d)?'betaald':'niet betaald'}`).join(' · '):'Geen betaalmoment deze maand';
+      const dueToPay=dues.find(d=>!fixedPayment(f,d)&&d<=today&&accountsReady()&&d>=data.accounts.startDate);
+      const status=f.active?`${paid.length} van ${dues.length} betaald`:'Gepauzeerd';
+      return `<div class="planner-item"><div class="planner-item-icon">${catEmoji[f.category]||'🧾'}</div><div class="planner-item-main"><strong>${esc(f.name)}</strong><p>${esc(f.category)} · Elke ${period} · ${esc(accountNames[f.account]||'Betaalrekening')}<br>${esc(dueSummary)}<br>${esc(status)}</p>${override?`<span class="fixed-month-note">✎ Eigen bedrag voor ${esc(fixedMonthDisplay(month))}</span>`:''}</div><div class="planner-item-side"><strong>${euro(rowTotal,2)}</strong><span class="fixed-due-tag">${dues.length?`${euro(monthAmount,2)} per betaalmoment`:'Geen afschrijving deze maand'}</span><div class="planner-item-buttons">${f.active&&dueToPay?`<button type="button" class="btn btn-lime btn-small" data-pay-fixed="${esc(f.id)}" data-due="${esc(dueToPay)}">Als betaald boeken</button>`:''}<button type="button" class="btn btn-outline btn-small" data-fixed-amount="${esc(f.id)}">Maandbedrag</button><button type="button" class="btn btn-outline btn-small" data-edit-fixed="${esc(f.id)}">Bewerken</button><button type="button" class="btn btn-light btn-small" data-toggle-fixed="${esc(f.id)}">${f.active?'Pauzeer':'Activeer'}</button><button type="button" class="delete-btn" data-delete-fixed="${esc(f.id)}" aria-label="Vaste last verwijderen">${icon('trash','icon-sm')}</button></div></div></div>`
+    }).join('')||'<div class="compact-empty">Nog geen vaste lasten. Voeg bijvoorbeeld huur, energie of een verzekering toe.</div>';
     $('#fixedCategories').innerHTML=(data.categories.length?data.categories.map(c=>`<span class="category-tag">🏷️ ${esc(c)}</span>`).join(''):'<span class="account-muted">Je hebt nog geen eigen categorieën gemaakt.</span>');
   }
   function isRealExpense(t){return t.type==='expense'&&(!accountsReady()||(t.date>=data.accounts.startDate&&['checking','savings'].includes(t.account)))}
@@ -868,9 +920,24 @@ select option{background:#0a2039;color:#edfaff}
   }
   function formFixed(id=''){
     const f=data.fixedCosts.find(x=>x.id===id),today=localDate(new Date());currentModal='fixed';
-    setModal(f?'Vaste last bewerken':'Vaste last toevoegen','Stel een terugkerende betaling in. Het saldo verandert pas als je een betaling als betaald boekt.',`<form id="fixedForm"><input type="hidden" name="id" value="${esc(id)}"><div class="field"><label>Naam vaste last</label><input name="name" required maxlength="70" value="${esc(f?.name||'')}" placeholder="Bijv. Huur, energie, internet"></div><div class="form-grid"><div class="field"><label>Bedrag (€)</label><input name="amount" type="number" min="0.01" step="0.01" max="100000000" required value="${f?esc(f.amount):''}"></div><div class="field"><label>Hoe vaak?</label><select name="frequency"><option value="month" ${!f||f.frequency==='month'?'selected':''}>Elke maand</option><option value="week" ${f?.frequency==='week'?'selected':''}>Elke week</option><option value="year" ${f?.frequency==='year'?'selected':''}>Elk jaar</option></select></div><div class="field"><label>Eerste betaaldatum</label><input type="date" name="firstDate" value="${esc(f?.firstDate||today)}" required></div><div class="field"><label>Rekening</label><select name="account"><option value="checking" ${f?.account!=='savings'?'selected':''}>💳 Betaalrekening</option><option value="savings" ${f?.account==='savings'?'selected':''}>🐷 Spaarrekening</option></select></div>${categoryField('fixedCat',f?.category||'Wonen')}</div><p class="field-hint">Een bestaande vaste last bewerken wijzigt niet de betalingen die je eerder hebt geboekt.</p>${actions}</form>`)
+    setModal(f?'Standaardgegevens bewerken':'Vaste last toevoegen','Dit is het standaardbedrag voor maanden zonder eigen maandbedrag. Kies Maandbedrag in het overzicht als alleen een bepaalde maand verandert.',`<form id="fixedForm"><input type="hidden" name="id" value="${esc(id)}"><div class="field"><label>Naam vaste last</label><input name="name" required maxlength="70" value="${esc(f?.name||'')}" placeholder="Bijv. Huur, energie, internet"></div><div class="form-grid"><div class="field"><label>Bedrag (€)</label><input name="amount" type="number" min="0.01" step="0.01" max="100000000" required value="${f?esc(f.amount):''}"></div><div class="field"><label>Hoe vaak?</label><select name="frequency"><option value="month" ${!f||f.frequency==='month'?'selected':''}>Elke maand</option><option value="week" ${f?.frequency==='week'?'selected':''}>Elke week</option><option value="year" ${f?.frequency==='year'?'selected':''}>Elk jaar</option></select></div><div class="field"><label>Eerste betaaldatum</label><input type="date" name="firstDate" value="${esc(f?.firstDate||today)}" required></div><div class="field"><label>Rekening</label><select name="account"><option value="checking" ${f?.account!=='savings'?'selected':''}>💳 Betaalrekening</option><option value="savings" ${f?.account==='savings'?'selected':''}>🐷 Spaarrekening</option></select></div>${categoryField('fixedCat',f?.category||'Wonen')}</div><p class="field-hint">Een bestaande vaste last bewerken wijzigt niet de betalingen die je eerder hebt geboekt.</p>${actions}</form>`)
   }
-  function formPayFixed(id){const f=data.fixedCosts.find(x=>x.id===id);if(!f||!f.active)return;if(!accountsReady()){go('accounts');formBalances();return}const due=nextDue(f),today=localDate(new Date());currentModal='payFixed';setModal(f.name+' als betaald boeken','Hierdoor wordt precies één uitgave toegevoegd en het gekozen rekeningsaldo verlaagd.',`<form id="payFixedForm"><input type="hidden" name="id" value="${esc(f.id)}"><input type="hidden" name="due" value="${esc(due)}"><div class="field"><label>Bijbehorend betaalmoment</label><input value="${esc(dateView(due))}" disabled></div><div class="form-grid"><div class="field"><label>Betaald bedrag (€)</label><input name="amount" type="number" required min="0.01" step="0.01" max="100000000" value="${esc(f.amount)}"></div><div class="field"><label>Werkelijke betaaldatum</label><input type="date" name="date" required min="${esc(data.accounts.startDate)}" max="${today}" value="${today}"></div><div class="field full"><label>Afboeken van rekening</label><select name="account"><option value="checking" ${f.account==='checking'?'selected':''}>Betaalrekening</option><option value="savings" ${f.account==='savings'?'selected':''}>Spaarrekening</option></select></div></div><p class="field-hint">Deze betaling telt ook mee bij het weekbudget van ${esc(f.category)} op de echte betaaldatum. Niet dubbel boeken als je hem al als transactie hebt toegevoegd.</p>${actions}</form>`)}
+  function formFixedAmount(id){
+    const f=data.fixedCosts.find(x=>x.id===id);if(!f)return;
+    currentModal='fixedMonth';
+    setModal('Maandbedrag · '+f.name,'Pas alleen de gekozen maand aan. Andere maanden houden hun eigen bedrag; eerder geboekte transacties blijven ongewijzigd.',`<form id="fixedMonthForm"><input type="hidden" name="id" value="${esc(f.id)}"><div class="field"><label for="overrideMonth">Voor welke maand?</label><input id="overrideMonth" name="month" type="month" required value="${esc(selectedFixedMonth)}"></div><div class="field"><label for="overrideAmount">Bedrag per betaalmoment (€)</label><input id="overrideAmount" name="amount" type="number" step="0.01" min="0.01" max="100000000" required value="${esc(fixedAmountForMonth(f,selectedFixedMonth))}"></div><p class="field-hint">Standaardbedrag: ${euro(f.amount,2)}. Deze wijziging geldt alleen voor de geselecteerde kalendermaand. Bij wekelijkse lasten geldt het bedrag voor elk betaalmoment in die maand. Een al betaalde transactie blijft het werkelijk geboekte bedrag houden.</p><div class="modal-actions"><button type="button" class="btn btn-outline" id="resetFixedMonth">Standaardbedrag herstellen</button><button type="submit" class="btn btn-primary">Maandbedrag opslaan ${icon('arrow','icon-sm')}</button></div></form>`);
+  }
+  function formPayFixed(id,due){
+    const f=data.fixedCosts.find(x=>x.id===id);
+    if(!f||!f.active)return;
+    if(!accountsReady()){go('accounts');formBalances();return}
+    if(!due)due=nextDue(f);
+    const today=localDate(new Date());
+    if(!due||due>today||fixedPayment(f,due))return toast('Dit betaalmoment is nog niet boekbaar.');
+    currentModal='payFixed';
+    const amount=fixedAmountForMonth(f,due.slice(0,7));
+    setModal(f.name+' als betaald boeken','Boek de werkelijke betaling. Alleen deze betaling verandert je saldo.',`<form id="payFixedForm"><input type="hidden" name="id" value="${esc(f.id)}"><input type="hidden" name="due" value="${esc(due)}"><div class="field"><label>Bijbehorend betaalmoment</label><input value="${esc(dateView(due))}" disabled></div><div class="form-grid"><div class="field"><label>Werkelijk betaald bedrag (€)</label><input name="amount" type="number" required min="0.01" step="0.01" max="100000000" value="${esc(amount)}"></div><div class="field"><label>Werkelijke betaaldatum</label><input type="date" name="date" required min="${esc(data.accounts.startDate)}" max="${today}" value="${today}"></div><div class="field full"><label>Afboeken van rekening</label><select name="account"><option value="checking" ${f.account==='checking'?'selected':''}>Betaalrekening</option><option value="savings" ${f.account==='savings'?'selected':''}>Spaarrekening</option></select></div></div><p class="field-hint">Het voorgestelde bedrag komt van ${esc(fixedMonthDisplay(due.slice(0,7)))}. De transactie wordt opgeslagen met het werkelijk betaalde bedrag en verandert niet achteraf. Niet dubbel boeken als je hem al als transactie hebt toegevoegd.</p>${actions}</form>`)
+  }
   function formWeek(id=''){
     const b=data.weekBudgets.find(x=>x.id===id);currentModal='week';
     setModal(b?'Weekbudget aanpassen':'Weekbudget plannen','Kies een categorie en een datum. Een week begint altijd maandag en eindigt zondag.',`<form id="weekForm"><input type="hidden" name="id" value="${esc(id)}"><div class="form-grid"><div class="field"><label>Budgetbedrag (€)</label><input type="number" name="amount" min="0.01" max="100000000" step="0.01" required value="${b?esc(b.amount):''}" placeholder="Bijv. 75.00"></div><div class="field"><label>Datum in budgetweek</label><input type="date" name="date" value="${esc(b?.start||selectedWeek)}" required></div>${categoryField('weekCat',b?.category||'Boodschappen')}<div class="field full" ${b?'hidden':''}><label>Plan vooruit</label><select name="repeat"><option value="1">Alleen deze week</option><option value="4">Deze en de volgende 3 weken</option><option value="8">Deze en de volgende 7 weken</option><option value="12">Deze en de volgende 11 weken</option><option value="26">Deze en de volgende 25 weken</option><option value="52">Deze en de volgende 51 weken</option></select></div></div><p class="field-hint">Bij meerdere weken krijgt iedere maandag–zondagweek hetzelfde bedrag. Je kunt latere weken apart aanpassen.</p>${actions}</form>`)
@@ -922,9 +989,17 @@ select option{background:#0a2039;color:#edfaff}
       const category=getSelectedCategory(f);if(!category)return;const old=data.fixedCosts.find(x=>x.id===id);
       if(old){Object.assign(old,{name,amount:+amount.toFixed(2),frequency,firstDate,account,category})}else{data.fixedCosts.push({id:uid(),name,amount:+amount.toFixed(2),frequency,firstDate,account,category,active:true})}
       toast(old?'Vaste last aangepast':'Vaste last toegevoegd. Je rekening is nog niet afgeschreven.');
+    }else if(currentModal==='fixedMonth'){
+      const id=String(f.get('id')||''),month=String(f.get('month')||''),amount=Number(f.get('amount'));
+      const fixed=data.fixedCosts.find(x=>x.id===id);
+      if(!fixed||!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||!amountOK(amount))return toast('Controleer de gekozen maand en het bedrag.');
+      if(!fixed.monthAmounts||typeof fixed.monthAmounts!=='object'||Array.isArray(fixed.monthAmounts))fixed.monthAmounts={};
+      fixed.monthAmounts[month]=+amount.toFixed(2);
+      selectedFixedMonth=month;
+      toast('Maandbedrag voor '+fixedMonthDisplay(month)+' opgeslagen. Andere maanden blijven hetzelfde.');
     }else if(currentModal==='payFixed'){
       const fixed=data.fixedCosts.find(x=>x.id===f.get('id')),due=String(f.get('due')),date=String(f.get('date')),account=String(f.get('account')),amount=Number(f.get('amount'));
-      if(!fixed||!fixed.active||due!==nextDue(fixed)||!accountsReady()||!amountOK(amount)||!['checking','savings'].includes(account)||date<data.accounts.startDate||date>localDate(new Date()))return toast('Deze betaling kon niet worden geregistreerd.');
+      if(!fixed||!fixed.active||!fixedDuesForMonth(fixed,due.slice(0,7)).includes(due)||fixedPayment(fixed,due)||due>localDate(new Date())||!accountsReady()||!amountOK(amount)||!['checking','savings'].includes(account)||date<data.accounts.startDate||date>localDate(new Date()))return toast('Deze betaling kon niet worden geregistreerd.');
       if(cents(amount)>balanceCents(account)&&!confirm('Deze betaling maakt je rekeningsaldo negatief. Toch boeken?'))return;
       data.transactions.push({id:uid(),name:fixed.name,amount:+amount.toFixed(2),category:fixed.category,type:'expense',account,date,fixedId:fixed.id,fixedDue:due});data.demo=false;toast('Vaste last betaald geboekt en afgetrokken van je rekening.');
     }else if(currentModal==='week'){
@@ -949,7 +1024,11 @@ select option{background:#0a2039;color:#edfaff}
   function exportCSV(){const q=v=>'"'+String(v).replace(/"/g,'""')+'"';const lines=[['Datum','Omschrijving','Categorie','Type','Rekening','Bedrag EUR'].map(q).join(';'),...data.transactions.map(t=>[t.date,t.name,t.category,t.type==='income'?'Inkomst':t.type==='transfer'?'Overboeking':'Uitgave',accountLabel(t),t.amount.toFixed(2).replace('.',',')].map(q).join(';'))];dl('bespaarslim-transacties.csv','\uFEFF'+lines.join('\r\n'),'text/csv;charset=utf-8;');toast('CSV-bestand gedownload')}
   document.addEventListener('click',e=>{const nav=e.target.closest('[data-view]');if(nav){go(nav.dataset.view);return}const chip=e.target.closest('[data-tx-category]');if(chip){txCategory=chip.dataset.txCategory;renderTransactions();return}const reset=e.target.closest('[data-tx-reset]');if(reset){txMonth='all';txCategory='all';$('#transactionSearch').value='';$('#transactionFilter').value='all';renderTransactions();return}const detail=e.target.closest('[data-tx-detail]');if(detail){showTransactionDetails(detail.dataset.txDetail);return}const open=e.target.closest('[data-modal]');if(open){({transaction:formTransaction,subscription:formSubscription,goal:formGoal,balances:formBalances,transfer:formTransfer,fixed:formFixed,week:formWeek,category:formCategory}[open.dataset.modal]||(()=>{}))();return}if(e.target.closest('[data-close]')||e.target.closest('#modalClose')){closeModal();return}const kindBtn=e.target.closest('[data-kind]');if(kindBtn){kind=kindBtn.dataset.kind;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b===kindBtn));const cat=$('#tcategory');cat.innerHTML=categoryOptions('',kind==='income');cat.dispatchEvent(new Event('change',{bubbles:true}));return}
     const c=e.target.closest('[data-contribute]');if(c){formContribute(c.dataset.contribute);return}
-    const pay=e.target.closest('[data-pay-fixed]');if(pay){formPayFixed(pay.dataset.payFixed);return}
+    const monthStep=e.target.closest('[data-fixed-month-step]');if(monthStep){selectedFixedMonth=shiftFixedMonth(selectedFixedMonth,Number(monthStep.dataset.fixedMonthStep));renderFixed();return}
+    if(e.target.closest('#fixedCurrentMonth')){selectedFixedMonth=currentMonth;renderFixed();return}
+    const monthAmount=e.target.closest('[data-fixed-amount]');if(monthAmount){formFixedAmount(monthAmount.dataset.fixedAmount);return}
+    if(e.target.closest('#resetFixedMonth')){const form=$('#fixedMonthForm');if(!form)return;const fixed=data.fixedCosts.find(x=>x.id===form.elements.id.value),month=form.elements.month.value;if(!fixed||!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))return;if(fixed.monthAmounts)delete fixed.monthAmounts[month];selectedFixedMonth=month;persist();closeModal();render();toast('Standaardbedrag hersteld voor '+fixedMonthDisplay(month));return}
+    const pay=e.target.closest('[data-pay-fixed]');if(pay){formPayFixed(pay.dataset.payFixed,pay.dataset.due);return}
     const editF=e.target.closest('[data-edit-fixed]');if(editF){formFixed(editF.dataset.editFixed);return}
     const editW=e.target.closest('[data-edit-week]');if(editW){formWeek(editW.dataset.editWeek);return}
     const openW=e.target.closest('[data-open-week]');if(openW){selectedWeek=openW.dataset.openWeek;go('weeks');return}
@@ -978,7 +1057,12 @@ select option{background:#0a2039;color:#edfaff}
     }catch(err){toast(err.message||'Het terugzetten is niet gelukt.')}finally{input.value=''}
   });
   window.addEventListener('beforeunload',e=>{if(activeProfile?.mode==='cloud'&&cloudDirty){e.preventDefault();e.returnValue=''}});
-  $('#modalWrap').addEventListener('click',e=>{if(e.target===$('#modalWrap'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});$('#modalBody').addEventListener('submit',e=>{if(e.target.matches('#addTransaction,#addSubscription,#addGoal,#addContribute,#setBalances,#makeTransfer,#fixedForm,#payFixedForm,#weekForm,#categoryForm'))addHandler(e)});
+  $('#fixedMonthInput').addEventListener('change',e=>{if(/^\d{4}-(0[1-9]|1[0-2])$/.test(e.target.value)){selectedFixedMonth=e.target.value;renderFixed()}});
+  $('#modalBody').addEventListener('change',e=>{if(e.target.id==='overrideMonth'){
+    const form=$('#fixedMonthForm'),fixed=data.fixedCosts.find(x=>x.id===form?.elements.id.value),month=e.target.value;
+    if(fixed&&/^\d{4}-(0[1-9]|1[0-2])$/.test(month))form.elements.amount.value=fixedAmountForMonth(fixed,month);
+  }});
+  $('#modalWrap').addEventListener('click',e=>{if(e.target===$('#modalWrap'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});$('#modalBody').addEventListener('submit',e=>{if(e.target.matches('#addTransaction,#addSubscription,#addGoal,#addContribute,#setBalances,#makeTransfer,#fixedForm,#fixedMonthForm,#payFixedForm,#weekForm,#categoryForm'))addHandler(e)});
   $('#modalBody').addEventListener('change',e=>{const select=e.target.closest('[data-category-select]');if(!select)return;const wrapper=select.closest('.field'),field=wrapper?.querySelector('.new-category-field');if(field){field.hidden=select.value!=='__new__';const input=field.querySelector('input');if(input){input.required=!field.hidden;if(!field.hidden)input.focus()}}});
   $('#weekDate').addEventListener('change',e=>{if(e.target.value){selectedWeek=mondayOf(e.target.value);renderWeeks()}});
   $('#transactionSearch').addEventListener('input',renderTransactions);$('#transactionFilter').addEventListener('change',renderTransactions);$('#transactionMonth').addEventListener('change',e=>{txMonth=e.target.value;renderTransactions()});
